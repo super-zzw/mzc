@@ -6,6 +6,23 @@
 				"navigationBarTitleText": "美赞臣回收小程序"
 			}
 		}
+        ,{
+            "path" : "pages/index/personIndex",
+            "style" : {}
+        }
+        ,
+        {
+            "path" : "pages/index/orderLog",
+            "style" : {
+				"navigationBarTitleText": "回收订单记录"
+			}
+        }
+        ,{
+            "path" : "pages/index/orderDetail",
+            "style" : {
+				"navigationBarTitleText": "回收订单详情"
+			}
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
