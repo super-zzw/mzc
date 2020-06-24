@@ -23,6 +23,75 @@
 				"navigationBarTitleText": "回收订单详情"
 			}
         }
+        
+        ,{
+            "path" : "pages/bookMsg/editAddress",
+            "style" : {
+				"navigationBarTitleText": "填写上门地址信息"
+				
+			}
+        }
+        ,{
+            "path" : "pages/bookMsg/addressSel",
+            "style" : {
+				"navigationBarTitleText": "上门地址选择"
+			}
+        }
+        
+        ,{
+            "path" : "pages/bookMsg/bookSuccess",
+            "style" : {
+				"navigationBarTitleText": "预约上门成功"
+			}
+        }
+        ,{
+            "path" : "pages/bookMsg/editBookMsg",
+            "style" : {
+				"navigationBarTitleText": "填写预约信息"
+			}
+        }
+   
+        ,{
+            "path" : "pages/achievement/index",
+            "style" : {
+				"navigationBarTitleText": "公益成就"
+			}
+        }
+  
+        ,{
+            "path" : "pages/exchangePoint/index",
+            "style" : {
+				"navigationBarTitleText": "环保积分兑换首页"
+			}
+        }
+        ,{
+            "path" : "pages/exchangePoint/pointLog",
+            "style" : {
+				"navigationBarTitleText": "环保积分记录"
+				
+			}
+        }
+        ,{
+            "path" : "pages/index/orderCancel",
+            "style" : {
+				"navigationBarTitleText": "回收订单详情"
+				
+			}
+        }
+        ,{
+            "path" : "components/cancelTip",
+            "style" : {
+				"navigationBarTitleText": "回收订单详情"
+				
+			}
+        }
+        ,{
+            "path" : "pages/orderFlow/index",
+            "style" : {
+				"navigationBarTitleText": "订单物流进度"
+				
+			}
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "white",

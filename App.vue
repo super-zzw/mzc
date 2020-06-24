@@ -17,16 +17,17 @@
 	max-width: 100%;
 }
 	.main{
+		    height: 1050rpx;
 			width: 674rpx;
 			margin: 0 auto;
-			margin-top: 148rpx;
-			// padding: 151rpx 40rpx 0;
+			margin-top: 120rpx;
 			background: #fff;
 			border-radius:47rpx;
 			border-bottom-left-radius:47rpx;
 			border-bottom-right-radius: 47rpx;
 			padding-bottom:40rpx;
 				box-sizing: border-box;
+				// overflow: scroll;
 				.header{
 				height:90rpx;
 				width: 100%;
@@ -55,7 +56,7 @@
 					.wraper{
 						padding-left: 44rpx;
 						padding-right: 7rpx;
-						padding-bottom: 34rpx;
+						padding-bottom: 10rpx;
 						background: #fff;
 						margin-bottom: 14rpx;
 					}
@@ -76,5 +77,15 @@
 					
 				}
 			}
+		}
+		.divider1{
+						  width:100%;
+						  height:13rpx;
+						  background:rgba(228,246,224,1);
+		}
+		.divider {
+			height: 2rpx;
+			width: 100%;
+			background: #CACACA;
 		}
 </style>

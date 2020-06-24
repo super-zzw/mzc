@@ -1,0 +1,184 @@
+<template>
+	<view>
+		<background></background>
+		<view class="main">
+			<view class="addreeBox" v-if="!addressList.length">
+				<view class="addressItem">
+					<view class="name row">
+						<text class="label">寄件人</text>
+						<view class="inputBox">张笑笑</view>
+						<!-- <input type="text" name="" id="" placeholder="填写寄件人姓名" class="inputBox" placeholder-style="color:#1A6752"> -->
+					</view>
+					<view class="divider"></view>
+					<view class="row phone">
+						<text class="label">手机号码</text>
+						<view class="inputBox">+86 13945765421</view>
+						<!-- <input type="number" name="" id="" placeholder="填写联系人手机号码" class="inputBox" placeholder-style="color:#1A6752"> -->
+					</view>
+					<view class="divider"></view>
+					<view class="row region">
+						<text class="label">所在地区</text>
+						<!-- <input type="text" name="" id="" placeholder="填写联系人手机号码" class="inputBox" placeholder-style="color:#1A6752"> -->
+						<view class="inputBox">
+							<view class="showRegion">
+								<text>广东省广州市天河区</text>
+								<text>中山大道西89号C栋808</text>
+							</view>
+							<image src="../../static/icon8.png" class="regionSel"></image>
+						</view>
+					</view>
+					<view class="divider"></view>
+					<view class="options">
+						<view class="editBtn btn">编辑</view>
+						<view class="delBtn btn">删除</view>
+					</view>
+				</view>
+			</view>
+
+			<view class="addAddressBox">
+				<view class="addBtn">添加新地址</view>
+			</view>
+		</view>
+	</view>
+</template>
+
+<script>
+	export default {
+		data() {
+			return {
+				addressList: []
+			};
+		}
+	}
+</script>
+
+<style lang="less" scoped>
+	.main {
+		display: flex;
+		flex-direction: column;
+		background: #F9F9F9;
+		overflow: hidden;
+
+		.addreeBox {
+			
+			.addressItem {
+				padding-top: 56rpx;
+				padding-left: 60rpx;
+				padding-bottom: 34rpx;
+				box-sizing: border-box;
+				background-color: #fff;
+				.row {
+					display: flex;
+					flex-direction: row;
+					align-items: center;
+ 
+					.label {
+						font-size: 27rpx;
+						font-family: PingFang SC;
+						font-weight: 500;
+						color: rgba(118, 157, 146, 1);
+						width: 110rpx;
+					}
+
+					.inputBox {
+						margin-left: 40rpx;
+						font-size: 27rpx;
+						font-family: PingFang SC;
+						font-weight: 600;
+						color: #1A6752;
+
+						.regionSel {
+							width: 17rpx;
+							height: 26rpx;
+						}
+					}
+				}
+
+				.name {
+					margin-bottom: 34rpx;
+				}
+
+				.phone {
+					margin: 32rpx 0;
+				}
+
+				.region {
+					margin: 30rpx 0 34rpx;
+
+					.inputBox {
+						width: 400rpx;
+						display: flex;
+						justify-content: space-between;
+						align-items: center;
+
+						.showRegion {
+							// display: inline-block;
+							width: 300rpx;
+							display: flex;
+							flex-direction: column;
+						}
+					}
+				}
+
+				.address {
+					margin: 32rpx 0;
+				}
+
+				
+
+				.options {
+					margin: 33rpx 57rpx 0 173rpx;
+					display: flex;
+					justify-content: space-between;
+
+					.btn {
+						width: 175rpx;
+						height: 69rpx;
+						font-size: 28rpx;
+						font-family: PingFang SC;
+						font-weight: 600;
+						border-radius: 34rpx;
+						display: flex;
+						justify-content: center;
+						align-items: center;
+					}
+
+					.editBtn {
+						color: #1A6752;
+						border: 3rpx solid rgba(26, 103, 82, 1);
+					}
+
+					.delBtn {
+						color: #B11D00;
+						border: 3rpx solid rgba(177, 29, 0, 1);
+					}
+				}
+			}
+		}
+
+
+		.addAddressBox {
+			// background: #F9F9F9;
+			flex-grow: 1;
+
+			.addBtn {
+				width: 371rpx;
+				height: 80rpx;
+				border-radius: 40rpx;
+				background: #2D8255;
+				font-size: 33rpx;
+				font-family: PingFang SC;
+				font-weight: 400;
+				color: rgba(254, 255, 254, 1);
+				display: flex;
+				justify-content: center;
+				align-items: center;
+
+				margin: 0 auto;
+				margin-top: 56rpx;
+			}
+
+		}
+
+	}
+</style>
