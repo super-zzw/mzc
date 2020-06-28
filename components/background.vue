@@ -1,5 +1,5 @@
 <template>
-	<view class="bgContainer">
+	<view class="bgContainer" :style="{background:color }">
 		<image src="../static/bg12.png" class="bg1" ></image>
 		<image src="../static/bg11.png" class="bg2"></image>
 		<image src="../static/bg13.png" class="bg3"></image>
@@ -8,9 +8,13 @@
 
 <script>
 	export default {
+		props:{
+			color:{
+				default:'#E5F7E1'
+			}
+		},
 		data() {
 			return {
-				
 			};
 		}
 	}
@@ -21,8 +25,8 @@
 		width: 100vw;
 		height: 100vh;
 		position: fixed;
-		background: #E5F7E1;
 		z-index: -1;
+		
 		.bg1{
 			  width: 100%;
 			   height: 665rpx;

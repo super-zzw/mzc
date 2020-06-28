@@ -1,7 +1,9 @@
 <script>
 	export default {
 		onLaunch: function() {
-			console.log('App Launch')
+			if(uni.getStorageSync('session')){
+				this.$store.commit('isLoginSet',true)
+			}
 		},
 		onShow: function() {
 			console.log('App Show')
@@ -16,11 +18,24 @@
 .html_img{
 	max-width: 100%;
 }
+button::after{ border: none; }
+.mask{
+	  position: fixed;
+	    top: 0;
+	    left: 0;
+	    width: 100vw;
+	    height: 100vh;
+	    background:rgba(52,52,52,0.7);
+  }
 	.main{
 		    height: 1050rpx;
 			width: 674rpx;
-			margin: 0 auto;
-			margin-top: 120rpx;
+			// margin: 120rpx auto 0;
+			position: absolute;
+			top: 130rpx;
+			left: 50%;
+			transform: translateX(-50%);
+			// margin-top: ;
 			background: #fff;
 			border-radius:47rpx;
 			border-bottom-left-radius:47rpx;

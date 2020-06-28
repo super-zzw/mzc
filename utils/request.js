@@ -4,8 +4,8 @@ import utils from "./method.js"
 var test = false;
 var _baseUrl = '';
 if (test) {
-	_baseUrl = 'http://192.168.1.25:9701/api';  //测试地址日强
-} else {	_baseUrl = 'https://xxxx.com/api';  //正式地址
+	_baseUrl = 'www.meadcan.com/api';  //测试地址日强
+} else {	_baseUrl = 'https://www.meadcan.com/api';  //正式地址
 }
 var baseUrl = _baseUrl;
 // 请求loading交给页面处理
@@ -13,42 +13,44 @@ var baseUrl = _baseUrl;
 
 // 单次请求
 export function http(opt){
+	console.log(opt)
 	let _data = Object.assign({},opt.data || {})
 	return new Promise((resolve, reject)=>{
 		uni.request({
 			header:{
 				"Content-Type":"application/x-www-form-urlencoded",
-				"Xlkz-SessionId":uni.getStorageSync("session") || "",
+				"Mzc-SessionId":uni.getStorageSync("session") || "",
 			},
 			url: baseUrl + Api[opt.apiName],
 			method:opt.method || 'GET',
 			data:_data,
 			success:res => {
-				if(res.statusCode == 200){
-					if(res.data && res.data.code == 200000){
-						resolve(res.data.data)
-					}else if(res.data && res.data.code == 300000){
-						uni.hideLoading()
-						utils.rmData()
-						uni.showToast({
-							icon: 'none',
-							title: res.data.message,
-							duration: 1500
-						});
-						reject(res.message)
-					}else{
-						uni.hideLoading()
-						uni.showToast({
-							icon: 'none',
-							title: res.data.message,
-							duration: 1500
-						});
-						reject(res)
-					}
-				}else{
-					uni.hideLoading()
-					reject('服务器错误')
-				}
+				// if(res.statusCode == 200){
+				// 	if(res.data && res.data.code == 200000){
+				// 		resolve(res.data.data)
+				// 	}else if(res.data && res.data.code == 300000){
+				// 		uni.hideLoading()
+				// 		utils.rmData()
+				// 		uni.showToast({
+				// 			icon: 'none',
+				// 			title: res.data.message,
+				// 			duration: 1500
+				// 		});
+				// 		reject(res.message)
+				// 	}else{
+				// 		uni.hideLoading()
+				// 		uni.showToast({
+				// 			icon: 'none',
+				// 			title: res.data.message,
+				// 			duration: 1500
+				// 		});
+				// 		reject(res)
+				// 	}
+				// }else{
+				// 	uni.hideLoading()
+				// 	reject('服务器错误')
+				// }
+				resolve(res.data)
 			},
 			fail:err => {
 				uni.hideLoading()

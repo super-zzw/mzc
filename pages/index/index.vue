@@ -2,9 +2,12 @@
 	<view class="indexContainer">
 		<background1></background1>
 		<view class="box1">
-			<view class="avatarBox">
-				<image src="../../static/naifen.png" mode="" class="avatar"></image>
-			</view>
+			<button type="default" class="avatarBox" hover-class="none" open-type="getUserInfo" lang="zh_CN" @getuserinfo="GotUserInfo()">
+				<image src="../../static/naifen.png" mode="" class="avatar" @click="toIndex"></image>
+			</button>
+			<!-- <view >
+				
+			</view> -->
 			<view class="titleBox">
 				<text class="row1">宝宝妈咪一家人</text>
 				<view  class="row2">
@@ -51,16 +54,76 @@
 </template>
 
 <script>
-	// import background from '../../components/background.vue'
+	import { mapState } from 'vuex';
+	import Utils from '../../utils/method.js'
 	export default {
 		data() {
 			return {
 				
 			}
 		},
-	
+	  computed:{
+		  ...mapState(['isLogin'])
+	  },
 		methods: {
-			
+			toIndex(){
+				
+			},
+			GotUserInfo(){
+				console.log(Utils.onGotUserInfo)
+				Utils.onGotUserInfo()
+			}
+			// async onGotUserInfo(){
+			// 	if(!this.isLogin){
+			// 		uni.showLoading({
+			// 		    title: '授权请求中...' 
+			// 		})
+			// 		try{
+			// 			let result = await Utils.wxLogin()
+			// 			if(result){
+			// 				console.log(result)
+			// 				this.$store.commit("userInfoSet",result);
+						
+			// 				// await this.$http({apiName: "cacheJsCode",method:"POST",data: {jsCode:result.jsCode}})
+			// 				// const data = await this.$http({
+			// 				// 	apiName: "isBindRoutine",
+			// 				// 	method: "POST",
+			// 				// 	hiddenToast:true,
+			// 				// 	data:{
+			// 				// 		jsCode:result.jsCode
+			// 				// 	}
+			// 				// });
+			// 				// uni.setStorageSync('session',data.data); // 存session
+			// 				this.$store.commit('isLoginSet',true); // 把登录状态变成true
+			// 				uni.navigateTo({
+			// 					url:'./personIndex'
+			// 				})
+			// 				// await this.getUserInfo();
+			// 				// utils.dealResolvePage()
+			// 			}else{
+			// 				uni.showToast({
+			// 					icon: 'none',
+			// 					title: "授权失败",
+			// 					duration: 1500
+			// 				});
+			// 			}
+			// 			uni.hideLoading()
+			// 		}catch(e){
+			// 			// if(e.data.code === 500005){
+			// 			// 	uni.navigateTo({
+			// 			// 		url: "./telBind"
+			// 			// 	})
+			// 			// }
+			// 			uni.hideLoading()
+			// 		}
+			// 	}else{
+			// 		uni.navigateTo({
+			// 			url:'./personIndex'
+			// 		})
+			// 	}
+				
+				
+			// }
 		}
 	}
 </script>
@@ -68,7 +131,6 @@
 <style lang="less" scoped>
  .indexContainer{
 	 background: #1A6852;
-	 height: 1453rpx;
 	 display: flex;
 	 height: 100vh;
 	 flex-direction: column;

@@ -1,7 +1,9 @@
 import store from '../store'
+import {http,httpAll} from './request.js'
 export default{
 	wxLogin(){
 		return new Promise((resolve,reject) => {
+			
 			uni.login({
 			  provider: 'weixin',
 			  success: function (res) {
@@ -10,7 +12,7 @@ export default{
 				    	provider: 'weixin',
 				    	success: function(infoRes) {
 							let result = {}
-							Object.assign(result,infoRes.userInfo,{jsCode:res.code},{inviteCode:store.state.inviteCode});
+							Object.assign(result,infoRes.userInfo,{jsCode:res.code});
 							resolve(result);
 				    	},
 				    	fail(res) {
@@ -24,6 +26,49 @@ export default{
 			  fail:function(res){resolve(false)}
 			})
 		})
+	},
+	async onGotUserInfo() {
+		uni.showLoading({
+		    title: '授权请求中...' 
+		});
+		try{
+			// console.log(this.wxLogin)
+			let result = await this.wxLogin();
+			if(result){
+			
+				store.commit("userInfoSet",result);
+			  const data=await http({apiName: "getUserInfo",method:"POST",data: {jsCode :result.jsCode,avatarUrl :result.avatarUrl ,nickName:result.nickName}})
+				
+				// 	apiName: "isBindRoutine",
+				// 	method: "POST",
+				// 	hiddenToast:true,
+				// 	data:{
+				// 		jsCode:result.jsCode
+				// 	}
+				// });
+				console.log(2,data)
+				// uni.setStorageSync('session',data.data); // 存session
+				uni.setStorageSync('userInfo',result); // 存session
+				store.commit('isLoginSet',true); // 把登录状态变成true
+				// await this.getUserInfo();
+				// utils.dealResolvePage()
+			}else{
+				uni.showToast({
+					icon: 'none',
+					title: "授权失败",
+					duration: 1500
+				});
+			}
+			uni.hideLoading()
+		}catch(e){
+			// if(e.data.code === 500005){
+			// 	uni.navigateTo({
+			// 		url: "./telBind"
+			// 	})
+			// }
+			uni.hideLoading()
+		}
+		
 	},
 	//登录成功设置
 	setSesion(session,userInfo){

@@ -2,9 +2,9 @@
 	<view class="container">
 		<background></background>
 		<view class="mainCon">
-			<view class="avatar"><image src="../../static/icon1.png" ></image></view>
+			<view class="avatar"><image :src="userInfo.avatarUrl" ></image></view>
 			<view class="titleBox">
-				<text class="row1">宝宝妈咪一家人</text>
+				<text class="row1">{{userInfo.nickName}}</text>
 				<view  class="row2">
 					<text class="txt">0g 碳减排量</text>
 					
@@ -36,11 +36,19 @@
 </template>
 
 <script>
+	import {mapState} from 'vuex'
+	
 	export default {
 		data() {
 			return {
 				
 			};
+		},
+		computed:{
+			...mapState(['isLogin','userInfo'])
+		},
+	async onLoad() {
+			
 		}
 	}
 </script>
@@ -60,9 +68,11 @@
 		  		  margin-top: 128rpx;
 		  		  width: 164rpx;
 		  		  height: 164rpx;
+				 
 		  		  image{
 		  			  width: 100%;
 		  			  height: 100%;
+					   border-radius:50% ;
 		  		  }
 		  }
 		  .titleBox{
