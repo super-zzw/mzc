@@ -2,7 +2,7 @@
 	<view>
 		<background></background>
 		<view class="main">
-			<view class="addreeBox" v-if="!addressList.length">
+			<view class="addreeBox" v-if="addressList.length">
 				<view class="addressItem">
 					<view class="name row">
 						<text class="label">寄件人</text>
@@ -34,9 +34,13 @@
 					</view>
 				</view>
 			</view>
-
+            <view v-else class="noAddress">
+				<image src="../../static/noaddress.png" mode=""></image>
+				<text>暂无新地址哦～</text>
+			</view>
 			<view class="addAddressBox">
-				<view class="addBtn">添加新地址</view>
+				<navigator class="addBtn" url="./editAddress">添加新地址</navigator>
+				
 			</view>
 		</view>
 	</view>
@@ -48,6 +52,26 @@
 			return {
 				addressList: []
 			};
+		},
+		async onLoad() {
+			uni.showLoading({
+			
+					title:"加载中...",
+					mask:true
+			
+				
+			}),
+			await this.getAddress()
+			uni.hideLoading()
+		},
+		methods:{
+			getAddress(){
+				this.$http({
+					apiName:'getReceiveList'
+				}).then(res=>{
+					this.addressList=res.data
+				}).catch(err=>{})
+			}
 		}
 	}
 </script>
@@ -155,7 +179,25 @@
 				}
 			}
 		}
-
+        .noAddress{
+			display: flex;
+			
+			flex-direction: column;
+			align-items: center;
+			image{
+				margin-top: 130rpx;
+				width: 400rpx;
+				height: 330rpx;
+				
+			}
+			text{
+				font-size:32rpx;
+				font-family:PingFang SC;
+				font-weight:500;
+				color:rgba(191,191,191,1);
+				margin-top: 34rpx;
+			}
+		}
 
 		.addAddressBox {
 			// background: #F9F9F9;

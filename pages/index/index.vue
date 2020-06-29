@@ -3,19 +3,21 @@
 		<background1></background1>
 		<view class="box1">
 			<button type="default" class="avatarBox" hover-class="none" open-type="getUserInfo" lang="zh_CN" @getuserinfo="GotUserInfo()">
-				<image src="../../static/naifen.png" mode="" class="avatar" @click="toIndex"></image>
+				<image :src="userInfo.avatarUrl" mode="" class="avatar" @click="toIndex" v-if="isLogin"></image>
+				<image src="../../static/naifen.png" mode="" class="avatar" @click="toIndex"  v-else></image>
 			</button>
 			<!-- <view >
 				
 			</view> -->
 			<view class="titleBox">
-				<text class="row1">宝宝妈咪一家人</text>
+				<text class="row1" v-if="isLogin">{{userInfo.nickName}}</text>
+				<text  class="row1" v-else>暂未登录</text>
 				<view  class="row2">
 					<text class="txt">0g 碳减排量</text>
 					
 					<image src="../../static/line.png" class="line"></image>
 					<text class="txt">0 环保积分</text>
-					<image src="../../static/arrowRight.png" class="arrow"></image>
+					<image src="../../static/arrowRight.png" class="arrow" @tap="GotUserInfo"></image>
 				</view>
 				
 			</view>
@@ -33,7 +35,7 @@
 				<view class="txt1 ">免费上门</view>
 				<view class="txt2">加入空罐回收计划</view>
 				<view class="txt3 ">还有环保积分等你拿</view>
-				<view class="btn">立即预约</view>
+				<view class="btn" @tap="toBook">立即预约</view>
 			</view>
 		</view>
 		<view class="box2">
@@ -62,16 +64,38 @@
 				
 			}
 		},
+		onLoad() {
+			if(this.isLogin){
+				this.$store.commit('userInfoSet',uni.getStorageSync('userInfo'))
+			}
+		},
 	  computed:{
-		  ...mapState(['isLogin'])
+		  ...mapState(['isLogin','userInfo'])
 	  },
 		methods: {
 			toIndex(){
 				
 			},
 			GotUserInfo(){
-				console.log(Utils.onGotUserInfo)
-				Utils.onGotUserInfo()
+				if(this.isLogin){
+					uni.navigateTo({
+										url:'./personIndex'
+									})
+				}else{
+					this.$store.commit('jumpPageSet','./personIndex')
+					Utils.onGotUserInfo()
+				}
+				
+			},
+			toBook(){
+				if(this.isLogin){
+					uni.navigateTo({
+										url:'/pages/bookMsg/editBookMsg'
+									})
+				}else{
+					this.$store.commit('jumpPageSet','/pages/bookMsg/editBookMsg')
+					Utils.onGotUserInfo()
+				}
 			}
 			// async onGotUserInfo(){
 			// 	if(!this.isLogin){

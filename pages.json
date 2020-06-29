@@ -110,6 +110,10 @@
 				"navigationBarTitleText": "注册美赞臣CRM会员页"
 			}
         }
+        ,{
+            "path" : "components/404",
+            "style" : {}
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "white",

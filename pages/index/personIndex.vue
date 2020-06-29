@@ -2,9 +2,9 @@
 	<view class="container">
 		<background></background>
 		<view class="mainCon">
-			<view class="avatar"><image :src="userInfo.avatarUrl" ></image></view>
+			<view class="avatar"><image :src="avatarUrl" ></image></view>
 			<view class="titleBox">
-				<text class="row1">{{userInfo.nickName}}</text>
+				<text class="row1">{{nickName}}</text>
 				<view  class="row2">
 					<text class="txt">0g 碳减排量</text>
 					
@@ -20,7 +20,7 @@
 				</view>
 				<view class="item">
 					<image src="../../static/icon5.png" mode=""></image>
-					<text>环保积分兑换</text>
+					<text>环保积分使用</text>
 				</view>
 				<view class="item">
 					<image src="../../static/icon6.png" mode=""></image>
@@ -31,6 +31,7 @@
 					<text>公益成就</text>
 				</view>
 			</view>
+			<navigator url="#" class="feedback">问题反馈</navigator>
 		</view>
 	</view>
 </template>
@@ -45,9 +46,20 @@
 			};
 		},
 		computed:{
-			...mapState(['isLogin','userInfo'])
+			...mapState(['isLogin','userInfo']),
+			avatarUrl(){
+				return uni.getStorageSync('userInfo').avatarUrl
+			},
+			nickName(){
+				return uni.getStorageSync('userInfo').nickName
+			}
 		},
+		
 	async onLoad() {
+			// uni.showLoading({
+			// 	title:"加载中...",
+			// 	mask:true
+			// })
 			
 		}
 	}
@@ -55,11 +67,12 @@
 
 <style lang="less" scoped>
   .container{
-	  background: #E5F7E1;
-	  height: 100vh;
-	  padding: 0 140rpx;
+	  // background: #E5F7E1;
+	  // height: 100vh;
+	 
 	 
 	  .mainCon{
+		   padding: 0 140rpx;
 		  display: flex;
 		  // justify-content: center;
 		  align-items: center;
@@ -134,6 +147,14 @@
 					  }
 		  		  }
 		  }
+		  .feedback{
+			  margin-top: 30rpx;
+			  font-size:36rpx;
+			  font-family:PingFang SC;
+			  font-weight:600;
+			  color:rgba(26,103,82,1);
+		  }
+		  
 	  }
 	 
   }

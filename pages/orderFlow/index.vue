@@ -60,7 +60,7 @@
 					</view>
 					<view class="right">
 						<text class="title">派送中</text>
-						<text class="info">[泉州市]泉州清蒙派件员 吴家鑫13876523456正在为您派件</text>
+						<text class="info">[泉州市]泉州清蒙派件员 吴家鑫<text class="postmanPhone">13876523456</text>正在为您派件</text>
 						<text class="time">2020-08-08 15:08:08 </text>
 						<view class=""></view>
 					</view>
@@ -182,6 +182,9 @@
 		   					   font-family:PingFang SC;
 		   					   font-weight:400;
 		   					   color:rgba(39,84,72,1);
+							   .postmanPhone{
+								   color: #ddb83e;
+							   }
 		   				   }
 		   				   .time{
 		   					   font-size:24rpx;

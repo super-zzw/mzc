@@ -32,8 +32,8 @@ export default{
 		    title: '授权请求中...' 
 		});
 		try{
-			// console.log(this.wxLogin)
 			let result = await this.wxLogin();
+			console.log(result)
 			if(result){
 			
 				store.commit("userInfoSet",result);
@@ -47,10 +47,13 @@ export default{
 				// 	}
 				// });
 				console.log(2,data)
-				// uni.setStorageSync('session',data.data); // 存session
+				uni.setStorageSync('session',data.data); // 存session
 				uni.setStorageSync('userInfo',result); // 存session
 				store.commit('isLoginSet',true); // 把登录状态变成true
 				// await this.getUserInfo();
+				uni.navigateTo({
+					url:store.state.jumpPage
+				})
 				// utils.dealResolvePage()
 			}else{
 				uni.showToast({
@@ -61,11 +64,7 @@ export default{
 			}
 			uni.hideLoading()
 		}catch(e){
-			// if(e.data.code === 500005){
-			// 	uni.navigateTo({
-			// 		url: "./telBind"
-			// 	})
-			// }
+			
 			uni.hideLoading()
 		}
 		

@@ -3,8 +3,8 @@
 		<background></background>
 		<view class="main">
 			<view class="wraper">
-				<view class="row">
-					<text class="label">填写上门地址</text>
+				<view class="row" @tap="editMsg">
+					<text class="label" >填写上门地址</text>
 					<view class="right">
 						<image src="../../static/icon8.png" class="selectIcon"></image>
 					</view>
@@ -68,7 +68,31 @@
 			return {
 				flag:false
 			};
+		},
+		methods:{
+			 editMsg(){
+				// uni.showLoading({
+				// 	title:"加载中...",
+				// 	mask:true
+				// })
+				// this.$http({
+				// 	apiName:'getReceiveList'
+				// }).then(res=>{
+				// 	if(res.data.length){
+						uni.navigateTo({
+							url:'./addressSel'
+						})
+					
+				// 	}else{
+				// 		uni.navigateTo({
+				// 			url:"./editAddress"
+				// 		})
+				// 	} 
+				// 	uni.hideLoading()
+				// }).catch(err=>{uni.hideLoading()})
+			}
 		}
+		
 	}
 </script>
 
