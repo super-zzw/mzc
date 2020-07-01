@@ -2,17 +2,17 @@
 	<view>
 		<background></background>
 		<view class="main">
-			<view class="addreeBox" v-if="addressList.length">
-				<view class="addressItem">
+			<view class="addreeBox" v-if="addressList.length" >
+				<view class="addressItem" v-for="(item,index) in addressList" :key="index">
 					<view class="name row">
 						<text class="label">寄件人</text>
-						<view class="inputBox">张笑笑</view>
+						<view class="inputBox">{{item.username}}</view>
 						<!-- <input type="text" name="" id="" placeholder="填写寄件人姓名" class="inputBox" placeholder-style="color:#1A6752"> -->
 					</view>
 					<view class="divider"></view>
 					<view class="row phone">
 						<text class="label">手机号码</text>
-						<view class="inputBox">+86 13945765421</view>
+						<view class="inputBox">+86 {{item.mobile}}</view>
 						<!-- <input type="number" name="" id="" placeholder="填写联系人手机号码" class="inputBox" placeholder-style="color:#1A6752"> -->
 					</view>
 					<view class="divider"></view>
@@ -21,28 +21,35 @@
 						<!-- <input type="text" name="" id="" placeholder="填写联系人手机号码" class="inputBox" placeholder-style="color:#1A6752"> -->
 						<view class="inputBox">
 							<view class="showRegion">
-								<text>广东省广州市天河区</text>
-								<text>中山大道西89号C栋808</text>
+								<text>{{item.province+item.city+item.district}}</text>
+								<text>{{item.detailedAddress}}</text>
 							</view>
 							<image src="../../static/icon8.png" class="regionSel"></image>
 						</view>
 					</view>
 					<view class="divider"></view>
 					<view class="options">
-						<view class="editBtn btn">编辑</view>
-						<view class="delBtn btn">删除</view>
+						<view class="editBtn btn" @tap="edit(item.id)">编辑</view>
+						<view class="delBtn btn" @tap="open(item.id)" data-id="">删除</view>
 					</view>
 				</view>
 			</view>
-            <view v-else class="noAddress">
+            <view v-if="loading&&addressList.length==0" class="noAddress">
 				<image src="../../static/noaddress.png" mode=""></image>
 				<text>暂无新地址哦～</text>
+				<view class="addAddressBox">
+					<navigator class="addBtn" url="./editAddress">添加新地址</navigator>
+					
+				</view>
 			</view>
-			<view class="addAddressBox">
+			<view class="addAddressBox" v-if="loading">
 				<navigator class="addBtn" url="./editAddress">添加新地址</navigator>
 				
 			</view>
 		</view>
+		<alert v-if="isDel" title="确定删除?" @tapBtn="del">
+			
+		</alert>
 	</view>
 </template>
 
@@ -50,16 +57,17 @@
 	export default {
 		data() {
 			return {
-				addressList: []
+				addressList: [],
+				isDel:false,
+				delId:'',
+				loading:false
 			};
 		},
 		async onLoad() {
 			uni.showLoading({
-			
 					title:"加载中...",
 					mask:true
 			
-				
 			}),
 			await this.getAddress()
 			uni.hideLoading()
@@ -69,8 +77,38 @@
 				this.$http({
 					apiName:'getReceiveList'
 				}).then(res=>{
-					this.addressList=res.data
+					this.addressList=res.data;
+					this.loading=true
 				}).catch(err=>{})
+			},
+			open(id){
+				this.isDel=true
+				this.delId=id
+			},
+			edit(id){
+				console.log('./editAddress?id='+id)
+				uni.navigateTo({
+					url:'./editAddress?id='+id
+				})
+			},
+			del(res){
+				if(res){
+					
+					this.$http({
+						apiName:'delAddress',
+						method:'POST',
+						receiveId :this.delId
+					}).then(res=>{
+						uni.showToast({
+							icon:'none',
+							title:'删除成功',
+							duration:1500
+						})
+						this.getAddress()
+					})
+				}
+				this.isDel=false
+				// delAddress
 			}
 		}
 	}
@@ -81,8 +119,9 @@
 		display: flex;
 		flex-direction: column;
 		background: #F9F9F9;
-		overflow: hidden;
-
+		// overflow: hidden;
+          height: 1000rpx;
+          overflow: scroll;
 		.addreeBox {
 			
 			.addressItem {

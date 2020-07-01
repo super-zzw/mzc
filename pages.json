@@ -114,6 +114,10 @@
             "path" : "components/404",
             "style" : {}
         }
+        ,{
+            "path" : "components/alert",
+            "style" : {}
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "white",

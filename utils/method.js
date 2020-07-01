@@ -46,7 +46,7 @@ export default{
 				// 		jsCode:result.jsCode
 				// 	}
 				// });
-				console.log(2,data)
+			
 				uni.setStorageSync('session',data.data); // 存session
 				uni.setStorageSync('userInfo',result); // 存session
 				store.commit('isLoginSet',true); // 把登录状态变成true
@@ -101,6 +101,27 @@ export default{
 			}
 		}
 		return res
+	},
+	// 表单校验
+	judgeForm(arr){
+		let res = true;
+		for (let item of arr) {
+			let _val = item.data;
+						if ((_val === null) || (_val === "") || (JSON.stringify(_val) === "{}") || (String(_val).length == 0) || (_val.length == 0)||_val === false) {
+							res = false;
+								uni.hideLoading();
+								setTimeout(_=>{
+									uni.showToast({
+										icon: 'none',
+										title: item.info,
+										duration: 2000
+									});
+								})
+							break
+						}
+					}
+					return res
+		
 	},
 	//过万处理
 	dealWan(data){

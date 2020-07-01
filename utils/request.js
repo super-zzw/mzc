@@ -25,31 +25,31 @@ export function http(opt){
 			method:opt.method || 'GET',
 			data:_data,
 			success:res => {
-				// if(res.statusCode == 200){
-				// 	if(res.data && res.data.code == 200000){
-				// 		resolve(res.data.data)
-				// 	}else if(res.data && res.data.code == 300000){
-				// 		uni.hideLoading()
-				// 		utils.rmData()
-				// 		uni.showToast({
-				// 			icon: 'none',
-				// 			title: res.data.message,
-				// 			duration: 1500
-				// 		});
-				// 		reject(res.message)
-				// 	}else{
-				// 		uni.hideLoading()
-				// 		uni.showToast({
-				// 			icon: 'none',
-				// 			title: res.data.message,
-				// 			duration: 1500
-				// 		});
-				// 		reject(res)
-				// 	}
-				// }else{
-				// 	uni.hideLoading()
-				// 	reject('服务器错误')
-				// }
+				if(res.statusCode == 200){
+					if(res.data && res.data.code == 200000){
+						resolve(res.data)
+					}else if(res.data && res.data.code == 300000){
+						uni.hideLoading()
+						utils.rmData()
+						uni.showToast({
+							icon: 'none',
+							title: res.data.message,
+							duration: 1500
+						});
+						reject(res.message)
+					}else{
+						uni.hideLoading()
+						uni.showToast({
+							icon: 'none',
+							title: res.data.message,
+							duration: 1500
+						});
+						reject(res)
+					}
+				}else{
+					uni.hideLoading()
+					reject('服务器错误')
+				}
 				resolve(res.data)
 			},
 			fail:err => {

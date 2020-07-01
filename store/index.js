@@ -7,7 +7,8 @@ const store = new Vuex.Store({
 	state: {
 		isLogin:false,  //是否登录
 		userInfo:{}    ,//用户信息
-		jumpPage:'/pages/index/index'
+		jumpPage:'/pages/index/index',
+		addressMsg:''
 	},
 	mutations: {
 		isLoginSet(state,data){
@@ -20,6 +21,9 @@ const store = new Vuex.Store({
 		},
 		jumpPageSet(state,data){
 			state.jumpPage=data
+		},
+		selectAddr(state,data){
+			state.addressMsg=data
 		}
 	}
 })
