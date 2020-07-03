@@ -2,11 +2,11 @@
 	<view>
 		<background></background>
 		<view class="main">
-			<image src="../static/icon11.png" class="cancelIcon"></image>
+			<image src="../static/success.png" class="cancelIcon"></image>
 			<text class="cancelText">您已成功取消订单</text>
 			<view class="options">
 				<navigator url="../pages/index/index" class="btn btn1">返回首页</navigator>
-				<navigator url="../pages/index/index" class="btn btn2">再次预约</navigator>
+				<navigator url="../pages/bookMsg/editBookMsg" class="btn btn2">再次预约</navigator>
 			</view>
 		</view>
 	</view>

@@ -37,7 +37,7 @@
   .container{
 	  width: 100vw;
 	  height: 100vh;
-	  background: rgba(0,0,0,.5);
+	  background: rgba(0,0,0,.7);
 	  position: absolute;
 	  left: 0;
 	  top: 0;

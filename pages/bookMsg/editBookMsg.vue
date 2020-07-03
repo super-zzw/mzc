@@ -7,34 +7,29 @@
 					<view class="row r1">
 						<view class="left">
 							<text class="label">寄件人</text>
-
 							<text class="info">{{addressMsg.username}}</text>
 						</view>
-
-
 					</view>
 					<view class="divider"></view>
 					<view class="row r1">
 						<view class="left">
 							<text class="label">手机号码</text>
-
 							<text class="info">{{addressMsg.mobile}}</text>
 						</view>
-
-
 					</view>
 					<view class="divider "></view>
 					<view class="row r1">
-						<view class="left">
+						<view class="left addBox">
 							<text class="label">所在地区</text>
-							<view class="info" @tap="addressSel">
-								<view>{{addressMsg.province+addressMsg.city+addressMsg.district}}</view>
-								<text>{{addressMsg.detailedAddress}}</text>
+							<view @tap="addressSel" class="addMsg">
+								<view class="info">
+									<text>{{addressMsg.province+addressMsg.city+addressMsg.district}}</text>
+									<text>{{addressMsg.detailedAddress}}</text>
+								</view>
+
+								<image src="../../static/icon8.png" class="selectIcon"></image>
 							</view>
 
-						</view>
-						<view class="right">
-							<image src="../../static/icon8.png" class="selectIcon"></image>
 						</view>
 					</view>
 
@@ -52,34 +47,27 @@
 				<view class="row">
 					<text class="label">预约时间</text>
 					<view class="timeSel">
-						<picker mode="multiSelector" :range="dateTimes" @change="dateTimeChange" >
+						<picker mode="multiSelector" :range="dateTimes" @change="dateTimeChange">
 							<!-- <view>{{}}</view> -->
 							<view class="mr">
-								<view class="info"  ><text v-if="form_data.time">{{form_data.time}}</text> </view>
+								<view class="info"><text v-if="bookTime">{{bookTime}}</text> </view>
 								<!-- 	<view class="right"> -->
-								  <view class="right">
-									  <text class="rightTxt" v-if="!form_data.time">选择预约上门时间</text>
-									  <image src="../../static/icon8.png" class="selectIcon"></image>
-								  </view>
-									
+								<view class="right">
+									<text class="rightTxt" v-if="!bookTime">选择预约上门时间</text>
+									<image src="../../static/icon8.png" class="selectIcon"></image>
+								</view>
+
 							</view>
-								
-						
-							
-						
 						</picker>
 					</view>
-						
-				
-					
-					
-					
+
+
 				</view>
 				<view class="divider"></view>
 				<view class="row">
 					<text class="label">回收品类</text>
 					<view class="right">
-						<text class="rightTxt">奶粉罐</text>
+						<text class="rightTxt">{{type}}</text>
 						<image src="../../static/detail.png" class="icon1"></image>
 					</view>
 
@@ -87,19 +75,19 @@
 				<view class="divider"></view>
 				<view class="row">
 					<text class="label">回收数量</text>
-					<picker  :range="numArray" @change="numChange" :value="index">
+					<picker :range="numArray" @change="numChange" :value="index">
 						<view class="right">
 							<text class="rightTxt">{{numArray[index]}}</text>
 							<image src="../../static/trangle.png" class="selnum"></image>
 						</view>
 					</picker>
-					
+
 
 				</view>
 				<view class="divider"></view>
 				<view class="row remark">
 					<text class="label">留言备注</text>
-					<textarea value="" placeholder="留言备注（可描述回收物状态、特殊要求等）" auto-height placeholder-style="font-size:27rpx;color:#779D93" />
+					<textarea value="" placeholder="留言备注（可描述回收物状态、特殊要求等）" auto-height placeholder-style="font-size:27rpx;color:#779D93" v-model="remark"/>
 					</view>
 				<view class="divider"></view>
 				<view  class="readme">
@@ -122,21 +110,36 @@
 	export default {
 		data() {
 			return {
+				orderId:'',
 				flag:false,
-				form_data:{
-					time:'',
-				},
+			    bookTime:'',
 				dateTimes:[ [],["14:00-15:00","15:00-16:00","16:00-17:00"]],
+				aTime :'',
+				eTime :'',
 				formatDate:[],
 				numArray:[3,4,5,6,7,8,9,10],
-				index:7
+				index:7,
+				remark:'',
+				type:"奶粉罐",
+				        types:{
+				            "奶粉罐":1
+				        },
 			};
 		},
 		computed:{
 			...mapState(['addressMsg'])
 		},
-		async onLoad() {
+		async onLoad(opt) {
 			await this.setDate()
+			if(opt.id){
+				this.orderId=opt.id
+				uni.showLoading({
+					title:'加载中...'
+				})
+				
+				await this.getOrder()
+				uni.hideLoading()
+			}
 		},
 		methods:{
 			setDate(){
@@ -159,7 +162,9 @@
 			},
 			dateTimeChange(e){
 				console.log(e)
-				this.form_data.time=this.formatDate[e.detail.value[0]]+' '+ this.dateTimes[1][e.detail.value[1]]
+				this.bookTime=this.formatDate[e.detail.value[0]]+' '+ this.dateTimes[1][e.detail.value[1]]
+				this.aTime=this.formatDate[e.detail.value[0]]+' '+this.dateTimes[1][e.detail.value[1]].split('-')[0]
+				this.eTime=this.formatDate[e.detail.value[0]]+' '+this.dateTimes[1][e.detail.value[1]].split('-')[1]
 			},
 			numChange(e){
 				this.index=e.detail.value
@@ -173,37 +178,58 @@
 			async toBook(){
 				let _j_data = [
 				              { data:this.addressMsg?'1' : '',info:"请添加上门地址"},
-				              { data:this.form_data.time,info:"请选择预约上门时间"},
+				              { data:this.bookTime,info:"请选择预约上门时间"},
 				              // { data:this.form_data.city,info:"地区不能为空"},
 				              { data:this.flag,info:"请阅读并同意美赞臣隐私保护声明"},
 				]
 				 let jres = await Utils.judgeForm(_j_data)
 				if(jres){
-					
+					this.$http({
+						apiName:'orderReverse',
+						method:'POST',
+						data:{
+							aTime:this.aTime,
+							amount:this.numArray[this.index],
+							areaNum:this.addressMsg.areaNum,
+							eTime:this.eTime,
+							mobile:this.addressMsg.mobile,
+							receiveaAddress:this.addressMsg.province + this.addressMsg.city + this.addressMsg.district + this.addressMsg.detailedAddress,
+							remark:this.remark,
+							type:this.types[this.type],
+							username:this.addressMsg.username 
+						}
+					}).then(res=>{
+						 uni.showToast({
+						      title:"预约成功"
+						 })
+						  setTimeout( ()=> {
+						                         uni.navigateTo({
+						                             url: './bookSuccess?id='+res.data,
+						                         })
+						                     },1000)
+					}).catch(err=>{})
 				}else{
 					
 				}
 			},
 			 editMsg(){
-				// uni.showLoading({
-				// 	title:"加载中...",
-				// 	mask:true
-				// })
-				// this.$http({
-				// 	apiName:'getReceiveList'
-				// }).then(res=>{
-				// 	if(res.data.length){
 						uni.navigateTo({
 							url:'./addressSel'
 						})
-					
-				// 	}else{
-				// 		uni.navigateTo({
-				// 			url:"./editAddress"
-				// 		})
-				// 	} 
-				// 	uni.hideLoading()
-				// }).catch(err=>{uni.hideLoading()})
+			},
+			getOrder(){
+				this.$http({
+						apiName:'checkOrderStatus',
+						method:'POST',
+						params:this.orderId
+						
+					})
+				.then(res=>{
+					this.bookTime=res.data.appointmentTime
+					this.index=this.numArray.indexOf(res.data.amount)
+					this.remark=res.data.remark
+					// this.$store.commit('userInfoSet',uni.getStorageSync('userInfo'))
+				})
 			}
 		}
 		
@@ -340,7 +366,8 @@
 		font-family:PingFang SC;
 		font-weight:500;
 		color:rgba(26,103,82,1);
-		display: inline-block;
+		display: flex;
+		flex-direction: column;
 		
 	}
 	.timeSel{
@@ -358,4 +385,16 @@
 		// 	width: 250rpx;
 		// }
 	}
+	.addBox{
+		flex: 1;
+		display: flex;
+		justify-content: space-between;
+		.addMsg{
+			display: flex;
+			justify-content: space-between;
+			flex: 1;
+			align-items: center;
+		}
+		}
+	
 </style>

@@ -6,17 +6,14 @@
 				<image :src="userInfo.avatarUrl" mode="" class="avatar" @click="toIndex" v-if="isLogin"></image>
 				<image src="../../static/naifen.png" mode="" class="avatar" @click="toIndex"  v-else></image>
 			</button>
-			<!-- <view >
-				
-			</view> -->
 			<view class="titleBox">
 				<text class="row1" v-if="isLogin">{{userInfo.nickName}}</text>
 				<text  class="row1" v-else>暂未登录</text>
 				<view  class="row2">
-					<text class="txt">0g 碳减排量</text>
+					<text class="txt">{{carbonEmissions}}g 碳减排量</text>
 					
 					<image src="../../static/line.png" class="line"></image>
-					<text class="txt">0 环保积分</text>
+					<text class="txt">{{integral||0}} 环保积分</text>
 					<image src="../../static/arrowRight.png" class="arrow" @tap="GotUserInfo"></image>
 				</view>
 				
@@ -47,7 +44,7 @@
 				<image src="../../static/icon1.png" ></image>
 				<text>空罐去哪儿了</text>
 			</view>
-			<view class="navItem">
+			<view class="navItem" @tap="toLessons">
 				<image src="../../static/icon1.png" ></image>
 				<text>美罐最美活动</text>
 			</view>
@@ -61,18 +58,33 @@
 	export default {
 		data() {
 			return {
-				
+				carbonEmissions:0,
+				integral:0
 			}
 		},
-		onLoad() {
+		async onLoad() {
 			if(this.isLogin){
 				this.$store.commit('userInfoSet',uni.getStorageSync('userInfo'))
 			}
+			uni.showLoading({
+				title:"加载中...",
+			})
+			await this.getUser()
 		},
 	  computed:{
 		  ...mapState(['isLogin','userInfo'])
 	  },
 		methods: {
+			getUser(){
+				this.$http({
+					apiName:'getUser'
+				}).then(res=>{
+				uni.hideLoading()
+				    this.$store.commit('setUserDetail',res.data)
+					this.carbonEmissions=res.data.carbonEmissions
+					this.integral=res.data.integral
+				}).catch(err=>{})
+			},
 			toIndex(){
 				
 			},
@@ -96,58 +108,14 @@
 					this.$store.commit('jumpPageSet','/pages/bookMsg/editBookMsg')
 					Utils.onGotUserInfo()
 				}
+			},
+			toLessons(){
+				console.log(1)
+				uni.navigateTo({
+					url:'./lessons'
+				})
 			}
-			// async onGotUserInfo(){
-			// 	if(!this.isLogin){
-			// 		uni.showLoading({
-			// 		    title: '授权请求中...' 
-			// 		})
-			// 		try{
-			// 			let result = await Utils.wxLogin()
-			// 			if(result){
-			// 				console.log(result)
-			// 				this.$store.commit("userInfoSet",result);
-						
-			// 				// await this.$http({apiName: "cacheJsCode",method:"POST",data: {jsCode:result.jsCode}})
-			// 				// const data = await this.$http({
-			// 				// 	apiName: "isBindRoutine",
-			// 				// 	method: "POST",
-			// 				// 	hiddenToast:true,
-			// 				// 	data:{
-			// 				// 		jsCode:result.jsCode
-			// 				// 	}
-			// 				// });
-			// 				// uni.setStorageSync('session',data.data); // 存session
-			// 				this.$store.commit('isLoginSet',true); // 把登录状态变成true
-			// 				uni.navigateTo({
-			// 					url:'./personIndex'
-			// 				})
-			// 				// await this.getUserInfo();
-			// 				// utils.dealResolvePage()
-			// 			}else{
-			// 				uni.showToast({
-			// 					icon: 'none',
-			// 					title: "授权失败",
-			// 					duration: 1500
-			// 				});
-			// 			}
-			// 			uni.hideLoading()
-			// 		}catch(e){
-			// 			// if(e.data.code === 500005){
-			// 			// 	uni.navigateTo({
-			// 			// 		url: "./telBind"
-			// 			// 	})
-			// 			// }
-			// 			uni.hideLoading()
-			// 		}
-			// 	}else{
-			// 		uni.navigateTo({
-			// 			url:'./personIndex'
-			// 		})
-			// 	}
-				
-				
-			// }
+			
 		}
 	}
 </script>
@@ -160,7 +128,7 @@
 	 flex-direction: column;
 	justify-content: space-around;
 	 // padding-top: 282rpx;
-	 padding-bottom: 100rpx;
+	 padding-bottom: 70rpx;
 	 box-sizing: border-box;
 	 position: relative;
 	 .box1{
@@ -322,7 +290,7 @@
 		 }
 	 }
 	 .box2{
-		
+		z-index: 10;
 		 display: flex;
 		 flex-direction: row;
 		 width: 100%;

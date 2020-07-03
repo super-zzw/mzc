@@ -39,14 +39,6 @@ export default{
 				store.commit("userInfoSet",result);
 			  const data=await http({apiName: "getUserInfo",method:"POST",data: {jsCode :result.jsCode,avatarUrl :result.avatarUrl ,nickName:result.nickName}})
 				
-				// 	apiName: "isBindRoutine",
-				// 	method: "POST",
-				// 	hiddenToast:true,
-				// 	data:{
-				// 		jsCode:result.jsCode
-				// 	}
-				// });
-			
 				uni.setStorageSync('session',data.data); // 存session
 				uni.setStorageSync('userInfo',result); // 存session
 				store.commit('isLoginSet',true); // 把登录状态变成true

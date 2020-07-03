@@ -4,9 +4,9 @@
 		<image src="../../static/close.png" @tap="isMask=false" class="close"></image>
 		<view class="main">
 			<view class="mainContent">
-				<view class="adItem" v-for="(item,index) in 4" :key="index">
+				<view class="adItem" v-for="(item,index) in articleList" :key="index" @tap="toDetail(item.id)">
 					<image src="../../static/award.png" class="left"></image>
-					<view class="right">奶罐体验 I 开启全新回 收方式</view>
+					<view class="right">{{item.title}}</view>
 				</view>
 			</view>
 			
@@ -18,8 +18,26 @@
 	export default {
 		data() {
 			return {
-				
+				articleList:[]
 			};
+		},
+		async onLoad() {
+			await this.getArticleList()
+			
+		},
+		methods:{
+			getArticleList(){
+				this.$http({
+					apiName:'getArticleList',
+					method:'POST',
+					
+				}).then(res=>{
+					this.articleList=res.data.list
+				})
+			},
+			toDetail(id){
+				
+			}
 		}
 	}
 </script>
@@ -33,7 +51,7 @@
 					   width: 77rpx;
 					   height: 77rpx;
 					   position: absolute;
-					   top: 30rpx;
+					   top: 20rpx;
 					   left: 50%;
 					   margin-left: -39rpx;
 			}
@@ -67,7 +85,7 @@
 										   font-size:31rpx;
 										   width: 300rpx;
 										   font-family:PingFang SC;
-										   font-weight:500;
+										   font-weight:600;
 										   color:rgba(26,103,82,1);
 										   line-height:43rpx;
 									   }

@@ -3,7 +3,7 @@
 		<background></background>
 		<view class="main">
 			<view class="header">
-				<image src="../../static/icon2.png" class="avatar"></image>
+				<image :src="userInfo.avatarUrl" class="avatar"></image>
 				<view class="orderSel">
 					<text>所有积分</text>
 					<image src="../../static/pulldown.png" @tap="pulldown=!pulldown" :style="{transform:pulldown?'rotate(180deg)':'rotate(0deg)'}"></image>
@@ -15,10 +15,10 @@
 				</view>
 				
 			</view> 
-			<view class="topBox">当前环保积分余额：188</view>
+			<view class="topBox">当前环保积分余额：{{userDetail.integral||0}}</view>
 			<view class="divider1"></view>
-			<view class="logBox">
-				<view class="pointLogItem" v-for="(item,index) in 6" :key="index">
+			<view class="logBox" v-if="pointList.length">
+				<view class="pointLogItem" v-for="(item,index) in pointList" :key="index" >
 				<view class="contentBox">
 					<view class="left">
 						<text class="row1">回收赠送环保积分</text>
@@ -29,17 +29,43 @@
 				</view>
 				<view class="divider"></view>
 				</view>
+				
+			</view>
+			<view v-else class="logBox">
+				<defaultPage></defaultPage>
 			</view>
 		</view>
 	</view>
 </template>
 
 <script>
+	import {mapState} from 'vuex'
 	export default {
 		data() {
 			return {
-				pulldown:false
+				pulldown:false,
+				pointList:[]
 			};
+		},
+		computed:{
+			...mapState(['userInfo','userDetail'])
+		},
+		async onLoad() {
+			uni.showLoading({
+				title:'加载中...'
+			})
+			await this.getPointList()
+			uni.hideLoading()
+		},
+		methods:{
+			getPointList(){
+				this.$http({
+					apiName:'getPointList',
+					method:'POST'
+				}).then(res=>{
+					this.pointList=res.data
+				}).catch(err=>{})
+			}
 		}
 	}
 </script>
@@ -47,6 +73,10 @@
 <style lang="less" scoped>
   .main{
 	  .header{
+		  .avatar{
+			  border-radius: 50%;
+			  border:7rpx solid rgba(61,135,98,1);
+		  }
 		  .orderSel{
 		  	position: relative;
 		  	text{
@@ -59,6 +89,7 @@
 		  		width: 24rpx;
 		  		height: 18rpx;
 		  		margin-left: 17rpx;
+				
 		  	}
 		  	.selectBox{
 		  		z-index: 10;

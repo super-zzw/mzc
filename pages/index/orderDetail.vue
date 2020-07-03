@@ -3,13 +3,13 @@
 		<background></background>
 		<view class="main">
 			<view class="header">
-				<image src="../../static/icon2.png" class="avatar"></image>
+				<image :src="userInfo.avatarUrl" class="avatar"></image>
 			</view> 
-			<view class="orderBox">
-				<view class="orderItem"  >
+			<view class="orderBox" v-if="loading">
+				<view class="orderItem">
 					<view class="wraper">
 						<view class="orderItem">
-							<view class="status status1" v-if="step==1">订单状态：代取件</view>
+							<view class="status status1" v-if="step==1">订单状态：待取件</view>
 							<view class="status status2" v-if="step===3">订单状态：已发放积分</view>
 							<view class="status status2" v-if="step===4">订单状态：订单已完成</view>
 							<view class="status status2" v-if="step===2">订单状态：已收件</view>
@@ -41,22 +41,22 @@
 						 <view class="contentBox">
 							 <h1 class="title">预约信息</h1>
 							 <view class="content">
-								 <text class="txt">订单编号：MJ378975874889212</text>
-								 <text class="txt">用户姓名：张笑笑</text>
-								 <text class="txt">联系手机：13787676542</text>
-								 <text class="txt">预约上门时间：2019/11/01 09:00-11:00</text>
-								 <text class="txt">回收品类：奶粉罐</text>
-								 <text class="txt">回收数量：10</text>
+								 <text class="txt">订单编号：{{data_info.orderId}}</text>
+								 <text class="txt">用户姓名：{{data_info.username}}</text>
+								 <text class="txt">联系手机：{{data_info.mobile}}</text>
+								 <text class="txt">预约上门时间：{{data_info.appointmentTime}}</text>
+								 <text class="txt">回收品类：{{types[data_info.type]}}</text>
+								 <text class="txt">回收数量：{{data_info.amount}}</text>
 								 <text class="txt" v-if="step!==4">留言备注：请准时上门回收，上门前提前电话告知</text>
 								<view class="progress" v-if="step==2||step==3">
-									 <text class="txt">物流单号：JD378975874889345</text>
+									 <text class="txt">物流单号：{{data_info.jdOrder}}</text>
 									 <view class="progressBtn">查看进度</view>
 								 </view>
-								 <text class="txt" v-if="step==4">物流单号：JD378975874889345</text>
-								 <text class="txt" v-if="step==4">订单完成时间：2019</text>
+								 <text class="txt" v-if="step==4">物流单号：{{data_info.jdOrder}}</text>
+								 <text class="txt" v-if="step==4">订单完成时间：{{data_info.orderTime}}</text>
 								 <view class="options" v-if="step==1">
-									 <view class="editMsg btn">修改信息</view>
-									 <view class="cancelOrder btn">取消订单</view>
+									 <!-- <view class="editMsg btn" @tap="editOrderMsg">修改信息</view> -->
+									 <view class="cancelOrder btn" @tap="cancelOrder">取消订单</view>
 								 </view>
 							 </view>
 						 </view>
@@ -69,15 +69,25 @@
 </template>
 
 <script>
+	import {mapState} from 'vuex'
 	export default {
 		data() {
 			return {
+				loading:false,
 				statusTxt:'代取件',
-				step:1,
+				step:0,
+				orderId:'',
+				data_info:{},
+				 types:{
+				            "1":"奶粉罐"
+				        }
 				// icon:'icon11.png'
 			};
 		},
 		computed:{
+			
+				...mapState(['userInfo']),
+				
 			icon(){
 				return function(i){
 					if(this.step==i){
@@ -91,7 +101,54 @@
 					
 				
 			}
+		},
+		async onLoad(opt) {
+			this.orderId=opt.id
+			uni.showLoading({
+				title:'加载中...',
+				
+			})
+			await this.getOrderDetail()
+			uni.hideLoading()
+		},
+		methods:{
+			getOrderDetail(){
+				this.$http({
+					apiName:'checkOrderStatus',
+					method:'POST',
+					params:this.orderId
+					
+				})
+			.then(res=>{
+				this.loading=true
+				this.data_info=res.data
+				this.step=this.data_info.status
+			})
+		},
+		// editOrderMsg(){
+		// 	uni.navigateTo({
+		// 		url:'../bookMsg/editBookMsg?id='+this.orderId
+		// 	})
+		// },
+		cancelOrder(){
+			this.$http({
+				apiName:'cancelOrder',
+				method:'POST',
+				data:{
+					recycleOrderId:this.orderId
+				}
+			}).then(res=>{
+				uni.showToast({
+				                    title:"取消成功"
+				                })
+				                setTimeout(res => {
+				                    wx.navigateTo({
+				                        url: '../../components/cancelTip'
+				                    })
+				                },1000)
+			}).catch(err=>{})
 		}
+	},
 	}
 </script>
 

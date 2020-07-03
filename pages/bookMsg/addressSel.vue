@@ -37,10 +37,9 @@
             <view v-if="loading&&addressList.length==0" class="noAddress">
 				<image src="../../static/noaddress.png" mode=""></image>
 				<text>暂无新地址哦～</text>
-				<view class="addAddressBox">
+				<!-- <view class="addAddressBox">
 					<navigator class="addBtn" url="./editAddress">添加新地址</navigator>
-					
-				</view>
+				</view> -->
 			</view>
 			<view class="addAddressBox" v-if="loading">
 				<navigator class="addBtn" url="./editAddress">添加新地址</navigator>
@@ -97,7 +96,10 @@
 					this.$http({
 						apiName:'delAddress',
 						method:'POST',
-						receiveId :this.delId
+						data:{
+							receiveId:this.delId
+						}
+						
 					}).then(res=>{
 						uni.showToast({
 							icon:'none',
@@ -105,7 +107,7 @@
 							duration:1500
 						})
 						this.getAddress()
-					})
+					}).catch(err=>{})
 				}
 				this.isDel=false
 				// delAddress

@@ -3,12 +3,12 @@
 		<background></background>
 		<view class="main">
 			<view class="wraper">
-				<image src="../../static/bg1.png"  class="successImg"></image>
-				<image src="../../static/icon11.png" class="successIcon"></image>
+				<image src="../../static/bookSuccess.png"  class="successImg"></image>
+				<image src="../../static/success.png" class="successIcon"></image>
 				<text class="successTxt">您已预约上门成功，请等待京东物流上门</text>
 				<view class="options">
-					<navigator url="../index/index" class="index btn">返回首页</navigator>
-					<navigator url="../index/index" class="order btn">查看订单</navigator>
+					<navigator url="../index/index" class="index btn" hover-class="none">返回首页</navigator>
+					<navigator :url="'../index/orderDetail?id='+orderId" class="order btn" hover-class="none">查看订单</navigator>
 				</view>
 			</view>
 		</view>
@@ -20,8 +20,11 @@
 	export default {
 		data() {
 			return {
-
+             orderId:''
 			};
+		},
+		onLoad(opt) {
+			this.orderId=opt.id
 		}
 	}
 </script>

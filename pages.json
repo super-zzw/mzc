@@ -95,27 +95,21 @@
         ,{
             "path" : "pages/index/lessons",
             "style" : {
-				"navigationBarTitleText": "美赞臣回收小程序"
+				"navigationBarTitleText": "母婴育儿课堂"
 			}
         }
-        ,{
-            "path" : "pages/exchangePoint/exchangePoint",
-            "style" : {
-				"navigationBarTitleText": "注册美赞臣CRM会员页"
-			}
-        }
-        ,{
-            "path" : "pages/exchangePoint/register",
-            "style" : {
-				"navigationBarTitleText": "注册美赞臣CRM会员页"
-			}
-        }
+        
+        
         ,{
             "path" : "components/404",
             "style" : {}
         }
         ,{
             "path" : "components/alert",
+            "style" : {}
+        }
+        ,{
+            "path" : "components/defaultPage",
             "style" : {}
         }
     ],

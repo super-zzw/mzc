@@ -1,10 +1,10 @@
 import Api from './api.js'
 // import store from '../store'
 import utils from "./method.js"
-var test = false;
+var test = true;
 var _baseUrl = '';
 if (test) {
-	_baseUrl = 'www.meadcan.com/api';  //测试地址日强
+	_baseUrl = 'http://192.168.1.17:9108/api';  //测试地址日强
 } else {	_baseUrl = 'https://www.meadcan.com/api';  //正式地址
 }
 var baseUrl = _baseUrl;
@@ -16,12 +16,13 @@ export function http(opt){
 	console.log(opt)
 	let _data = Object.assign({},opt.data || {})
 	return new Promise((resolve, reject)=>{
+		let _params = opt.params || ""
 		uni.request({
 			header:{
 				"Content-Type":"application/x-www-form-urlencoded",
 				"Mzc-SessionId":uni.getStorageSync("session") || "",
 			},
-			url: baseUrl + Api[opt.apiName],
+			url: baseUrl + Api[opt.apiName] + _params,
 			method:opt.method || 'GET',
 			data:_data,
 			success:res => {

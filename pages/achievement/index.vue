@@ -3,16 +3,18 @@
 		<background></background>
 		<view class="main">
 			<view class="wraper">
-				<view class="achievementItem" v-for="(item,index) in 4" :key="index">
+				<defaultPage v-if="loading&&certificateList.length==0"></defaultPage>
+				<view class="achievementItem" v-for="(item,index) in 7" :key="index" v-if="certificateList.length">
 					<image src="../../static/award.png" class="award" @tap="isMask=true"></image>
 					<text class="awardName">公益证书</text>
 					<text class="time">于2020年5月25日获取</text>
 				</view>
+				
 			</view>
 		</view>
 		<view class="mask" v-if="isMask"></view>
 		<view class="awardDetail" v-if="isMask">
-			<image src="../../static/arrowRight.png" @tap="isMask=false" class="close"></image>
+			<image src="../../static/close.png" @tap="isMask=false" class="close"></image>
 			<view class="contentBox">
 			  <image src="../../static/award.png" class="award" ></image>
 			  <image src="../../static/icon2.png" class="avatar"></image>
@@ -35,8 +37,28 @@
 	export default {
 		data() {
 			return {
-				isMask:false
+				isMask:false,
+				certificateList:[],
+				loading:false
 			};
+		},
+		async onLoad() {
+			uni.showLoading({
+				title:'加载中...'
+			})
+			await this.getCertificateList()
+			uni.hideLoading()
+		},
+		methods:{
+			getCertificateList(){
+				this.$http({
+					apiName:'getCertificateList',
+					method:'POST'
+				}).then(res=>{
+					this.certificateList=res.data.list
+					this.loading=true
+				}).catch(err=>{})
+			}
 		}
 	}
 </script>
@@ -44,12 +66,20 @@
 <style lang="less" scoped>
   .main{
 	  .wraper{
-		  padding-top: 104rpx;
-		  display: flex;
-		  flex-wrap: wrap;
-		  flex-direction: row;
+		  padding-top: 90rpx;
+		  // display: flex;
+		  // flex-wrap: wrap;
+		  // flex-direction: row;
+		  width: 100%;
+		  height: 900rpx;
+		overflow-y:auto;
+		  word-break: break-all; 
+		  	word-wrap: break-word;
+		  // justify-content: flex-start;
 		  .achievementItem{
-			  flex: 50%;
+			    float: left;
+			  width: 50%;
+			  height: auto;
 			  margin-bottom: 68rpx;
 			  display: flex;
 			  justify-content: center;

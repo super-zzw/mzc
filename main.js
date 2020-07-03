@@ -5,6 +5,7 @@ import {http,httpAll} from './utils/request.js'
 import background from 'components/background.vue'
 import background1 from 'components/background1.vue'
 import alert from 'components/alert.vue'
+import defaultPage from 'components/defaultPage.vue'
 Vue.config.productionTip = false
 
 App.mpType = 'app'
@@ -14,6 +15,7 @@ Vue.prototype.$httpAll = httpAll;
 Vue.component('background',background);
 Vue.component('background1',background1);
 Vue.component('alert',alert);
+Vue.component('defaultPage',defaultPage);
 const app = new Vue({
 	store,
     ...App

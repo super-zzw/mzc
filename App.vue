@@ -28,14 +28,14 @@ button::after{ border: none; }
 	    background:rgba(52,52,52,0.7);
   }
 	.main{
-		    height: 1050rpx;
+		    height: 1060rpx;
 			width: 674rpx;
-			// margin: 120rpx auto 0;
+		
 			position: absolute;
-			top: 130rpx;
+			top: 110rpx;
 			left: 50%;
 			transform: translateX(-50%);
-			// margin-top: ;
+		
 			background: #fff;
 			border-radius:47rpx;
 			border-bottom-left-radius:47rpx;
@@ -61,6 +61,8 @@ button::after{ border: none; }
 					height: 164rpx;
 					top: -85rpx;
 					left: 260rpx;
+					border-radius: 50%;
+					border:7rpx solid rgba(61,135,98,1);
 				}
 				
 			}
@@ -102,5 +104,9 @@ button::after{ border: none; }
 			height: 2rpx;
 			width: 100%;
 			background: #CACACA;
+		}
+		button:after{
+			line-height: 0;
+			border: none;
 		}
 </style>

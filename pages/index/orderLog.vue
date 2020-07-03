@@ -3,7 +3,7 @@
 		<background></background>
 		<view class="main">
 			<view class="header">
-				<image src="../../static/icon2.png" class="avatar"></image>
+				<image :src="userInfo.avatarUrl" class="avatar"></image>
 				<view class="orderSel">
 					<text>所有订单</text>
 					<image src="../../static/pulldown.png" @tap="pulldown=!pulldown" :style="{transform:pulldown?'rotate(180deg)':'rotate(0deg)'}"></image>
@@ -17,14 +17,16 @@
 				</view>
 			</view> 
 			<view class="orderBox">
-				<view class="orderItem" v-for="(item,index) in 5" :key="index">
+				<view class="orderItem" v-for="(item,index) in orderList" :key="index" @tap="toOrderDetail(item.id,item.status)">
 					<view class="wraper">
-						<text class="orderNum">订单编号：MJ378975874889212</text>
+						<text class="orderNum">订单编号：{{item.orderId}}</text>
 						<view class="line"></view>
 						<view class="contentBox" >
-							<view class="status" :class="'status'+status">订单状态: 代取件</view>
-							<view class="txt txt1">预约上门时间：2019/11/01 09:00-11:00</view>
-							<view class="txt">订单提交时间：2019/10/30 09:36</view>
+							<view class="status" :class="'status'+status">订单状态: {{statusTxt(item.status)}}
+							<text v-if="status==4">(碳排减量+20)</text>
+							</view>
+							<view class="txt txt1">预约上门时间：{{item.appointmentTime}}</view>
+							<view class="txt">订单提交时间：{{item.createTime}}</view>
 							<image src="../../static/icon8.png" class="arrow"></image>
 						</view>
 					</view>
@@ -38,12 +40,53 @@
 </template>
 
 <script>
+	import {mapState} from 'vuex'
 	export default {
 		data() {
 			return {
 				status:0,
-				pulldown:false
+				// statusTxt:['已取消','待收件','已完成','已收件'],
+				pulldown:false,
+				orderList:[]
 			};
+		},
+		computed:{
+			...mapState(['userInfo']),
+			statusTxt(){
+				return function(status){
+					if(status==-1) return '已取消'
+					if(status==1)  return '待收件'
+					if(status==4)  return '已完成'
+					if(status==2)   return '已收件'
+ 				}
+			}
+		},
+		async onLoad() {
+			uni.showLoading({
+				title:'加载中...'
+			})
+			await this.getOrderList()
+			uni.hideLoading()
+		},
+		methods:{
+			getOrderList(){
+				this.$http({
+					apiName:'getOrderList',
+					method:'POST'
+				}).then(res=>{
+					this.orderList=res.data.list
+				}).catch(err=>{})
+			},
+			toOrderDetail(id,status){
+				if(status==-1){
+					uni.navigateTo({
+						url:'./orderCancel?id='+id
+					})
+				}
+				uni.navigateTo({
+					url:'./orderDetail?id='+id
+				})
+			}
 		}
 	}
 </script>
@@ -54,7 +97,7 @@
 		.main{
 			
 				.header{
-			
+			  
 				.orderSel{
 					position: relative;
 					text{
