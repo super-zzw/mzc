@@ -50,7 +50,7 @@
 								 <text class="txt" v-if="step!==4">留言备注：请准时上门回收，上门前提前电话告知</text>
 								<view class="progress" v-if="step==2||step==3">
 									 <text class="txt">物流单号：{{data_info.jdOrder}}</text>
-									 <view class="progressBtn">查看进度</view>
+									 <view class="progressBtn" @tap="toProgress">查看进度</view>
 								 </view>
 								 <text class="txt" v-if="step==4">物流单号：{{data_info.jdOrder}}</text>
 								 <text class="txt" v-if="step==4">订单完成时间：{{data_info.orderTime}}</text>
@@ -138,15 +138,20 @@
 					recycleOrderId:this.orderId
 				}
 			}).then(res=>{
-				uni.showToast({
-				                    title:"取消成功"
-				                })
+				// uni.showToast({
+				//                     title:"取消成功"
+				//                 })
 				                setTimeout(res => {
 				                    wx.navigateTo({
 				                        url: '../../components/cancelTip'
 				                    })
 				                },1000)
 			}).catch(err=>{})
+		},
+		toProgress(){
+			uni.navigateTo({
+				url:'../orderFlow/index?recycleOrderId='+this.orderId+'&createTime='+this.data_info.createTime
+			})
 		}
 	},
 	}

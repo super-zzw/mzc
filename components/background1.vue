@@ -1,5 +1,5 @@
 <template>
-	<view class="bgContainer">
+	<view class="bgContainer" :style="{background:color }">
 		<image src="../static/bg1.png" class="bg1" ></image>
 		<image src="../static/bg2.png" class="bg2"></image>
 	</view>
@@ -7,6 +7,7 @@
 
 <script>
 	export default {
+		props:['color'],
 		data() {
 			return {
 				

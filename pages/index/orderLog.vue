@@ -7,12 +7,13 @@
 				<view class="orderSel">
 					<text>所有订单</text>
 					<image src="../../static/pulldown.png" @tap="pulldown=!pulldown" :style="{transform:pulldown?'rotate(180deg)':'rotate(0deg)'}"></image>
-					<view class="selectBox" :style="{height:pulldown?'337rpx':'0'}">
+					<view class="selectBox" :style="{height:pulldown?'400rpx':'0'}">
 						<image src="../../static/selectBox.png" ></image>
-						<text class="item1 item">已取消</text>
-						<text class="item2 item">代收件</text>
-						<text class="item3 item">已完成</text>
-						<text class="item4 item">已收件</text>
+						<text class="item0 item" @tap="status=''">所有订单</text>
+						<text class="item1 item" @tap="status=-1">已取消</text>
+						<text class="item2 item" @tap="status=1">待收件</text>
+						<text class="item3 item" @tap="status=3">已完成</text>
+						<text class="item4 item" @tap="status=2">已收件</text>
 					</view>
 				</view>
 			</view> 
@@ -22,8 +23,8 @@
 						<text class="orderNum">订单编号：{{item.orderId}}</text>
 						<view class="line"></view>
 						<view class="contentBox" >
-							<view class="status" :class="'status'+status">订单状态: {{statusTxt(item.status)}}
-							<text v-if="status==4">(碳排减量+20)</text>
+							<view class="status" :class="'status'+item.status">订单状态: {{statusTxt(item.status)}}
+							<text v-if="item.status==4">(碳排减量+20)</text>
 							</view>
 							<view class="txt txt1">预约上门时间：{{item.appointmentTime}}</view>
 							<view class="txt">订单提交时间：{{item.createTime}}</view>
@@ -44,7 +45,7 @@
 	export default {
 		data() {
 			return {
-				status:0,
+				status:'',
 				// statusTxt:['已取消','待收件','已完成','已收件'],
 				pulldown:false,
 				orderList:[]
@@ -61,20 +62,30 @@
  				}
 			}
 		},
+		watch:{
+			status(res){
+				this.getOrderList(res)
+			}
+		},
 		async onLoad() {
-			uni.showLoading({
-				title:'加载中...'
-			})
-			await this.getOrderList()
-			uni.hideLoading()
+			
+			await this.getOrderList(this.status)
+			
 		},
 		methods:{
-			getOrderList(){
+			getOrderList(status){
+				uni.showLoading({
+					title:'加载中...'
+				})
 				this.$http({
 					apiName:'getOrderList',
-					method:'POST'
+					method:'POST',
+					data:{
+						status:status
+					}
 				}).then(res=>{
 					this.orderList=res.data.list
+					uni.hideLoading()
 				}).catch(err=>{})
 			},
 			toOrderDetail(id,status){
@@ -114,7 +125,7 @@
 					.selectBox{
 						z-index: 10;
 						width: 220rpx;
-						height: 337rpx;
+						height: 400rpx;
 						position: absolute;
 						left: -30rpx;
 						top: 50rpx;
@@ -132,17 +143,20 @@
 							position: absolute;
 							left: 80rpx;
 						}
-						.item1{
+						.item0{
 							top: 70rpx;
 						}
-						.item2{
+						.item1{
 							top: 130rpx;
 						}
-						.item3{
+						.item2{
 							top: 190rpx;
 						}
-						.item4{
+						.item3{
 							top: 250rpx;
+						}
+						.item4{
+							top: 310rpx;
 						}
 					}
 				}
@@ -174,14 +188,17 @@
 								font-size: 29rpx;
 								font-weight:500;
 							}
-							.status.status0{
+							.status.status1{
 								color: #D5A601;
 							}
-							.status.status1{
+							.status.status2{
 								color: #275548;
 							}
-							.status.status2{
+							.status.status-1{
 								color: #B21E01;
+							}
+							.status.status3{
+								color: #275548;
 							}
 							.txt{
 								font-size:29rpx;

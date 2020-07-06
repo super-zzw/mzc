@@ -22,4 +22,6 @@ export default{
 	getWuserMobile:'/getWuserMobile', //获取用户手机号
 	exchangeCard:'/exchangeCard' ,//申请证书
 	getArticleList:'/article/list}' ,//获取文章列表
+	getAgreement:'/agreement' ,//获取协议
+	getOverFlow:'/order/logistics/'
 }

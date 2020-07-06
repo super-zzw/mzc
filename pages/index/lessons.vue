@@ -1,10 +1,10 @@
 <template>
 	<view class="container">
-		<background color="#1A6752"></background>
+		<background1 color="#196751"></background1>
 		<image src="../../static/close.png" @tap="isMask=false" class="close"></image>
 		<view class="main">
 			<view class="mainContent">
-				<view class="adItem" v-for="(item,index) in articleList" :key="index" @tap="toDetail(item.id)">
+				<view class="adItem" v-for="(item,index) in articleList" :key="index" @tap="toDetail(item.contentUrl)">
 					<image src="../../static/award.png" class="left"></image>
 					<view class="right">{{item.title}}</view>
 				</view>
@@ -35,8 +35,14 @@
 					this.articleList=res.data.list
 				})
 			},
-			toDetail(id){
-				
+			toDetail(url){
+				console.log(url)
+				uni.navigateTo({
+					url:'./article?url='+url,
+					fail(err) {
+						console.log(1,err)
+					}
+				})
 			}
 		}
 	}

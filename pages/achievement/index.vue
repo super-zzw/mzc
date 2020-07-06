@@ -4,10 +4,10 @@
 		<view class="main">
 			<view class="wraper">
 				<defaultPage v-if="loading&&certificateList.length==0"></defaultPage>
-				<view class="achievementItem" v-for="(item,index) in 7" :key="index" v-if="certificateList.length">
-					<image src="../../static/award.png" class="award" @tap="isMask=true"></image>
+				<view class="achievementItem" v-for="(item,index) in certificateList" :key="index" v-if="certificateList.length">
+					<image :src="item.coverUrl" class="award" @tap="isMask=true"></image>
 					<text class="awardName">公益证书</text>
-					<text class="time">于2020年5月25日获取</text>
+					<text class="time">于{{item.createTime|formatDate}}获取</text>
 				</view>
 				
 			</view>
@@ -48,6 +48,15 @@
 			})
 			await this.getCertificateList()
 			uni.hideLoading()
+		},
+		filters:{
+			formatDate(data){
+				let year=data.split(' ')[0].split('-')[0],
+				    month=data.split(' ')[0].split('-')[1],
+					day=data.split(' ')[0].split('-')[2]
+					
+					return year+'年'+month+'月'+day+'日'
+			}
 		},
 		methods:{
 			getCertificateList(){
@@ -121,11 +130,11 @@
 	  .close{
 		  width: 77rpx;
 		  height: 77rpx;
-		  margin-top: 40rpx;
+		  margin-top: 20rpx;
 	  }
 	  .contentBox{
 		  margin-top: 30rpx;
-		  width: 95%;
+		  width: 90%;
 		  height: 950rpx;
 		  background: #E2FFDB;
 		  border-radius:47rpx;

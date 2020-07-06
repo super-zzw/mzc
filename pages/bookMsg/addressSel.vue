@@ -3,7 +3,7 @@
 		<background></background>
 		<view class="main">
 			<view class="addreeBox" v-if="addressList.length" >
-				<view class="addressItem" v-for="(item,index) in addressList" :key="index">
+				<view class="addressItem" v-for="(item,index) in addressList" :key="index" @tap="addressOk(item)">
 					<view class="name row">
 						<text class="label">寄件人</text>
 						<view class="inputBox">{{item.username}}</view>
@@ -111,6 +111,12 @@
 				}
 				this.isDel=false
 				// delAddress
+			},
+			addressOk(item){
+				uni.navigateTo({
+					url:'./editBookMsg'
+				})
+				this.$store.commit('selectAddr', item)
 			}
 		}
 	}

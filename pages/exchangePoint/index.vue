@@ -124,7 +124,7 @@
 			uni.showLoading({
 				title:'加载中...'
 			})
-			console.log(this.userDetail.vip)
+	
 			await this.getMsg()
 		},
 		computed:{
@@ -241,7 +241,7 @@
 					uni.hideLoading();
 				}
 			},
-			handleExchange(){
+			 handleExchange(){
 				// uni.showLoading({
 				// 	title: "兑换中..."
 				// })
@@ -253,11 +253,11 @@
 						}
 					}).then(res=>{
 					this.alert=true
-					
+					 this.getMsg()
 					}).catch(err=>{})
 			 // uni.hideLoading()
 			},
-			enterShop(boo){
+			 enterShop(boo){
 				if(boo){
 					uni.navigateToMiniProgram({
 					  appId: 'wx0906e6c98c19783a',
@@ -268,6 +268,9 @@
 					})
 				}else{
 					this.alert=false
+					this.isMask=false
+					this.exchangeBtn=false
+					
 				}
 			}
 		}

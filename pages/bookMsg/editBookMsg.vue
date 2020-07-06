@@ -21,7 +21,7 @@
 					<view class="row r1">
 						<view class="left addBox">
 							<text class="label">所在地区</text>
-							<view @tap="addressSel" class="addMsg">
+							<view @tap="addressSel" class="addMsg" >
 								<view class="info">
 									<text>{{addressMsg.province+addressMsg.city+addressMsg.district}}</text>
 									<text>{{addressMsg.detailedAddress}}</text>
@@ -68,7 +68,7 @@
 					<text class="label">回收品类</text>
 					<view class="right">
 						<text class="rightTxt">{{type}}</text>
-						<image src="../../static/detail.png" class="icon1"></image>
+						<image src="../../static/detail.png" class="icon1" @tap="show_modal = true"></image>
 					</view>
 
 				</view>
@@ -78,7 +78,7 @@
 					<picker :range="numArray" @change="numChange" :value="index">
 						<view class="right">
 							<text class="rightTxt">{{numArray[index]}}</text>
-							<image src="../../static/trangle.png" class="selnum"></image>
+							<image src="../../static/trangle.png" class="selnum" ></image>
 						</view>
 					</picker>
 
@@ -95,12 +95,30 @@
 						<image src="../../static/agree0.png" v-if="!flag"></image>
 						<image src="../../static/agree1.png" v-if="flag"></image>
 					</view>
-					<view class="xieyiBox">阅读并同意<navigator url="../index/index" class="xieyi">《美赞臣隐私保护声明》</navigator></view>
+					<view class="xieyiBox">阅读并同意<navigator url="./statement" class="xieyi">《美赞臣隐私保护声明》</navigator></view>
 				</view>
 				
 			</view>
 			<view class="bookBtn" @tap="toBook">立即预约</view>
 		</view>
+		
+		 <view class="sModal" v-if="show_modal">
+			
+		            <view class="sModalBox animated fadeIn">
+						 <image src="../../static/close.png" mode="widthFix" class="close" @tap="show_modal=false"></image>
+		                <view class="sModalHead">
+		                
+		                    <view class="sModalHeadItem sModalHeadItem1">回收说明</view>
+		                    <!-- <view class="sModalHeadItem sModalHeadItem2" @tap="show_modal = false">我知道了</view> -->
+		                </view>
+		                <view class="sModalBody">
+		                    <view class="sModalBodyItem">1.为了让回收更加环保，以及考虑到装载能力，预约一次可回收<text class="sModalBodyItem2">3-10个</text>奶粉罐。</view>
+		                    <view class="sModalBodyItem">2.建议将奶粉罐适当压扁后交给物流小哥。</view>
+		                    <view class="sModalBodyItem">3.回收包含美赞臣旗下任意品牌罐装空罐，包括蓝臻、铂睿、安儿宝、亲舒等。</view>
+							<view class="btn" @tap="show_modal=false">已了解</view>
+		                </view>
+		            </view>
+		        </view>
 	</view>
 </template>
 
@@ -110,6 +128,7 @@
 	export default {
 		data() {
 			return {
+				show_modal:false,
 				orderId:'',
 				flag:false,
 			    bookTime:'',
@@ -238,7 +257,8 @@
 
 <style lang="less" scoped>
     .main{
-		padding-top: 25rpx;
+		padding-bottom: 25rpx;
+		 overflow: scroll;
 		.wraper{
 			padding-left: 58rpx ;
 			.row{
@@ -273,6 +293,7 @@
 				.icon1{
 					width: 30rpx;
 					height: 30rpx;
+					cursor: pointer;
 				}
 				
 			}
@@ -396,5 +417,85 @@
 			align-items: center;
 		}
 		}
-	
+	  .sModal{
+	        width: 100%;
+	        height: 100vh;
+	        position: absolute;
+	        left: 0;
+	        top: 0;
+		  
+			box-sizing: border-box;
+	        background-color: rgba(0, 0, 0, 0.4);
+	        z-index: 100;
+		
+	            .sModalBox{
+					.close{
+						width: 77rpx;
+						height: 77rpx;
+						margin-bottom: 20rpx;
+					}
+	                position: absolute;
+	                left: 50%;
+	                bottom:20%;
+	                width: 100%;
+					   padding: 0 50rpx;
+						transform: translate(-50%,-50%);
+						height: 500rpx;
+	              
+	                box-sizing: border-box;
+	                animation-duration: .8s!important;
+					text-align: center;
+					
+	                .sModalHead{
+	                    display: flex;
+	                    justify-content: center;
+	                    align-items: center;
+						background:rgba(26,103,82,1); ;
+						 // text-align: center;
+						 height: 80rpx;
+	                    .sModalHeadItem{
+	                        width: 33.3%;
+	                        
+	                    }
+	                    .sModalHeadItem1{
+	                        font-weight: 500;
+	                        color: #fff;
+	                        font-size: 32rpx;
+	                       
+	                    }
+	                    .sModalHeadItem2{
+	                        font-size: 28rpx;
+	                        color: #2790E0;
+	                        text-align: right;
+	                    }
+	                }
+	                .sModalBody{
+	                    font-size: 28rpx;
+	                    color: #303133;
+	                   padding: 20rpx;
+						background: #fff;
+	                    .sModalBodyItem{
+	                        margin-bottom: 30rpx;
+	                        line-height: 44rpx;
+							 text-align: left;
+	                    }
+	                    .sModalBodyItem2{
+	                        color: #2790E0;
+	                    }
+						.btn{
+							
+							width: 200rpx;
+							height: 70rpx;
+							border-radius: 40rpx;
+							font-size: 34rpx;
+							background: rgba(26,103,82,1);
+							color: #fff;
+							display: flex;
+							justify-content: center;
+							align-items: center;
+							margin: 80rpx auto 0;
+						}
+	                }
+	            }
+	    }
 </style>

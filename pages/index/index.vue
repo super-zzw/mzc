@@ -79,10 +79,10 @@
 				this.$http({
 					apiName:'getUser'
 				}).then(res=>{
-				uni.hideLoading()
 				    this.$store.commit('setUserDetail',res.data)
 					this.carbonEmissions=res.data.carbonEmissions
 					this.integral=res.data.integral
+					  uni.hideLoading()
 				}).catch(err=>{})
 			},
 			toIndex(){
@@ -110,7 +110,7 @@
 				}
 			},
 			toLessons(){
-				console.log(1)
+				
 				uni.navigateTo({
 					url:'./lessons'
 				})
@@ -177,7 +177,7 @@
 				 align-items: center;
 				 justify-content: center;
 				 .txt{
-					 font-size:36rpx;
+					 font-size:34rpx;
 					 font-weight:500;
 					 color:rgba(18,92,72,1);
 					 line-height:20rpx;
@@ -185,7 +185,7 @@
 				 .line{
 					 width: 2rpx;
 					 height:18rpx ;
-					 margin: 0 22rpx 2rpx;
+					 margin: 0 14rpx 2rpx;
 					 line-height: 24rpx;
 				 }
 				 .arrow{

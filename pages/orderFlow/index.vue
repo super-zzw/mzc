@@ -1,10 +1,10 @@
 <template>
 	<view>
 		<background></background>
-		<view class="main">
+		<view class="main" v-if="detail.length">
 			<view class="wraper">
-				<view class="companyName txt">物流公司：京东物流</view>
-				<view class="orderNum txt">订单编号：MJ378975874889212 <text class="copy">复制</text></view>
+				<view class="companyName txt">物流公司：{{detail[0].opeName}}</view>
+				<view class="orderNum txt">订单编号：{{detail[0].waybillCode}} <text class="copy" @tap="copy">复制</text></view>
 			</view>
 			<view class="divider1"></view>
 			<view class="wraper wrap1">
@@ -16,7 +16,7 @@
 					<view class="right">
 						<text class="title">已下单</text>
 						<text class="info">您提交了订单，请等待系统确认</text>
-						<text class="time">2020-08-08 15:08:08</text>
+						<text class="time">{{createTime}}</text>
 					</view>
 				</view>
 				<view class="step">
@@ -25,9 +25,10 @@
 						<view class="line"></view>
 					</view>
 					<view class="right">
-						<text class="title">已揽件</text>
-						<text class="info">[广州市]广州珠海的广州珠海[13798765243]已揽件</text>
-						<text class="time">2020-08-08 15:08:08 </text>
+						<text class="title">{{detail[0].opeTitle}}</text>
+						<!-- <text class="info">[广州市]广州珠海的广州珠海[13798765243]已揽件</text> -->
+						<text class="info">{{detail[0].opeRemark}}</text>
+						<text class="time">{{detail[0].opeTime}} </text>
 					</view>
 				</view>
 				<view class="step">
@@ -86,11 +87,42 @@
 	export default {
 		data() {
 			return {
-				
+				orderId:'',
+				detail:[],
+				createTime:''
 			}
 		},
-		methods: {
+		async onLoad(opt) {
+	
+			this.orderId=opt.recycleOrderId 
+			this.createTime=opt.createTime
+			uni.showLoading({
+				title:'加载中...'
+			})
+			await this.getOverFlow()
 			
+		},
+		methods: {
+			getOverFlow(){
+				this.$http({
+					apiName:'getOverFlow',
+					method:'POST',
+					params:this.orderId
+				}).then(res=>{
+					this.detail=res.data
+					uni.hideLoading()
+				}).catch(res=>{})
+			},
+			copy(){
+				uni.setClipboardData({
+				    data: this.detail[0].waybillCode,
+				    success: function () {
+				        uni.showToast({
+				        	title:'成功复制到剪贴板'
+				        })
+				    }
+				});
+			}
 		}
 	}
 </script>

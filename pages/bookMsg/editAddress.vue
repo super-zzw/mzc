@@ -83,21 +83,21 @@
 				title: "数据加载中...",
 				mask: true
 			})
+			
+			
 			if (opt.id) {
 				this.id = opt.id
 				await this.getAddressMsg()
+				
 			}
-
-			await this.regionSel()
-			uni.hideLoading()
+				await this.regionSel()
+			
 		},
 		methods: {
 			regionSel() {
 				this.$http({
 					apiName: 'getOpenList'
 				}).then(res => {
-					// this.openList=res.data
-
 					for (let item of res.data) {
 						let _province = item.area //省/直辖市
 						if (this.provinces.indexOf(_province) == -1) {
@@ -130,6 +130,10 @@
 						this.cities[this.provinces[0]],
 						this.areas[this.cities[this.provinces[0]][0]]
 					]
+					if(this.multiArray.length>0){
+							uni.hideLoading()
+					}
+				
 				}).catch(err => {})
 
 
@@ -142,12 +146,11 @@
 						id: this.id
 					}
 				}).then(res => {
-					console.log(res.data)
 					for (let item in this.form_data) {
 						this.form_data[item] = res.data[item]
 					}
 					this.area = res.data.province + res.data.city + res.data.district
-					uni.hideLoading()
+					// uni.hideLoading()
 				}).catch(err => {})
 			},
 
@@ -157,7 +160,7 @@
 				this.form_data.province = this.multiArray[0][this.multiIndex[0]]
 				this.form_data.city = this.multiArray[1][this.multiIndex[1]]
 				this.form_data.district = this.multiArray[2][this.multiIndex[2]] || ''
-				this.area = this.form_data.province + this.form_data.city + this.form_data.district
+				this.area = this.form_data.province+ this.form_data.city + this.form_data.district
 				this.form_data.areaNum = this.areas_ids[this.area]
 
 			},
@@ -233,7 +236,7 @@
 	.container {
 
 		.main {
-
+        
 			.top {
 				padding-top: 56rpx;
 				padding-left: 60rpx;

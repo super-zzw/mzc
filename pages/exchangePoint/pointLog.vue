@@ -17,7 +17,7 @@
 			</view> 
 			<view class="topBox">当前环保积分余额：{{userDetail.integral||0}}</view>
 			<view class="divider1"></view>
-			<view class="logBox" v-if="pointList.length">
+		<!-- 	<view class="logBox" v-if="pointList.length">
 				<view class="pointLogItem" v-for="(item,index) in pointList" :key="index" >
 				<view class="contentBox">
 					<view class="left">
@@ -30,7 +30,20 @@
 				<view class="divider"></view>
 				</view>
 				
-			</view>
+			</view> -->
+			<scroll-view scroll-y="true" class="logBox" v-if="pointList.length" @scrolltolower="loadmore">
+				<view class="pointLogItem" v-for="(item,index) in pointList" :key="index" >
+				<view class="contentBox">
+					<view class="left">
+						<text class="row1">回收赠送环保积分</text>
+						<text class="row2">订单编号：MJ378975874889212</text>
+						<text class="row3">2020-08-08 15:08:08</text>
+					</view>
+					<view class="right">+10</view>
+				</view>
+				<view class="divider"></view>
+				</view>
+			</scroll-view>
 			<view v-else class="logBox">
 				<defaultPage></defaultPage>
 			</view>
@@ -44,7 +57,10 @@
 		data() {
 			return {
 				pulldown:false,
-				pointList:[]
+				pointList:[],
+				size:10,
+				page:1,
+				total:''
 			};
 		},
 		computed:{
@@ -61,10 +77,32 @@
 			getPointList(){
 				this.$http({
 					apiName:'getPointList',
-					method:'POST'
+					method:'POST',
+					data:{
+						size:this.size,
+						page:this.page
+					}
 				}).then(res=>{
-					this.pointList=res.data
+					// this.pointList.push(res.data.list)
+					this.pointList=this.pointList.concat(res.data.list)
+					this.total=res.data.total
+					uni.hideLoading()
 				}).catch(err=>{})
+			},
+			async loadmore(){
+				if(this.pointList.length>this.total){
+					uni.showToast({
+						title:'没有更多了...',
+						icon:'none'
+					})
+				}else{
+					this.page++
+					uni.showLoading({
+						title:'拼命加载中...'
+					})
+					await this.getPointList()
+				}
+				
 			}
 		}
 	}
@@ -129,11 +167,15 @@
 		  font-weight:600;
 		  color:rgba(39,84,72,1);
 	  }
+	  ::-webkit-scrollbar{
+		  width: 0;
+		  height: 0;
+		  background-color: #fff;
+	  }
 	  .logBox{
 	      height: 800rpx;
-		  overflow: scroll;
+		  box-sizing: border-box;
 		  padding: 0 50rpx;
-		
 		  .pointLogItem{
 			  .contentBox{
 				  width: 100%;
@@ -181,5 +223,6 @@
 			  
 		  }
 	  }
+	
   }
 </style>
