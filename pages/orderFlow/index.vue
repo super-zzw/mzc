@@ -8,7 +8,7 @@
 			</view>
 			<view class="divider1"></view>
 			<view class="wraper wrap1">
-				<view class="step">
+		<!-- 		<view class="step">
 					<view class="left">
 						<image src="../../static/icon_1.png" mode=""></image>
 						<view class="line"></view>
@@ -26,7 +26,6 @@
 					</view>
 					<view class="right">
 						<text class="title">{{detail[0].opeTitle}}</text>
-						<!-- <text class="info">[广州市]广州珠海的广州珠海[13798765243]已揽件</text> -->
 						<text class="info">{{detail[0].opeRemark}}</text>
 						<text class="time">{{detail[0].opeTime}} </text>
 					</view>
@@ -77,6 +76,17 @@
 						<text class="time">2020-08-08 15:08:08 </text>
 						<view class=""></view>
 					</view>
+				</view> -->
+				<view class="step" v-for="(item,index) in detail" :key="index">
+					<view class="left">
+						<image src="../../static/icon_1.png" mode=""></image>
+						<view class="line"></view>
+					</view>
+					<view class="right">
+						<text class="title">{{item.opeTitle}}</text>
+						<text class="info">{{item.opeRemark}}</text>
+						<text class="time">{{item.opeTime}}</text>
+					</view>
 				</view>
 			</view>
 		</view>
@@ -89,13 +99,13 @@
 			return {
 				orderId:'',
 				detail:[],
-				createTime:''
+				// createTime:''
 			}
 		},
 		async onLoad(opt) {
 	
 			this.orderId=opt.recycleOrderId 
-			this.createTime=opt.createTime
+			// this.createTime=opt.createTime
 			uni.showLoading({
 				title:'加载中...'
 			})
@@ -166,7 +176,9 @@
 			   flex-direction: row;
 	
 		   }
-		   
+		   .step:last-child .line{
+			   display: none;
+		   }
 		   .left{
 		   				   width: 42rpx;
 		   				   margin-right: 20rpx;
@@ -185,6 +197,7 @@
 		   					   background:#CDE7C8;
 		   					   height: 100%;
 		   				   }
+						   
 						   .point{
 							   width: 13rpx;
 							   height: 13rpx;
@@ -196,6 +209,7 @@
 							   margin-left: -6.5rpx;
 						   }
 		   }
+		  
 		   .right{
 		   				   flex: 1;
 		   				   display: flex;

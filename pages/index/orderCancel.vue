@@ -21,7 +21,7 @@
 					<text class="txt">留言备注：请准时上门回收，上门前提前电话告知</text>
 					<text class="txt">订单取消时间：2019/10/30 09:36</text>
 				</view>
-				<navigator url="./index" class="btn">再次预约上门回收</navigator>
+				<navigator url="../bookMsg/editBookMsg" class="btn">再次预约上门回收</navigator>
 			</view>
 		</view>
 	</view>

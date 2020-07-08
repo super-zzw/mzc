@@ -20,7 +20,7 @@
 	}
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 	.bgContainer{
 		width: 100vw;
 		height: 100vh;

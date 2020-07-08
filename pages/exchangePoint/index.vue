@@ -30,7 +30,7 @@
 			</view>
 		</view>
 		</view>
-		<view v-if="isMask">
+		<view v-if="isMask1">
 			<view class="mask"></view>
 				<image src="../../static/close.png" @tap="close" class="close"></image>
 			<view class="protectBox" v-if="protectBtn">
@@ -92,6 +92,7 @@
 		</view>
 		</view>
       <alert title="兑换成功" content="是否进入蓝臻积分商城？" v-else @tapBtn="enterShop"></alert>		
+	  <awareDetail :isMask="isMask" :src="imgPath"/>
 	</view>
 	
 </template>
@@ -99,6 +100,7 @@
 <script>
 	import Utils from '../../utils/method.js'
 	import {mapState} from 'vuex'
+	import awareDetail from '../../components/awareDetail.vue'
 	export default {
 		data() {
 			return {
@@ -108,6 +110,7 @@
 				centiare:'',
 				changeRule:'',
 				isMask:false,
+				isMask1:false,
 				protectBtn:false,
 				exchangeBtn:false,
 				form_data:{
@@ -116,9 +119,11 @@
 					authCode:'' 
 				},
 				count:10,
-				ratio:1
+				ratio:1,
+				imgPath:''
 			};
 		},
+			components:{awareDetail},
 		async onLoad() {
 			
 			uni.showLoading({
@@ -145,29 +150,33 @@
 			},
 			protect(){
 				this.protectBtn=true
-				this.isMask=true
+				this.isMask1=true
 			},
 			toProtect(){
 				this.$http({
 					apiName:'exchangeCard',
 					
-				}).then(res=>{}).catch(err=>{})
+				}).then(res=>{
+					uni.navigateTo({
+						url:'../achievement/index?isMask=true&imgPath='+res.data,
+						// success() {
+						// 	this.isMask=true
+						// 	this.imgPath=res.data
+						// }
+					})
+					
+					
+				}).catch(err=>{})
 			},
 			close(){
 				this.protectBtn=false
 				this.exchangeBtn=false
-				this.isMask=false
+				this.isMask1=false
 			},
 			exchange(){
-				// if(!this.userDetail.integral){
-				// 	uni.showToast({
-				// 		title:'您目前暂无积分',
-				// 		icon:'none'
-				// 	})
-				// }else{
-					this.isMask=true
+				
+					this.isMask1=true
 					this.exchangeBtn=true
-				// }
 				
 			},
 			async getAuthCode(){
@@ -229,7 +238,7 @@
 				try{
 					const userPhone = await this.$http({apiName: "getWuserMobile",method:'POST',data:{encryptedData,iv}});
 					this.form_data.mobile = userPhone.data;
-					this.isMask=true
+					this.isMask1=true
 					this.exchangeBtn=true
 					// this.loseCode = 1;
 				}catch(e){
@@ -253,7 +262,7 @@
 						}
 					}).then(res=>{
 					this.alert=true
-					 this.getMsg()
+					 // this.getMsg()
 					}).catch(err=>{})
 			 // uni.hideLoading()
 			},
@@ -268,7 +277,7 @@
 					})
 				}else{
 					this.alert=false
-					this.isMask=false
+					this.isMask1=false
 					this.exchangeBtn=false
 					
 				}

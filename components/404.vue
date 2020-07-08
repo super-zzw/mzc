@@ -15,7 +15,7 @@
 	}
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
   .container{
 	  width: 100vw;
 	  height: 100vh;

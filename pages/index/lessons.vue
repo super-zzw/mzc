@@ -1,7 +1,7 @@
 <template>
 	<view class="container">
 		<background1 color="#196751"></background1>
-		<image src="../../static/close.png" @tap="isMask=false" class="close"></image>
+		<!-- <image src="../../static/close.png" @tap="isMask=false" class="close"></image> -->
 		<view class="main">
 			<view class="mainContent">
 				<view class="adItem" v-for="(item,index) in articleList" :key="index" @tap="toDetail(item.contentUrl)">

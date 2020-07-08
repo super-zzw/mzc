@@ -102,7 +102,7 @@
         ,{
             "path" : "pages/index/lessons",
             "style" : {
-				
+				"navigationBarTitleText": "母婴育儿课堂"
 			}
         }
         
@@ -124,6 +124,12 @@
         ,{
             "path" : "pages/index/article",
             "style" : {}
+        }
+        ,{
+            "path" : "pages/index/feedBack",
+            "style" : {
+				"navigationBarTitleText": "意见反馈"
+			}
         }
     ],
 	"globalStyle": {

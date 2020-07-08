@@ -3,30 +3,33 @@
 		<background></background>
 		<view class="main">
 			<view class="addreeBox" v-if="addressList.length" >
-				<view class="addressItem" v-for="(item,index) in addressList" :key="index" @tap="addressOk(item)">
-					<view class="name row">
-						<text class="label">寄件人</text>
-						<view class="inputBox">{{item.username}}</view>
-						<!-- <input type="text" name="" id="" placeholder="填写寄件人姓名" class="inputBox" placeholder-style="color:#1A6752"> -->
-					</view>
-					<view class="divider"></view>
-					<view class="row phone">
-						<text class="label">手机号码</text>
-						<view class="inputBox">+86 {{item.mobile}}</view>
-						<!-- <input type="number" name="" id="" placeholder="填写联系人手机号码" class="inputBox" placeholder-style="color:#1A6752"> -->
-					</view>
-					<view class="divider"></view>
-					<view class="row region">
-						<text class="label">所在地区</text>
-						<!-- <input type="text" name="" id="" placeholder="填写联系人手机号码" class="inputBox" placeholder-style="color:#1A6752"> -->
-						<view class="inputBox">
-							<view class="showRegion">
-								<text>{{item.province+item.city+item.district}}</text>
-								<text>{{item.detailedAddress}}</text>
-							</view>
-							<image src="../../static/icon8.png" class="regionSel"></image>
+				<view class="addressItem" v-for="(item,index) in addressList" :key="index" >
+					<block @tap="addressOk(item)">
+						<view class="name row">
+							<text class="label">寄件人</text>
+							<view class="inputBox">{{item.username}}</view>
+							<!-- <input type="text" name="" id="" placeholder="填写寄件人姓名" class="inputBox" placeholder-style="color:#1A6752"> -->
 						</view>
-					</view>
+						<view class="divider"></view>
+						<view class="row phone">
+							<text class="label">手机号码</text>
+							<view class="inputBox">+86 {{item.mobile}}</view>
+							<!-- <input type="number" name="" id="" placeholder="填写联系人手机号码" class="inputBox" placeholder-style="color:#1A6752"> -->
+						</view>
+						<view class="divider"></view>
+						<view class="row region">
+							<text class="label">所在地区</text>
+							<!-- <input type="text" name="" id="" placeholder="填写联系人手机号码" class="inputBox" placeholder-style="color:#1A6752"> -->
+							<view class="inputBox">
+								<view class="showRegion">
+									<text>{{item.province+item.city+item.district}}</text>
+									<text>{{item.detailedAddress}}</text>
+								</view>
+								<image src="../../static/icon8.png" class="regionSel"></image>
+							</view>
+						</view>
+					</block>
+					
 					<view class="divider"></view>
 					<view class="options">
 						<view class="editBtn btn" @tap="edit(item.id)">编辑</view>

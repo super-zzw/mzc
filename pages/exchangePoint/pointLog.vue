@@ -5,46 +5,34 @@
 			<view class="header">
 				<image :src="userInfo.avatarUrl" class="avatar"></image>
 				<view class="orderSel">
-					<text>所有积分</text>
+					<text>{{txt}}</text>
 					<image src="../../static/pulldown.png" @tap="pulldown=!pulldown" :style="{transform:pulldown?'rotate(180deg)':'rotate(0deg)'}"></image>
-					<view class="selectBox" :style="{height:pulldown?'210rpx':'0'}">
+					<view class="selectBox" :style="{height:pulldown?'270rpx':'0'}">
 						<image src="../../static/selectBox.png" ></image>
-						<text class="item1 item">已获得</text>
-						<text class="item2 item">已消耗</text>
+						<text class="item0 item" @tap="status==''?'':(status='',pointList=[]),page=1,pulldown=false,txt='所有记录'">所有记录</text>
+						<text class="item1 item" @tap="pointList=[],status=1,pulldown=false,page=1,txt='已获得'">已获得</text>
+						<text class="item2 item" @tap="pointList=[],status=-1,pulldown=false,page=1,txt='已消耗'">已消耗</text>
 					</view>
 				</view>
 				
 			</view> 
 			<view class="topBox">当前环保积分余额：{{userDetail.integral||0}}</view>
 			<view class="divider1"></view>
-		<!-- 	<view class="logBox" v-if="pointList.length">
+		
+			<scroll-view scroll-y="true" class="logBox"  @scrolltolower="loadmore">
 				<view class="pointLogItem" v-for="(item,index) in pointList" :key="index" >
 				<view class="contentBox">
 					<view class="left">
-						<text class="row1">回收赠送环保积分</text>
-						<text class="row2">订单编号：MJ378975874889212</text>
-						<text class="row3">2020-08-08 15:08:08</text>
+						<text class="row1">{{item.title}}</text>
+						<text class="row2">{{item.remark}}</text>
+						<text class="row3">{{item.createTime}}</text>
 					</view>
-					<view class="right">+10</view>
-				</view>
-				<view class="divider"></view>
-				</view>
-				
-			</view> -->
-			<scroll-view scroll-y="true" class="logBox" v-if="pointList.length" @scrolltolower="loadmore">
-				<view class="pointLogItem" v-for="(item,index) in pointList" :key="index" >
-				<view class="contentBox">
-					<view class="left">
-						<text class="row1">回收赠送环保积分</text>
-						<text class="row2">订单编号：MJ378975874889212</text>
-						<text class="row3">2020-08-08 15:08:08</text>
-					</view>
-					<view class="right">+10</view>
+					<view :class="item.status==1?'right1':'right2'">{{item.status==1?'+'+item.integral:'-'+item.integral}}</view>
 				</view>
 				<view class="divider"></view>
 				</view>
 			</scroll-view>
-			<view v-else class="logBox">
+			<view v-if="loading&&pointList.length==0" class="logBox" >
 				<defaultPage></defaultPage>
 			</view>
 		</view>
@@ -60,27 +48,36 @@
 				pointList:[],
 				size:10,
 				page:1,
-				total:''
+				total:'',
+				loading:false,
+				status:'',
+				txt:'所有记录'
 			};
 		},
 		computed:{
 			...mapState(['userInfo','userDetail'])
 		},
 		async onLoad() {
-			uni.showLoading({
-				title:'加载中...'
-			})
-			await this.getPointList()
-			uni.hideLoading()
+			// uni.showLoading({
+			// 	title:'加载中...'
+			// })
+			await this.getPointList(this.status)
+			// uni.hideLoading()
+		},
+		watch:{
+			status(res){
+				this.getPointList(res)
+			}
 		},
 		methods:{
-			getPointList(){
+			getPointList(status){
 				this.$http({
 					apiName:'getPointList',
 					method:'POST',
 					data:{
 						size:this.size,
-						page:this.page
+						page:this.page,
+						status:this.status
 					}
 				}).then(res=>{
 					// this.pointList.push(res.data.list)
@@ -132,7 +129,7 @@
 		  	.selectBox{
 		  		z-index: 10;
 		  		width: 220rpx;
-		  		height: 210rpx;
+		  		height: 270rpx;
 		  		position: absolute;
 		  		left: -30rpx;
 		  		top: 50rpx;
@@ -150,11 +147,14 @@
 		  			position: absolute;
 		  			left: 80rpx;
 		  		}
+				.item0{
+					top: 70rpx;
+				}
 		  		.item1{
-		  			top: 70rpx;
+		  			top: 130rpx;
 		  		}
 		  		.item2{
-		  			top: 130rpx;
+		  			top: 190rpx;
 		  		}
 		  	
 		  	}
@@ -211,12 +211,19 @@
 				  					  line-height:20rpx;
 				  				  }
 				  }
-				  .right{
+				  .right1{
 				  				  font-size:36rpx;
 				  				  font-family:JDZhengHei-01;
 				  				  font-weight:400;
 				  				  color:rgba(4,168,124,1);
 				  				  line-height:20rpx;
+				  }
+				  .right2{
+					  font-size:36rpx;
+					  font-family:JDZhengHei-01;
+					  font-weight:400;
+					  color:#B11D00;
+					  line-height:20rpx;
 				  }
 			  }
 			 

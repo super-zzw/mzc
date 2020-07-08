@@ -5,19 +5,19 @@
 			<view class="header">
 				<image :src="userInfo.avatarUrl" class="avatar"></image>
 				<view class="orderSel">
-					<text>所有订单</text>
+					<text>{{sortTxt}}</text>
 					<image src="../../static/pulldown.png" @tap="pulldown=!pulldown" :style="{transform:pulldown?'rotate(180deg)':'rotate(0deg)'}"></image>
 					<view class="selectBox" :style="{height:pulldown?'400rpx':'0'}">
 						<image src="../../static/selectBox.png" ></image>
-						<text class="item0 item" @tap="status=''">所有订单</text>
-						<text class="item1 item" @tap="status=-1">已取消</text>
-						<text class="item2 item" @tap="status=1">待收件</text>
-						<text class="item3 item" @tap="status=3">已完成</text>
-						<text class="item4 item" @tap="status=2">已收件</text>
+						<text class="item0 item" @tap="status='',pulldown=false,sortTxt='所有订单'">所有订单</text>
+						<text class="item1 item" @tap="status=-1,pulldown=false,sortTxt='已取消'">已取消</text>
+						<text class="item2 item" @tap="status=1,pulldown=false,sortTxt='待收件'">待收件</text>
+						<text class="item3 item" @tap="status=4,pulldown=false,sortTxt='已完成'">已完成</text>
+						<text class="item4 item" @tap="status=3,pulldown=false,sortTxt='已收件'">已收件</text>
 					</view>
 				</view>
 			</view> 
-			<view class="orderBox">
+			<view class="orderBox" >
 				<view class="orderItem" v-for="(item,index) in orderList" :key="index" @tap="toOrderDetail(item.id,item.status)">
 					<view class="wraper">
 						<text class="orderNum">订单编号：{{item.orderId}}</text>
@@ -33,9 +33,9 @@
 					</view>
 					
 				</view>
-		
-			
+				<defaultPage v-if="orderList.length==0&&loading"/>
 			</view>
+			
 		</view>
 	</view>
 </template>
@@ -46,9 +46,10 @@
 		data() {
 			return {
 				status:'',
-				// statusTxt:['已取消','待收件','已完成','已收件'],
+				loading:false,
 				pulldown:false,
-				orderList:[]
+				orderList:[],
+				sortTxt:'所有订单'
 			};
 		},
 		computed:{
@@ -57,8 +58,9 @@
 				return function(status){
 					if(status==-1) return '已取消'
 					if(status==1)  return '待收件'
+					if(status==3)  return '已收件'
 					if(status==4)  return '已完成'
-					if(status==2)   return '已收件'
+					if(status==2)   return '待收货确认'
  				}
 			}
 		},
@@ -66,6 +68,9 @@
 			status(res){
 				this.getOrderList(res)
 			}
+		},
+		onShow() {
+			this.pulldown=false
 		},
 		async onLoad() {
 			
@@ -85,6 +90,7 @@
 					}
 				}).then(res=>{
 					this.orderList=res.data.list
+					this.loading=true
 					uni.hideLoading()
 				}).catch(err=>{})
 			},

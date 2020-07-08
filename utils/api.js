@@ -23,5 +23,6 @@ export default{
 	exchangeCard:'/exchangeCard' ,//申请证书
 	getArticleList:'/article/list}' ,//获取文章列表
 	getAgreement:'/agreement' ,//获取协议
-	getOverFlow:'/order/logistics/'
+	getOverFlow:'/order/logistics/' ,//获取物流信息
+	submitFeedBack:'/submitFeedBack' ,//提交反馈
 }

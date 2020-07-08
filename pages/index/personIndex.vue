@@ -31,7 +31,7 @@
 					<text>公益成就</text>
 				</view>
 			</view>
-			<navigator url="#" class="feedback">问题反馈</navigator>
+			<navigator url="#" class="feedback" @tap="toFeedBack" hover-class="none">问题反馈</navigator>
 		</view>
 	</view>
 </template>
@@ -56,13 +56,14 @@
 			}
 		},
 		
-	async onLoad() {
+	async onShow() {
 			uni.showLoading({
 				title:"加载中...",
 			})
 			await this.getUser()
 			
 		},
+		
 		methods:{
 			toOrderLog(){
 				uni.navigateTo({
@@ -90,9 +91,15 @@
 				}).then(res=>{
 					this.carbonEmissions=res.data.carbonEmissions
 					this.integral=res.data.integral
+					this.$store.commit('setUserDetail',res.data)
 					uni.hideLoading()
 				}).catch(err=>{})
 			},
+			toFeedBack(){
+				uni.navigateTo({
+					url:'./feedBack'
+				})
+			}
 		}
 	}
 </script>

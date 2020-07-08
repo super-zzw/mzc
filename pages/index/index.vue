@@ -4,7 +4,7 @@
 		<view class="box1">
 			<button type="default" class="avatarBox" hover-class="none" open-type="getUserInfo" lang="zh_CN" @getuserinfo="GotUserInfo()">
 				<image :src="userInfo.avatarUrl" mode="" class="avatar" @click="toIndex" v-if="isLogin"></image>
-				<image src="../../static/naifen.png" mode="" class="avatar" @click="toIndex"  v-else></image>
+				<image src="../../static/defaultAvatar.png" mode="" class="avatar" @click="toIndex"  v-else></image>
 			</button>
 			<view class="titleBox">
 				<text class="row1" v-if="isLogin">{{userInfo.nickName}}</text>
@@ -41,11 +41,11 @@
 				<text>回收入门秘籍</text>
 			</view>
 			<view class="navItem">
-				<image src="../../static/icon1.png" ></image>
+				<image src="../../static/icon2.png" ></image>
 				<text>空罐去哪儿了</text>
 			</view>
 			<view class="navItem" @tap="toLessons">
-				<image src="../../static/icon1.png" ></image>
+				<image src="../../static/icon3.png" ></image>
 				<text>美罐最美活动</text>
 			</view>
 		</view>
@@ -75,6 +75,13 @@
 		  ...mapState(['isLogin','userInfo'])
 	  },
 		methods: {
+			onShareAppMessage: function(e) {
+			let title = '美赞臣回收小程序'
+			return {
+			title: title,
+			path: 'pages/index/index'
+			}
+			},
 			getUser(){
 				this.$http({
 					apiName:'getUser'

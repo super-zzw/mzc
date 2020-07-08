@@ -23,12 +23,10 @@
 							<view class="uni-list-cell-db">
 								<picker mode="multiSelector" @change="areaPickerChange" @columnchange="areaPickerColumnChange" :value="multiIndex"
 								 :range="multiArray">
-
 									<view class="Region">
 										<text class="showRegion">{{area}}</text>
 										<image src="../../static/icon8.png" class="selectIcon"></image>
 									</view>
-
 								</picker>
 							</view>
 						</view>
@@ -37,8 +35,8 @@
 				<view class="divider"></view>
 				<view class="row address">
 					<text class="label">详细地址</text>
-					<input type="text" name="" id="" placeholder="请输入详细的地址信息" class="inputBox" placeholder-style="color:#1A6752"
-					 v-model="form_data.detailedAddress">
+					<textarea type="text" name="" id="textArea" placeholder="请输入详细的地址信息" class="inputBox " placeholder-style="color:#1A6752"
+					 v-model="form_data.detailedAddress" :auto-height="true"></textarea>
 				</view>
 			</view>
 			<view class="divider1"></view>
@@ -80,7 +78,7 @@
 		},
 		async onLoad(opt) {
 			uni.showLoading({
-				title: "数据加载中...",
+				title: "加载中...",
 				mask: true
 			})
 			
@@ -268,6 +266,7 @@
 							height: 26rpx;
 						}
 					}
+					
 				}
 
 				.name {
@@ -347,5 +346,10 @@
 			flex-direction: row;
 		}
 
+	}
+	#textArea{
+		width: 420rpx;
+		// height: 300rpx;
+	
 	}
 </style>

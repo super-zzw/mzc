@@ -105,9 +105,13 @@ button::after{ border: none; }
 			width: 100%;
 			background: #CACACA;
 		}
+		button{
+			padding: 0;
+		}
 		button:after{
 			line-height: 0;
 			border: none;
+			
 		}
 		
 </style>

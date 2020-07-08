@@ -5,14 +5,15 @@
 			<view class="wraper">
 				<defaultPage v-if="loading&&certificateList.length==0"></defaultPage>
 				<view class="achievementItem" v-for="(item,index) in certificateList" :key="index" v-if="certificateList.length">
-					<image :src="item.coverUrl" class="award" @tap="isMask=true"></image>
+					<image :src="item.coverUrl" class="award" @tap="open(item.certificateUrl)"></image>
 					<text class="awardName">公益证书</text>
 					<text class="time">于{{item.createTime|formatDate}}获取</text>
 				</view>
 				
 			</view>
 		</view>
-		<view class="mask" v-if="isMask"></view>
+		<awareDetail :isMask="isMask" :src="imgPath"/>
+		<!-- <view class="mask" v-if="isMask"></view>
 		<view class="awardDetail" v-if="isMask">
 			<image src="../../static/close.png" @tap="isMask=false" class="close"></image>
 			<view class="contentBox">
@@ -29,25 +30,32 @@
 			 <text class="tip">可扫码进入美赞臣回收小程序助力公益</text>
 			</view>
 			<view class="txt1">可长按图片保存到本地，再进行分享</view>
-		</view>
+		</view> -->
 	</view>
 </template>
 
 <script>
+	import awareDetail from '../../components/awareDetail.vue'
 	export default {
 		data() {
 			return {
 				isMask:false,
 				certificateList:[],
-				loading:false
+				loading:false,
+				imgPath:''
 			};
 		},
-		async onLoad() {
+		components:{awareDetail},
+		async onLoad(opt) {
 			uni.showLoading({
 				title:'加载中...'
 			})
 			await this.getCertificateList()
-			uni.hideLoading()
+			if(opt.isMask&&opt.imgPath){
+				this.isMask=true
+				this.imgPath=opt.imgPath
+			}
+			
 		},
 		filters:{
 			formatDate(data){
@@ -64,9 +72,14 @@
 					apiName:'getCertificateList',
 					method:'POST'
 				}).then(res=>{
-					this.certificateList=res.data.list
+					this.certificateList=res.data
 					this.loading=true
+					uni.hideLoading()
 				}).catch(err=>{})
+			},
+			open(url){
+				this.isMask=true
+				this.imgPath=url
 			}
 		}
 	}
