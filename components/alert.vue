@@ -46,7 +46,6 @@
 	  align-items: center;
 	  .alertBox{
 		  width: 670rpx;
-		  // height: 333rpx;
 		  display: flex;
 		  flex-direction: column;
 		  align-items: center;

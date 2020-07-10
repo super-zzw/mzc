@@ -13,28 +13,10 @@
 			</view>
 		</view>
 		<awareDetail :isMask="isMask" :src="imgPath"/>
-		<!-- <view class="mask" v-if="isMask"></view>
-		<view class="awardDetail" v-if="isMask">
-			<image src="../../static/close.png" @tap="isMask=false" class="close"></image>
-			<view class="contentBox">
-			  <image src="../../static/award.png" class="award" ></image>
-			  <image src="../../static/icon2.png" class="avatar"></image>
-			  <text class="nickName">宝宝妈咪一家人</text>
-			  <text class="awardText">感谢你于2020年5月25捐赠xxxx环保积分，用于保护 xxx地区xx平方米土地，由美赞臣（中国）与中华环境 保护基金会以共管的方式对xx地区展开保护。</text>
-			  <view class="awardNumBox">
-				  <text class="title">证书编号</text>
-				  <text class="number">xxxxxxxxxxxxxxxxxxxxxxxx</text>
-				  
-			  </view>
-			 <image src="../../static/icon7.png" class="code"></image>
-			 <text class="tip">可扫码进入美赞臣回收小程序助力公益</text>
-			</view>
-			<view class="txt1">可长按图片保存到本地，再进行分享</view>
-		</view> -->
 	</view>
 </template>
 
-<script>
+<script>  
 	import awareDetail from '../../components/awareDetail.vue'
 	export default {
 		data() {
@@ -89,15 +71,13 @@
   .main{
 	  .wraper{
 		  padding-top: 90rpx;
-		  // display: flex;
-		  // flex-wrap: wrap;
-		  // flex-direction: row;
+		 
 		  width: 100%;
 		  height: 900rpx;
 		overflow-y:auto;
 		  word-break: break-all; 
 		  	word-wrap: break-word;
-		  // justify-content: flex-start;
+		
 		  .achievementItem{
 			    float: left;
 			  width: 50%;
@@ -137,7 +117,7 @@
 	  width: 100%;
 	  height: 100vh;
 	  display: flex;
-	  // justify-content: center;
+
 	  flex-direction: column;
 	  align-items: center;
 	  .close{

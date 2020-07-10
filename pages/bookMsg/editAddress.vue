@@ -1,7 +1,7 @@
 <template>
 	<view class="container">
 		<background></background>
-		<view class="main">
+		<view class="main" v-if="!loading">
 			<view class="top">
 				<view class="name row">
 					<text class="label">寄件人</text>
@@ -41,7 +41,7 @@
 			</view>
 			<view class="divider1"></view>
 			<view class="saveBtn" @tap="submitAdd">
-				保存并试用
+				保存并使用
 			</view>
 		</view>
 	</view>
@@ -74,6 +74,7 @@
 				cities: {}, //每个省对应的市集合
 				areas: {}, //每个市对应的区集合
 				area: "填写省市区信息",
+				loading:true
 			};
 		},
 		async onLoad(opt) {
@@ -86,9 +87,11 @@
 			if (opt.id) {
 				this.id = opt.id
 				await this.getAddressMsg()
+			
 				
 			}
 				await this.regionSel()
+				
 			
 		},
 		methods: {
@@ -130,6 +133,7 @@
 					]
 					if(this.multiArray.length>0){
 							uni.hideLoading()
+							this.loading=false
 					}
 				
 				}).catch(err => {})
@@ -303,7 +307,7 @@
 				width: 371rpx;
 				height: 80rpx;
 				border-radius: 40rpx;
-				background: #2D8255;
+				background: linear-gradient(86deg,rgba(26,103,82,1) 0%,rgba(46,130,86,1) 100%);
 				font-size: 33rpx;
 				font-family: PingFang SC;
 				font-weight: 400;

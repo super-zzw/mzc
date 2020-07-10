@@ -99,20 +99,19 @@
 					uni.navigateTo({
 						url:'./orderCancel?id='+id
 					})
-				}
+				}else{
 				uni.navigateTo({
 					url:'./orderDetail?id='+id
 				})
 			}
+		}
 		}
 	}
 </script>
 
 <style lang="less" scoped>
 	.container{
-		
 		.main{
-			
 				.header{
 			  
 				.orderSel{

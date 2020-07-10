@@ -3,7 +3,7 @@
 		<background></background>
 		<view class="main">
 			<view class="header">
-				<image src="../../static/icon2.png" class="avatar"></image>
+				<image :src="userInfo.avatarUrl" class="avatar"></image>
 			</view>
 			<view class="wraper cancelTxt">
 				订单状态：订单已取消
@@ -12,14 +12,14 @@
 			<view class="wraper bookMsg">
 				<h1 class="title">预约信息</h1>
 				<view class="contentBox">
-					<text class="txt">订单编号：MJ378975874889212</text>
-					<text class="txt">用户姓名：张笑笑</text>
-					<text class="txt">联系手机：13787676542</text>
-					<text class="txt">预约上门时间：2019/11/01 09:00-11:00</text>
-					<text class="txt">回收品类：奶粉罐</text>
-					<text class="txt">回收数量：10</text>
-					<text class="txt">留言备注：请准时上门回收，上门前提前电话告知</text>
-					<text class="txt">订单取消时间：2019/10/30 09:36</text>
+					<text class="txt">订单编号：{{data_info.jdOrder}}</text>
+					<text class="txt">用户姓名：{{data_info.username}}</text>
+					<text class="txt">联系手机：{{data_info.mobile}}</text>
+					<text class="txt">预约上门时间：{{data_info.appointmentTime}}</text>
+					<text class="txt">回收品类：{{types[data_info.type]}}</text>
+					<text class="txt">回收数量：{{data_info.amount}}</text>
+					<text class="txt" v-if="data_info.remark">留言备注：{{data_info.remark}}</text>
+					<text class="txt">订单取消时间：{{data_info.updateTime}}</text>
 				</view>
 				<navigator url="../bookMsg/editBookMsg" class="btn">再次预约上门回收</navigator>
 			</view>
@@ -28,20 +28,45 @@
 </template>
 
 <script>
+	import { mapState } from 'vuex';
 	export default {
 		data() {
 			return {
-
+          orderId:'',
+		  data_info:{},
+		  types:{
+		             "1":"奶粉罐"
+		         }
 			};
+		},
+		async onLoad(opt) {
+			uni.showLoading({
+				title:'加载中...'
+			})
+			this.orderId=opt.id
+			await this.getOrderDetail()
+		},
+		computed:{
+				  ...mapState(['userInfo'])
+		},
+		methods:{
+			getOrderDetail(){
+					this.$http({
+						apiName:'checkOrderStatus',
+						method:'POST',
+						params:this.orderId
+					})
+				.then(res=>{
+					this.data_info=res.data
+					uni.hideLoading()
+				})
+			},
 		}
 	}
 </script>
 
 <style lang="less" scoped>
 	.main {
-
-		// display: flex;
-		// flex-direction: column;
 		.wraper {
 			padding: 50rpx 0 38rpx 45rpx;
 

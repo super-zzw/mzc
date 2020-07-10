@@ -3,7 +3,7 @@
 		<background></background>
 		<view class="main">
 			<view class="wraper">
-				<image src="../../static/bookSuccess.png"  class="successImg"></image>
+				<image :src="imgUrl"  class="successImg"></image>
 				<image src="../../static/success.png" class="successIcon"></image>
 				<text class="successTxt">您已预约上门成功，请等待京东物流上门</text>
 				<view class="options">
@@ -20,11 +20,30 @@
 	export default {
 		data() {
 			return {
-             orderId:''
+             orderId:'',
+			 imgUrl:''
 			};
 		},
 		onLoad(opt) {
+			uni.showLoading({
+				title:'加载中...'
+			})
 			this.orderId=opt.id
+			this.getImg()
+		},
+		methods:{
+			getImg(){
+				this.$http({
+					apiName:'getImgList',
+					data:{
+						type:2
+					}
+				}).then(res=>{
+					
+					this.imgUrl=res.data[0].imageUrl
+					uni.hideLoading()
+				})
+			}
 		}
 	}
 </script>
@@ -73,7 +92,7 @@
 				}
 				.index{
 					color: #FEFFFF;
-					background: #2E8356;
+					background: linear-gradient(86deg,rgba(26,103,82,1) 0%,rgba(46,130,86,1) 100%);
 				}
 				.order{
 					border:3rpx solid rgba(17,92,73,1);

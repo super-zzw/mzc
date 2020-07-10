@@ -1,11 +1,10 @@
 <template>
 	<view class="container">
 		<background1 color="#196751"></background1>
-		<!-- <image src="../../static/close.png" @tap="isMask=false" class="close"></image> -->
 		<view class="main">
 			<view class="mainContent">
 				<view class="adItem" v-for="(item,index) in articleList" :key="index" @tap="toDetail(item.contentUrl)">
-					<image src="../../static/award.png" class="left"></image>
+					<image :src="item.coverImg" class="left"></image>
 					<view class="right">{{item.title}}</view>
 				</view>
 			</view>
@@ -22,6 +21,9 @@
 			};
 		},
 		async onLoad() {
+			uni.showLoading({
+				title:'加载中...'
+			})
 			await this.getArticleList()
 			
 		},
@@ -33,14 +35,16 @@
 					
 				}).then(res=>{
 					this.articleList=res.data.list
-				})
+					uni.hideLoading()
+				}).catch(err=>{}
+				)
 			},
 			toDetail(url){
 				console.log(url)
 				uni.navigateTo({
 					url:'./article?url='+url,
 					fail(err) {
-						console.log(1,err)
+						
 					}
 				})
 			}
@@ -50,7 +54,6 @@
 
 <style lang="less" scoped>
 	.container{
-		// background-color: #1A6752;
 		width: 100vw;
 		height: 100vh;
 		.close{

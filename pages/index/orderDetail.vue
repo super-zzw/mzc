@@ -47,7 +47,7 @@
 								 <text class="txt">预约上门时间：{{data_info.appointmentTime}}</text>
 								 <text class="txt">回收品类：{{types[data_info.type]}}</text>
 								 <text class="txt">回收数量：{{data_info.amount}}</text>
-								 <text class="txt" v-if="step!==4">留言备注：请准时上门回收，上门前提前电话告知</text>
+								 <text class="txt" v-if="step!==4&&data_info.remark">留言备注: {{data_info.remark}}</text>
 								<view class="progress" v-if="step==2||step==3">
 									 <text class="txt">物流单号：{{data_info.jdOrder}}</text>
 									 <view class="progressBtn" @tap="toProgress">查看进度</view>
@@ -81,11 +81,10 @@
 				 types:{
 				            "1":"奶粉罐"
 				        }
-				// icon:'icon11.png'
+				
 			};
 		},
 		computed:{
-			
 				...mapState(['userInfo']),
 				
 			icon(){
@@ -125,11 +124,6 @@
 				this.step=this.data_info.status
 			})
 		},
-		// editOrderMsg(){
-		// 	uni.navigateTo({
-		// 		url:'../bookMsg/editBookMsg?id='+this.orderId
-		// 	})
-		// },
 		cancelOrder(){
 			this.$http({
 				apiName:'cancelOrder',
@@ -138,9 +132,6 @@
 					recycleOrderId:this.orderId
 				}
 			}).then(res=>{
-				// uni.showToast({
-				//                     title:"取消成功"
-				//                 })
 				                setTimeout(res => {
 				                    wx.navigateTo({
 				                        url: '../../components/cancelTip'
@@ -199,9 +190,7 @@
 	  			  margin-top: 24rpx;
 	  			  display: flex;
 	  			  flex-direction: row;
-	  			  // justify-content: space-around;
 				  text{
-					  // flex: 1;
 					  font-size:22rpx;
 					  font-family:PingFang SC;
 					  font-weight:400;

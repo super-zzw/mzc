@@ -87,7 +87,15 @@
 				<view class="divider"></view>
 				<view class="row remark">
 					<text class="label">留言备注</text>
-					<textarea value="" placeholder="留言备注（可描述回收物状态、特殊要求等）" auto-height placeholder-style="font-size:27rpx;color:#779D93" v-model="remark"/>
+					<!-- <cover-view> -->
+					   <!-- <view @tap="handleIpt=true" class="textArea"> -->
+						   <textarea  value="" placeholder="留言备注（可描述回收物状态、特殊要求等）" auto-height placeholder-style="font-size:27rpx;color:#779D93" v-model="remark" 
+						   v-if="handleIpt" @blur="blur" @focus="focus" class="textArea" auto-focus />
+						   <view v-else @tap="handleIpt=true" class="textArea">{{remark1}}</view>
+					   <!-- </view> -->
+						
+					<!-- </cover-view> -->
+				
 					</view>
 				<view class="divider"></view>
 				<view  class="readme">
@@ -128,16 +136,19 @@
 	export default {
 		data() {
 			return {
+				handleIpt:false,
 				show_modal:false,
 				orderId:'',
 				flag:false,
 			    bookTime:'',
-				dateTimes:[ [],["14:00-15:00","15:00-16:00","16:00-17:00"]],
+				dateTimes:[ [],["09:00-10:00","10:00-11:00","11:00-12:00","12:00-13:00",
+				"13:00-14:00","14:00-15:00","15:00-16:00","16:00-17:00","17:00-18:00"]],
 				aTime :'',
 				eTime :'',
 				formatDate:[],
 				numArray:[3,4,5,6,7,8,9,10],
 				index:7,
+				remark1:'留言备注（可描述回收物状态、特殊要求等）',
 				remark:'',
 				type:"奶粉罐",
 				        types:{
@@ -161,6 +172,18 @@
 			}
 		},
 		methods:{
+		focus(){
+			this.handleIpt=true
+			
+		},
+			blur(){
+				this.handleIpt=false
+				if(this.remark){
+					this.remark1=this.remark
+				}else{
+					this.remark1='留言备注（可描述回收物状态、特殊要求等）'
+				}
+			},
 			setDate(){
 				// let now=new	Date().getTime()
 				 let _weeks = ["星期日","星期一","星期二","星期三","星期四","星期五","星期六"]
@@ -258,7 +281,7 @@
 <style lang="less" scoped>
     .main{
 		padding-bottom: 25rpx;
-		 overflow: scroll;
+		 overflow-y: scroll;
 		.wraper{
 			padding-left: 58rpx ;
 			.row{
@@ -368,7 +391,7 @@
 			width: 372rpx;
 			height: 81rpx;
 			border-radius:41rpx;
-			background: #2E8356;
+			background: linear-gradient(86deg,rgba(26,103,82,1) 0%,rgba(46,130,86,1) 100%);
 			font-size:34rpx;
 			font-family:PingFang SC;
 			font-weight:400;
@@ -389,7 +412,8 @@
 		color:rgba(26,103,82,1);
 		display: flex;
 		flex-direction: column;
-		
+		padding-right: 5rpx;
+		flex: 1;
 	}
 	.timeSel{
 	
@@ -415,6 +439,7 @@
 			justify-content: space-between;
 			flex: 1;
 			align-items: center;
+			
 		}
 		}
 	  .sModal{
@@ -497,5 +522,15 @@
 						}
 	                }
 	            }
+			
 	    }
+		.textArea{
+			font-size:27rpx;color:#779D93;
+			line-height: 32rpx;
+			min-height: 32rpx;
+			display: block;
+			width: 100%;
+			word-wrap: break-word;
+		}
+		
 </style>

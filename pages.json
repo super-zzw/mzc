@@ -102,7 +102,7 @@
         ,{
             "path" : "pages/index/lessons",
             "style" : {
-				"navigationBarTitleText": "母婴育儿课堂"
+				"navigationBarTitleText": "美罐最新活动"
 			}
         }
         
@@ -131,12 +131,17 @@
 				"navigationBarTitleText": "意见反馈"
 			}
         }
+        ,{
+            "path" : "pages/index/toWhere",
+            "style" : {}
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
 		"navigationBarTitleText": "美赞臣回收小程序",
 		"navigationBarBackgroundColor": "#1A6752",
 		"backgroundColor": "#1A6752"
+		
 	}
 	
 }

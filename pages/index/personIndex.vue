@@ -2,14 +2,14 @@
 	<view class="container">
 		<background></background>
 		<view class="mainCon">
-			<view class="avatar"><image :src="avatarUrl" ></image></view>
+			<view class="avatar"><image :src="userInfo.avatarUrl" ></image></view>
 			<view class="titleBox">
-				<text class="row1">{{nickName}}</text>
+				<text class="row1">{{userInfo.nickName}}</text>
 				<view  class="row2">
-					<text class="txt">{{carbonEmissions||0}}g 碳减排量</text>
+					<text class="txt" @tap="show_modal = true">{{userDetail.carbonEmissions||0}}g 碳减排量</text>
 					
 					<image src="../../static/line.png" class="line"></image>
-					<text class="txt">{{integral||0}} 环保积分</text>
+					<text class="txt">{{userDetail.integral||0}} 环保积分</text>
 				</view>
 				
 			</view>
@@ -33,37 +33,31 @@
 			</view>
 			<navigator url="#" class="feedback" @tap="toFeedBack" hover-class="none">问题反馈</navigator>
 		</view>
+		<sModal :show_modal="show_modal" @toLog="toOrderLog"/>
 	</view>
 </template>
 
 <script>
 	import {mapState} from 'vuex'
-	
+	import sModal from '../../components/sModal.vue'
 	export default {
 		data() {
 			return {
-				carbonEmissions:0,
-				integral:0
+				show_modal:false
 			};
 		},
+		components:{sModal},
 		computed:{
-			...mapState(['isLogin','userInfo']),
-			avatarUrl(){
-				return uni.getStorageSync('userInfo').avatarUrl
-			},
-			nickName(){
-				return uni.getStorageSync('userInfo').nickName
-			}
+			...mapState(['isLogin','userInfo','userDetail']),
 		},
 		
-	async onShow() {
-			uni.showLoading({
-				title:"加载中...",
-			})
-			await this.getUser()
-			
-		},
+	async onLoad() {
 		
+		
+		},
+		onShow() {
+			this.$store.dispatch('getUser')
+		},
 		methods:{
 			toOrderLog(){
 				uni.navigateTo({
@@ -85,16 +79,6 @@
 					url:'../achievement/index'
 				})
 			},
-			getUser(){
-				this.$http({
-					apiName:'getUser'
-				}).then(res=>{
-					this.carbonEmissions=res.data.carbonEmissions
-					this.integral=res.data.integral
-					this.$store.commit('setUserDetail',res.data)
-					uni.hideLoading()
-				}).catch(err=>{})
-			},
 			toFeedBack(){
 				uni.navigateTo({
 					url:'./feedBack'
@@ -106,14 +90,9 @@
 
 <style lang="less" scoped>
   .container{
-	  // background: #E5F7E1;
-	  // height: 100vh;
-	 
-	 
 	  .mainCon{
 		   padding: 0 120rpx;
 		  display: flex;
-		  // justify-content: center;
 		  align-items: center;
 		  flex-direction: column;
 		  .avatar{
@@ -130,9 +109,6 @@
 		  		  }
 		  }
 		  .titleBox{
-		  			 // position: absolute;
-		  			 // top: 105rpx;
-		  			 // left: 118rpx;
 		  			 text-align: center;
 		          margin-top: 39rpx;
 		  
@@ -147,10 +123,11 @@
 		  				 align-items: center;
 		  				 justify-content: center;
 		  				 .txt{
-		  					 font-size:34rpx;
+		  					 font-size:32rpx;
 		  					 font-weight:500;
 		  					 color:rgba(18,92,72,1);
-		  					 line-height:20rpx;
+		  					 line-height:30rpx;
+							 text-align: left;
 		  				 }
 		  				 .line{
 		  					 width: 2rpx;
@@ -163,7 +140,7 @@
 		  			
 		  }
 		  .services{
-		  		  margin-top: 65rpx;
+		  		  margin-top: 55rpx;
 		  		  display: flex;
 		  		  flex-wrap: wrap;
 		  		  justify-content: space-between;

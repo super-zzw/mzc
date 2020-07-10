@@ -9,16 +9,16 @@
 				<image src="../../static/bg14.png" mode="" ></image>
 			</view>
 			<view class="wraper">
-				<view class="title">环保积分兑换绿地保护面积</view>
-				<text class="description">公益活动介绍文字: {{publicActivies}}</text>
+				<view class="title">公益捐赠</view>
+				<text class="description">{{publicActivies}}</text>
 				<view class="line"></view>
-				<text class="txt1">{{integralM}}个环保积分，可认领保护地面积{{centiare}}平方米</text>
+				<text class="txt1">{{count1}}个环保积分，可认领保护地面积{{count1*integralM}}平方米</text>
 				<view  class="protectBtn" @tap="protect">我要保护</view>
 			</view>
 			<view class="divider1"></view>
 			<view class="wraper">
 				<view class="title color1">兑换好礼</view>
-				<text class="description color1">兑换规则: {{changeRule}}</text>
+				<text class="description color1">{{changeRule}}</text>
 				<view class="options">
 					<view class="btn exchangeBtn">
 						<button  open-type="getPhoneNumber" @getphonenumber="getPhone" v-if="userDetail.vip==-1">我要兑换</button>
@@ -38,8 +38,14 @@
 				<view class="contentBox">
 				  <image src="../../static/background1.png" class="protectImg" ></image>
 				  <view class="txtBox">
-					  <text class="r1">使用XXX环保积分</text>
-					  <text class="r2">保护XX平方米的土地</text>
+	
+					  <view class="r1">
+						  <text>使用</text>
+					<!--  <view > -->
+					  	<numSelect class="numsel" color="#218C6F" :value="count1" @getValue="changeValue1"/>
+					  <!-- </view> -->
+					  <text>环保积分</text></view>
+					  <text class="r2">保护{{count1*integralM}}平方米的土地</text>
 					  <view class="btns">
 						  <view class="btn btn1" @tap="toProtect">申请保护</view>
 						  <view class="btn btn2" @tap="close">再想想</view>
@@ -61,7 +67,7 @@
 				    </view>
 				    <view class="inputBox codeBox">
 				    	<text class="label">验证码</text>
-				    	<input type="number" v-model="form_data.authCode" placeholder="请输入你收到的6位验证码" placeholder-style="color:#999"/>
+				    	<input type="number" v-model="form_data.authCode" placeholder="请输入你收到的4位验证码" placeholder-style="color:#999"/>
 				    </view>
 				    <view class="options1">
 				    	<view class="btn btn1" @tap="register">立即注册</view>
@@ -73,11 +79,7 @@
 						<view class="row">
 							<text class="txt">本次兑换环保积分</text>
 							<view class="countBox">
-								<text class="count">{{count}}</text>
-								<view class="right">
-									<image src="../../static/up.png" mode="" @click="count++"></image>
-									<image src="../../static/down.png" mode="" @click="count==0?0:count--" ></image>
-								</view>
+								<numSelect  color="#218C6F" :value="count*ratio" @getValue="changeValue"/>
 							</view>
 						</view>
 						<view class="row">
@@ -101,6 +103,7 @@
 	import Utils from '../../utils/method.js'
 	import {mapState} from 'vuex'
 	import awareDetail from '../../components/awareDetail.vue'
+	import numSelect from '../../components/poiuy-numSelect/numSelect.vue'
 	export default {
 		data() {
 			return {
@@ -119,11 +122,12 @@
 					authCode:'' 
 				},
 				count:10,
-				ratio:1,
-				imgPath:''
+				ratio:null,
+				imgPath:'',
+				count1:10,
 			};
 		},
-			components:{awareDetail},
+			components:{awareDetail,numSelect},
 		async onLoad() {
 			
 			uni.showLoading({
@@ -131,6 +135,7 @@
 			})
 	
 			await this.getMsg()
+			console.log(this.userDetail)
 		},
 		computed:{
 			...mapState(['userDetail'])
@@ -140,13 +145,33 @@
 				this.$http({
 					apiName:'getConfigs',
 				}).then(res=>{
-					this.publicActivies=res.data[1].value
-					this.integralM=res.data[5].value
-					this.centiare=res.data[6].value
-					this.changeRule=res.data[2].value
-					this.ratio=res.data[8].value.split(':')[1]/res.data[8].value.split(':')[0]
+					let configs=res.data
+					for(let item in configs){
+						if(configs[item].key=="publicActivties"){
+							this.publicActivies=configs[item].value
+						}
+						if(configs[item].key=="integralM"){
+							this.integralM=configs[item].value
+						}
+						if(configs[item].key=="centiare"){
+							this.centiare=configs[item].value
+						}
+						if(configs[item].key=="changeRule"){
+							this.changeRule=configs[item].value
+						}
+						if(configs[item].key=="ratio"){
+							this.ratio=configs[item].value
+							
+						}
+					}
 					uni.hideLoading()
 				}).catch(res=>{})
+			},
+			changeValue(num){
+				this.count=num
+			},
+			changeValue1(num){
+				this.count1=num
 			},
 			protect(){
 				this.protectBtn=true
@@ -155,17 +180,16 @@
 			toProtect(){
 				this.$http({
 					apiName:'exchangeCard',
-					
+					data:{
+						integral:this.count1
+					}
 				}).then(res=>{
+					this.$store.dispatch('getUser')
+					this.close()
 					uni.navigateTo({
 						url:'../achievement/index?isMask=true&imgPath='+res.data,
-						// success() {
-						// 	this.isMask=true
-						// 	this.imgPath=res.data
-						// }
 					})
-					
-					
+		        
 				}).catch(err=>{})
 			},
 			close(){
@@ -174,10 +198,8 @@
 				this.isMask1=false
 			},
 			exchange(){
-				
 					this.isMask1=true
 					this.exchangeBtn=true
-				
 			},
 			async getAuthCode(){
 				let _j_data = [
@@ -222,7 +244,7 @@
 						icon: "success"
 					})
 					setTimeout(()=>{
-						this.$store.commit('setVip',1)
+						this.$store.dispatch('getUser')
 					},1000)
 				})
 			},
@@ -240,7 +262,7 @@
 					this.form_data.mobile = userPhone.data;
 					this.isMask1=true
 					this.exchangeBtn=true
-					// this.loseCode = 1;
+					
 				}catch(e){
 					uni.showToast({
 						title: "获取手机号码失败",
@@ -250,10 +272,8 @@
 					uni.hideLoading();
 				}
 			},
-			 handleExchange(){
-				// uni.showLoading({
-				// 	title: "兑换中..."
-				// })
+			 async handleExchange(){
+				
 					this.$http({
 						apiName:'exchangeIntegral',
 						method:'POST',
@@ -262,6 +282,7 @@
 						}
 					}).then(res=>{
 					this.alert=true
+					this.$store.dispatch('getUser')
 					 // this.getMsg()
 					}).catch(err=>{})
 			 // uni.hideLoading()
@@ -276,9 +297,7 @@
 					  }
 					})
 				}else{
-					this.alert=false
-					this.isMask1=false
-					this.exchangeBtn=false
+					this.close()
 					
 				}
 			}
@@ -289,12 +308,13 @@
 <style lang="less" scoped>
    .main{
 	 overflow: hidden;
-	 
+	 top: 80rpx;
+	 height: 1100rpx;
 	  .mainContent{
+		 height: 1060rpx;
+		 overflow: scroll;
+		  
 		 
-		  overflow: scroll;
-		  padding-bottom: 20rpx;
-		  height: 1000rpx;
 	  }
 	   // height: 1050rpx;
 	   .bigImg{
@@ -328,6 +348,7 @@
 			   color:rgba(62,136,98,1);
 			   line-height:32rpx;
 			   margin-bottom: 27rpx;
+			  
 		   }
 		   .description{
 			   font-size:26rpx;
@@ -335,7 +356,7 @@
 			   font-weight:500;
 			   color:rgba(62,136,98,1);
 			   line-height:32rpx;
-			   text-align: center;
+			   
 		   }
 		   .line{
 			   margin: 30rpx 0;
@@ -384,14 +405,13 @@
 			  .exchangeBtn{
 				  border:3rpx solid rgba(40,78,150,1);
 				  color:rgba(40,78,150,1);
-				  display: flex;
-				  align-items: center;
 				  .exchangeBtn1{
-					  padding: 20rpx 40rpx;
+					  padding: 0 40rpx;
+					  line-height: 80rpx;
 				  }
 			  }
 			  .shopBtn{
-				  background-color: #274F96;
+				  background-color:#274E96;
 				  color: #fff;
 				  display: flex;
 				  align-items: center;
@@ -427,7 +447,6 @@
 		   height: 205rpx;
 	   }
    	   .contentBox{
-   	   // padding:0 59rpx 57rpx;
    	   background-color: #fff;
 	   .txtBox{
 		   padding-top: 48rpx;
@@ -439,6 +458,13 @@
 			   font-family:PingFang SC;
 			   font-weight:500;
 			   color:rgba(38,84,71,1);
+		   }
+		   .r1{
+			   display: flex;
+			  .numsel{
+				  margin: 0 10rpx;
+				  // width: 140rpx;
+			   }
 		   }
 		   .r2{
 			   margin-top: 25rpx;
@@ -491,10 +517,10 @@
    					 
    				 }
    				 .countBox{
-   					 width:106rpx;
+   					 max-width:140rpx;
    					 height:55rpx;
-   					 border:2rpx solid rgba(19,66,110,1);
-   					 border-radius:7rpx;
+   					 // border:2rpx solid rgba(19,66,110,1);
+   					 // border-radius:7rpx;
    					 display: flex;
    					 flex-direction: row;
    					 align-items: center;

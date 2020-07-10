@@ -3,18 +3,21 @@
 		<background1></background1>
 		<view class="box1">
 			<button type="default" class="avatarBox" hover-class="none" open-type="getUserInfo" lang="zh_CN" @getuserinfo="GotUserInfo()">
-				<image :src="userInfo.avatarUrl" mode="" class="avatar" @click="toIndex" v-if="isLogin"></image>
+				<image :src="userInfo.avatarUrl" mode="" class="avatar" @click="toIndex" v-if="userInfo.avatarUrl"></image>
 				<image src="../../static/defaultAvatar.png" mode="" class="avatar" @click="toIndex"  v-else></image>
 			</button>
 			<view class="titleBox">
 				<text class="row1" v-if="isLogin">{{userInfo.nickName}}</text>
 				<text  class="row1" v-else>暂未登录</text>
 				<view  class="row2">
-					<text class="txt">{{carbonEmissions}}g 碳减排量</text>
+					<text class="txt" @tap="show_modal = true">{{userDetail.carbonEmissions||0}}g 碳减排量</text>
 					
 					<image src="../../static/line.png" class="line"></image>
-					<text class="txt">{{integral||0}} 环保积分</text>
-					<image src="../../static/arrowRight.png" class="arrow" @tap="GotUserInfo"></image>
+					<text class="txt">{{userDetail.integral||0}} 环保积分</text>
+					<button type="default" class="arrow" hover-class="none" open-type="getUserInfo" lang="zh_CN" @getuserinfo="GotUserInfo()">
+						<image src="../../static/arrowRight.png" ></image>
+					</button>
+					
 				</view>
 				
 			</view>
@@ -32,7 +35,9 @@
 				<view class="txt1 ">免费上门</view>
 				<view class="txt2">加入空罐回收计划</view>
 				<view class="txt3 ">还有环保积分等你拿</view>
-				<view class="btn" @tap="toBook">立即预约</view>
+				<button type="default" class="btn" hover-class="none" open-type="getUserInfo" lang="zh_CN" @getuserinfo="toBook">
+					立即预约
+				</button>
 			</view>
 		</view>
 		<view class="box2">
@@ -40,28 +45,31 @@
 				<image src="../../static/icon1.png" ></image>
 				<text>回收入门秘籍</text>
 			</view>
-			<view class="navItem">
+			<view class="navItem" @tap="toWhere">
 				<image src="../../static/icon2.png" ></image>
 				<text>空罐去哪儿了</text>
 			</view>
 			<view class="navItem" @tap="toLessons">
 				<image src="../../static/icon3.png" ></image>
-				<text>美罐最美活动</text>
+				<text>美罐最新活动</text>
 			</view>
 		</view>
+		
+		<sModal :show_modal="show_modal" @toLog="toOrderLog"/>
 	</view>
 </template>
 
 <script>
 	import { mapState } from 'vuex';
 	import Utils from '../../utils/method.js'
+	import sModal from '../../components/sModal.vue'
 	export default {
 		data() {
 			return {
-				carbonEmissions:0,
-				integral:0
+				show_modal:false
 			}
 		},
+		components:{sModal},
 		async onLoad() {
 			if(this.isLogin){
 				this.$store.commit('userInfoSet',uni.getStorageSync('userInfo'))
@@ -69,10 +77,11 @@
 			uni.showLoading({
 				title:"加载中...",
 			})
-			await this.getUser()
+			await this.$store.dispatch('getUser')
 		},
+	
 	  computed:{
-		  ...mapState(['isLogin','userInfo'])
+		  ...mapState(['isLogin','userInfo','userDetail'])
 	  },
 		methods: {
 			onShareAppMessage: function(e) {
@@ -82,19 +91,8 @@
 			path: 'pages/index/index'
 			}
 			},
-			getUser(){
-				this.$http({
-					apiName:'getUser'
-				}).then(res=>{
-				    this.$store.commit('setUserDetail',res.data)
-					this.carbonEmissions=res.data.carbonEmissions
-					this.integral=res.data.integral
-					  uni.hideLoading()
-				}).catch(err=>{})
-			},
-			toIndex(){
-				
-			},
+
+			
 			GotUserInfo(){
 				if(this.isLogin){
 					uni.navigateTo({
@@ -103,6 +101,7 @@
 				}else{
 					this.$store.commit('jumpPageSet','./personIndex')
 					Utils.onGotUserInfo()
+					
 				}
 				
 			},
@@ -121,8 +120,17 @@
 				uni.navigateTo({
 					url:'./lessons'
 				})
+			},
+			toOrderLog(){
+				uni.navigateTo({
+					url:'./orderLog'
+				})
+			},
+			toWhere(){
+				uni.navigateTo({
+					url:'./toWhere'
+				})
 			}
-			
 		}
 	}
 </script>
@@ -139,8 +147,7 @@
 	 box-sizing: border-box;
 	 position: relative;
 	 .box1{
-		 // position: absolute;
-		 // top: 282rpx;
+		
 		 margin: 0 auto;
 		 position: relative;
 		 border-radius:60rpx;
@@ -167,9 +174,7 @@
 				 }
 		 }
 		 .titleBox{
-			 // position: absolute;
-			 // top: 105rpx;
-			 // left: 118rpx;
+			
 			 text-align: center;
 		     margin-top: 120rpx;
 			 position: relative;
@@ -187,7 +192,7 @@
 					 font-size:34rpx;
 					 font-weight:500;
 					 color:rgba(18,92,72,1);
-					 line-height:20rpx;
+					 line-height:30rpx;
 				 }
 				 .line{
 					 width: 2rpx;
@@ -199,9 +204,10 @@
 				 				 width: 34rpx;
 				 				  height: 34rpx;
 								  margin-left: 7rpx;
-				 				  // position: absolute;
-				 				  // right: -42rpx;
-				 				  // bottom: 3rpx;
+				 				  image{
+									  width: 100%;
+									  height: 100%;
+								  }
 				 }
 			 }
 			
@@ -284,7 +290,7 @@
 				 margin-top: 44rpx;
 				 width:258rpx;
 				 height:81rpx;
-				 background:#1A9A6C;
+				 background:linear-gradient(86deg,rgba(26,154,108,1) 0%,rgba(46,130,86,1) 100%);
 				 border-radius:41rpx;
 				 font-size:40rpx;
 				 font-family:PingFang SC;
@@ -320,5 +326,9 @@
 			 }
 		 }
 	 }
+	 button{
+		 padding: 0;
+	 }
+	
  }
 </style>

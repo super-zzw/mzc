@@ -106,12 +106,18 @@ button::after{ border: none; }
 			background: #CACACA;
 		}
 		button{
-			padding: 0;
+			// padding: 0;
+			margin: 0;
+			line-height: 0;
 		}
 		button:after{
 			line-height: 0;
 			border: none;
 			
 		}
-		
+		::-webkit-scrollbar {
+		    width: 0;
+		    height: 0;
+		    color: transparent;
+         }
 </style>

@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-
+import {http} from '../utils/request.js'
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
@@ -29,8 +29,24 @@ const store = new Vuex.Store({
 		},
 		setUserDetail(state,data){
 			state.userDetail=data
+		},
+		setVip(state,data){
+			state.userDetail.vip=data
 		}
 		
+	},
+	actions:{
+		getUser({commit}){
+			uni.showLoading({
+				title:'加载中...'
+			})
+			http({
+				apiName:'getUser'
+			}).then(res=>{
+				commit('setUserDetail',res.data)
+				uni.hideLoading()
+			}).catch(err=>{})
+		}
 	}
 })
 

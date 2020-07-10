@@ -42,6 +42,7 @@ export default{
 				uni.setStorageSync('session',data.data); // 存session
 				uni.setStorageSync('userInfo',result); // 存session
 				store.commit('isLoginSet',true); // 把登录状态变成true
+				store.dispatch('getUser')
 				// await this.getUserInfo();
 				uni.navigateTo({
 					url:store.state.jumpPage

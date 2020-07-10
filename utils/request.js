@@ -4,7 +4,7 @@ import utils from "./method.js"
 var test = false;
 var _baseUrl = '';
 if (test) {
-	_baseUrl = 'http://192.168.1.17:9108/api';  //测试地址日强
+	_baseUrl = 'http://192.168.1.17:9108/api';  //测试地址
 } else {	_baseUrl = 'https://www.meadcan.com/api';  //正式地址
 }
 var baseUrl = _baseUrl;
@@ -13,7 +13,7 @@ var baseUrl = _baseUrl;
 
 // 单次请求
 export function http(opt){
-	console.log(opt)
+	// console.log(opt)
 	let _data = Object.assign({},opt.data || {})
 	return new Promise((resolve, reject)=>{
 		let _params = opt.params || ""
@@ -32,20 +32,17 @@ export function http(opt){
 					}else if(res.data && res.data.code == 300000){
 						uni.hideLoading()
 						utils.rmData()
-						uni.showToast({
-							icon: 'none',
-							title: res.data.message,
-							duration: 1500
-						});
 						reject(res.message)
 					}else{
 						uni.hideLoading()
+					    
 						uni.showToast({
 							icon: 'none',
 							title: res.data.message,
 							duration: 1500
 						});
 						reject(res)
+						
 					}
 				}else{
 					uni.hideLoading()

@@ -1,6 +1,6 @@
 <template>
 	<view class="container">
-		<view class="contentBox">{{agreement}}</view>
+		<view class="contentBox" v-html="agreement"></view>
 		<view class="bottomBox">
 			<view class="btn" @tap="iknow">已了解</view>
 		</view>
@@ -46,6 +46,7 @@
 		.contentBox{
 			flex: 1;
 			flex-grow: ;
+			padding: 20rpx;
 		}
 		.bottomBox{
 			height: 100rpx;
@@ -64,6 +65,7 @@
 				font-weight: 500;
 				padding: 0 70rpx;
 				border-radius: 35rpx;
+				margin-bottom: 30rpx;
 			}
 		}
 	}

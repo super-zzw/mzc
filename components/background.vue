@@ -26,7 +26,6 @@
 		height: 100vh;
 		position: fixed;
 		z-index: -1;
-		
 		.bg1{
 			  width: 100%;
 			   height: 665rpx;

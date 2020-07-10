@@ -3,6 +3,7 @@
 		<view class="mask" v-if="isMask"></view>
 		<view class="awardDetail" v-if="isMask">
 			<image src="../static/close.png" @tap="close" class="close"></image>
+			<!-- <saveFile :url="src" class="aware"></saveFile> -->
 			<image :src="src" class="aware"  :data-url="src" @longpress="saveImg"></image>
 			<view class="txt1">可长按图片保存到本地，再进行分享</view>
 		</view>
@@ -10,11 +11,15 @@
 </template>
 
 <script>
+
 	export default {
 		data() {
 			return {
 				
 			};
+		},
+		created() {
+			console.log(this.src)
 		},
 		props:{
 			isMask:{
@@ -22,6 +27,7 @@
 			},
 			src:{}
 		},
+	
 		methods:{
 			close(){
 				this.$parent.isMask=false
@@ -54,24 +60,36 @@
 			    })   
 			  },
 			  saveImg1(url){
-			    uni.getImageInfo({
-			      src: url,
-			      success:(res)=> {
-			        let path = res.path;
-			        uni.saveImageToPhotosAlbum({
-			          filePath:path,
-			          success:(res)=> { 
-			            console.log(res);
-			          },
-			          fail:(res)=>{
-			            console.log(res);
-			          }
-			        })
-			      },
-			      fail:(res)=> {
-			        console.log(res);
-			      }
-			    })
+				  uni.showModal({
+				  	title: '图片保存',
+				  	content: '确定要保存图片吗',
+				  	success: e => {
+				  		if (e['confirm']) {
+				  			uni.getImageInfo({
+				  			  src: url,
+				  			  success:(res)=> {
+				  			    let path = res.path;
+				  			    uni.saveImageToPhotosAlbum({
+				  			      filePath:path,
+				  			      success:(res)=> { 
+				  			       uni.showToast({
+				  			       	title:'保存成功',
+									icon:'success'
+				  			       })
+				  			      },
+				  			      fail:(res)=>{
+				  			        console.log(res);
+				  			      }
+				  			    })
+				  			  },
+				  			  fail:(res)=> {
+				  			    console.log(res);
+				  			  }
+				  			})
+				  		}
+				  	}
+				  });
+			   
 			  },
 			
 		}

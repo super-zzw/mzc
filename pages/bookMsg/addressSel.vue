@@ -4,22 +4,19 @@
 		<view class="main">
 			<view class="addreeBox" v-if="addressList.length" >
 				<view class="addressItem" v-for="(item,index) in addressList" :key="index" >
-					<block @tap="addressOk(item)">
+					<view @tap="addressOk(item)">
 						<view class="name row">
 							<text class="label">寄件人</text>
 							<view class="inputBox">{{item.username}}</view>
-							<!-- <input type="text" name="" id="" placeholder="填写寄件人姓名" class="inputBox" placeholder-style="color:#1A6752"> -->
 						</view>
 						<view class="divider"></view>
 						<view class="row phone">
 							<text class="label">手机号码</text>
 							<view class="inputBox">+86 {{item.mobile}}</view>
-							<!-- <input type="number" name="" id="" placeholder="填写联系人手机号码" class="inputBox" placeholder-style="color:#1A6752"> -->
 						</view>
 						<view class="divider"></view>
 						<view class="row region">
 							<text class="label">所在地区</text>
-							<!-- <input type="text" name="" id="" placeholder="填写联系人手机号码" class="inputBox" placeholder-style="color:#1A6752"> -->
 							<view class="inputBox">
 								<view class="showRegion">
 									<text>{{item.province+item.city+item.district}}</text>
@@ -28,7 +25,7 @@
 								<image src="../../static/icon8.png" class="regionSel"></image>
 							</view>
 						</view>
-					</block>
+					</view>
 					
 					<view class="divider"></view>
 					<view class="options">
@@ -40,9 +37,6 @@
             <view v-if="loading&&addressList.length==0" class="noAddress">
 				<image src="../../static/noaddress.png" mode=""></image>
 				<text>暂无新地址哦～</text>
-				<!-- <view class="addAddressBox">
-					<navigator class="addBtn" url="./editAddress">添加新地址</navigator>
-				</view> -->
 			</view>
 			<view class="addAddressBox" v-if="loading">
 				<navigator class="addBtn" url="./editAddress">添加新地址</navigator>
@@ -72,7 +66,8 @@
 			
 			}),
 			await this.getAddress()
-			uni.hideLoading()
+			
+			
 		},
 		methods:{
 			getAddress(){
@@ -80,7 +75,9 @@
 					apiName:'getReceiveList'
 				}).then(res=>{
 					this.addressList=res.data;
+					
 					this.loading=true
+					uni.hideLoading()
 				}).catch(err=>{})
 			},
 			open(id){
@@ -95,7 +92,6 @@
 			},
 			del(res){
 				if(res){
-					
 					this.$http({
 						apiName:'delAddress',
 						method:'POST',
@@ -113,7 +109,6 @@
 					}).catch(err=>{})
 				}
 				this.isDel=false
-				// delAddress
 			},
 			addressOk(item){
 				uni.navigateTo({
@@ -130,7 +125,6 @@
 		display: flex;
 		flex-direction: column;
 		background: #F9F9F9;
-		// overflow: hidden;
           height: 1000rpx;
           overflow: scroll;
 		.addreeBox {
@@ -160,7 +154,6 @@
 						font-family: PingFang SC;
 						font-weight: 600;
 						color: #1A6752;
-
 						.regionSel {
 							width: 17rpx;
 							height: 26rpx;
@@ -186,7 +179,6 @@
 						align-items: center;
 
 						.showRegion {
-							// display: inline-block;
 							width: 300rpx;
 							display: flex;
 							flex-direction: column;
@@ -250,14 +242,13 @@
 		}
 
 		.addAddressBox {
-			// background: #F9F9F9;
 			flex-grow: 1;
 
 			.addBtn {
 				width: 371rpx;
 				height: 80rpx;
 				border-radius: 40rpx;
-				background: #2D8255;
+				background: linear-gradient(86deg,rgba(26,103,82,1) 0%,rgba(46,130,86,1) 100%);
 				font-size: 33rpx;
 				font-family: PingFang SC;
 				font-weight: 400;

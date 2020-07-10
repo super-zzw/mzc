@@ -21,8 +21,9 @@ export default{
 	exchangeIntegral:'/exchangeIntegral' ,//兑换蓝臻积分
 	getWuserMobile:'/getWuserMobile', //获取用户手机号
 	exchangeCard:'/exchangeCard' ,//申请证书
-	getArticleList:'/article/list}' ,//获取文章列表
+	getArticleList:'/article/list' ,//获取文章列表
 	getAgreement:'/agreement' ,//获取协议
 	getOverFlow:'/order/logistics/' ,//获取物流信息
 	submitFeedBack:'/submitFeedBack' ,//提交反馈
+	getImgList:'/img/list' ,//获取图片
 }
