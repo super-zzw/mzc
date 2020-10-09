@@ -9,12 +9,12 @@
 				<view class="orderItem">
 					<view class="wraper">
 						<view class="orderItem">
-							<view class="status status1" v-if="step==1">订单状态：待取件</view>
+							<view class="status status1" v-if="step==1">订单状态：待收件</view>
 							<view class="status status2" v-if="step===3">订单状态：已发放积分</view>
 							<view class="status status2" v-if="step===4">订单状态：订单已完成</view>
 							<view class="status status2" v-if="step===2">订单状态：已收件</view>
 							<text class="tip" v-if="step==1">您已预约上门成功，请等待京东物流上门收件</text>
-							<text class="tip" v-if="step==4">环保排碳量+20</text>
+							<text class="tip" v-if="step==4">环保排碳量+{{98*data_info.amount-20}}</text>
 							<text class="tip" v-if="step===2||step==3">您的订单正在物流途中，请等待工厂收货确认</text>
 							<view class="steps">
 								<image  class="icon" :src="icon(0)"></image>
@@ -125,6 +125,9 @@
 			})
 		},
 		cancelOrder(){
+			uni.showLoading({
+				title:'取消中...'
+			})
 			this.$http({
 				apiName:'cancelOrder',
 				method:'POST',
@@ -132,7 +135,9 @@
 					recycleOrderId:this.orderId
 				}
 			}).then(res=>{
+				uni.hideLoading()
 				                setTimeout(res => {
+									
 				                    wx.navigateTo({
 				                        url: '../../components/cancelTip'
 				                    })

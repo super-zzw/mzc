@@ -9,7 +9,7 @@
 				订单状态：订单已取消
 			</view>
 			<view class="divider1"></view>
-			<view class="wraper bookMsg">
+			<view class="wraper bookMsg" >
 				<h1 class="title">预约信息</h1>
 				<view class="contentBox">
 					<text class="txt">订单编号：{{data_info.jdOrder}}</text>
@@ -21,7 +21,7 @@
 					<text class="txt" v-if="data_info.remark">留言备注：{{data_info.remark}}</text>
 					<text class="txt">订单取消时间：{{data_info.updateTime}}</text>
 				</view>
-				<navigator url="../bookMsg/editBookMsg" class="btn">再次预约上门回收</navigator>
+				<view @tap="toBook" class="btn">再次预约上门回收</view>
 			</view>
 		</view>
 	</view>
@@ -45,6 +45,7 @@
 			})
 			this.orderId=opt.id
 			await this.getOrderDetail()
+			uni.hideLoading()
 		},
 		computed:{
 				  ...mapState(['userInfo'])
@@ -58,9 +59,19 @@
 					})
 				.then(res=>{
 					this.data_info=res.data
-					uni.hideLoading()
+					
 				})
 			},
+			toBook(){
+				this.$http({
+					apiName:'isReverse',
+					
+				}).then(res=>{
+					uni.navigateTo({
+						url:'/pages/bookMsg/editBookMsg'
+					})
+				}).catch(err=>{})
+			}
 		}
 	}
 </script>

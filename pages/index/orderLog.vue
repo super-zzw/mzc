@@ -3,37 +3,41 @@
 		<background></background>
 		<view class="main">
 			<view class="header">
-				<image :src="userInfo.avatarUrl" class="avatar"></image>
-				<view class="orderSel">
+				<image :src="userDetail.avatarUrl" class="avatar"></image>
+				<view class="orderSel"  @tap="pulldown=!pulldown">
 					<text>{{sortTxt}}</text>
-					<image src="../../static/pulldown.png" @tap="pulldown=!pulldown" :style="{transform:pulldown?'rotate(180deg)':'rotate(0deg)'}"></image>
+					<image src="../../static/pulldown.png" :style="{transform:pulldown?'rotate(180deg)':'rotate(0deg)'}"></image>
 					<view class="selectBox" :style="{height:pulldown?'400rpx':'0'}">
 						<image src="../../static/selectBox.png" ></image>
-						<text class="item0 item" @tap="status='',pulldown=false,sortTxt='所有订单'">所有订单</text>
-						<text class="item1 item" @tap="status=-1,pulldown=false,sortTxt='已取消'">已取消</text>
-						<text class="item2 item" @tap="status=1,pulldown=false,sortTxt='待收件'">待收件</text>
-						<text class="item3 item" @tap="status=4,pulldown=false,sortTxt='已完成'">已完成</text>
-						<text class="item4 item" @tap="status=3,pulldown=false,sortTxt='已收件'">已收件</text>
+						<text class="item0 item" @tap.stop="status='',pulldown=false,sortTxt='所有订单'">所有订单</text>
+						<text class="item1 item" @tap.stop="status=-1,pulldown=false,sortTxt='已取消'">已取消</text>
+						<text class="item2 item" @tap.stop="status=1,pulldown=false,sortTxt='待收件'">待收件</text>
+						<text class="item3 item" @tap.stop="status=4,pulldown=false,sortTxt='已完成'">已完成</text>
+						<text class="item4 item" @tap.stop="status=3,pulldown=false,sortTxt='已收件'">已收件</text>
 					</view>
 				</view>
 			</view> 
 			<view class="orderBox" >
-				<view class="orderItem" v-for="(item,index) in orderList" :key="index" @tap="toOrderDetail(item.id,item.status)">
-					<view class="wraper">
-						<text class="orderNum">订单编号：{{item.orderId}}</text>
-						<view class="line"></view>
-						<view class="contentBox" >
-							<view class="status" :class="'status'+item.status">订单状态: {{statusTxt(item.status)}}
-							<text v-if="item.status==4">(碳排减量+20)</text>
+				<scroll-view scroll-y="true" class="logBox"  @scrolltolower="loadmore" v-if="orderList.length>0&&loading" @scroll="scroll">
+					<view class="orderItem" v-for="(item,index) in orderList" :key="index" @tap="toOrderDetail(item.id,item.status)">
+						<view class="wraper">
+							<text class="orderNum">订单编号：{{item.orderId}}</text>
+							<view class="line"></view>
+							<view class="contentBox" >
+								<view class="status" :class="'status'+item.status">订单状态: {{statusTxt(item.status)}}
+								<text v-if="item.status==4">(碳排减量+{{98*item.amount-20}})</text>
+								</view>
+								<view class="txt txt1">预约上门时间：{{item.appointmentTime}}</view>
+								<view class="txt">订单提交时间：{{item.createTime}}</view>
+								<image src="../../static/icon8.png" class="arrow"></image>
 							</view>
-							<view class="txt txt1">预约上门时间：{{item.appointmentTime}}</view>
-							<view class="txt">订单提交时间：{{item.createTime}}</view>
-							<image src="../../static/icon8.png" class="arrow"></image>
 						</view>
+						
 					</view>
-					
-				</view>
+				</scroll-view>
+				
 				<defaultPage v-if="orderList.length==0&&loading"/>
+				<!-- <image src="../../static/top.png" mode="" class="toTop"></image> -->
 			</view>
 			
 		</view>
@@ -49,11 +53,14 @@
 				loading:false,
 				pulldown:false,
 				orderList:[],
-				sortTxt:'所有订单'
+				sortTxt:'所有订单',
+				pageNum:1,
+				size:10,
+				total:''
 			};
 		},
 		computed:{
-			...mapState(['userInfo']),
+			...mapState(['userInfo','userDetail']),
 			statusTxt(){
 				return function(status){
 					if(status==-1) return '已取消'
@@ -66,6 +73,9 @@
 		},
 		watch:{
 			status(res){
+			   this.pageNum=1,
+			   this.orderList=[]
+			   this.loading=false
 				this.getOrderList(res)
 			}
 		},
@@ -73,9 +83,11 @@
 			this.pulldown=false
 		},
 		async onLoad() {
-			
+			uni.showLoading({
+				title:'加载中...'
+			})
 			await this.getOrderList(this.status)
-			
+			uni.hideLoading()
 		},
 		methods:{
 			getOrderList(status){
@@ -86,10 +98,16 @@
 					apiName:'getOrderList',
 					method:'POST',
 					data:{
-						status:status
+						status:status,
+						size:this.size,
+						pageNum:this.pageNum
 					}
 				}).then(res=>{
-					this.orderList=res.data.list
+					// if(this.status==''){
+						this.orderList=this.orderList.concat(res.data.list)
+					
+					
+					this.total=res.data.total
 					this.loading=true
 					uni.hideLoading()
 				}).catch(err=>{})
@@ -104,6 +122,23 @@
 					url:'./orderDetail?id='+id
 				})
 			}
+		},
+		async loadmore(){
+			if(this.orderList.length>this.total){
+				uni.showToast({
+					title:'没有更多了...',
+					icon:'none'
+				})
+			}else{
+				this.page++
+				uni.showLoading({
+					title:'拼命加载中...'
+				})
+				await this.getOrderList()
+			}
+		},
+		scroll(e){
+			console.log(e)
 		}
 		}
 	}
@@ -113,14 +148,20 @@
 	.container{
 		.main{
 				.header{
-			  
+			     .avatar{
+					 width: 145rpx;
+					 height: 145rpx;
+				 }
 				.orderSel{
 					position: relative;
-					text{
+					&>text{
 						color: #fff;
 						font-size:32rpx;
 						font-weight:500;
 						line-height:20px;
+						width: 128rpx;
+						text-align: right;
+						display: inline-block;
 					}
 					image{
 						width: 24rpx;
@@ -167,7 +208,9 @@
 				}
 			}
 			.orderBox{
-			   
+			   .logBox{
+				   height: 900rpx;
+			   }
 				.orderItem{
 					
 					.wraper{
@@ -196,7 +239,7 @@
 							.status.status1{
 								color: #D5A601;
 							}
-							.status.status2{
+							.status.status2,.status.status4{
 								color: #275548;
 							}
 							.status.status-1{
@@ -242,5 +285,11 @@
 			}
 		}
 	}
-
+ //    .toTop{
+	// 	position: fixed;
+	// 	right: 20rpx;
+	// 	bottom: 50rpx;
+	// 	width: 30rpx;
+	// 	height: 30rpx;
+	// }
 </style>

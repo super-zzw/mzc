@@ -32,6 +32,9 @@ export function http(opt){
 					}else if(res.data && res.data.code == 300000){
 						uni.hideLoading()
 						utils.rmData()
+						// uni.reLaunch({
+						// 	url: "/pages/index/index"
+						// })
 						reject(res.message)
 					}else{
 						uni.hideLoading()

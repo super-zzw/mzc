@@ -3,23 +3,26 @@
 		<background></background>
 		<view class="main">
 			<view class="header">
-				<image :src="userInfo.avatarUrl" class="avatar"></image>
-				<view class="orderSel">
-					<text>{{txt}}</text>
-					<image src="../../static/pulldown.png" @tap="pulldown=!pulldown" :style="{transform:pulldown?'rotate(180deg)':'rotate(0deg)'}"></image>
-					<view class="selectBox" :style="{height:pulldown?'270rpx':'0'}">
-						<image src="../../static/selectBox.png" ></image>
-						<text class="item0 item" @tap="status==''?'':(status='',pointList=[]),page=1,pulldown=false,txt='所有记录'">所有记录</text>
-						<text class="item1 item" @tap="pointList=[],status=1,pulldown=false,page=1,txt='已获得'">已获得</text>
-						<text class="item2 item" @tap="pointList=[],status=-1,pulldown=false,page=1,txt='已消耗'">已消耗</text>
-					</view>
+				<image :src="userDetail.avatarUrl" class="avatar"></image>
+				<view class="orderSel" @tap="pulldown=!pulldown">
+					
+						<text>{{txt}}</text>
+						<image src="../../static/pulldown.png"  :style="{transform:pulldown?'rotate(180deg)':'rotate(0deg)'}"></image>
+						<view class="selectBox" :style="{height:pulldown?'270rpx':'0'}">
+							<image src="../../static/selectBox.png" ></image>
+							<text class="item0 item" @tap.stop="status='',pulldown=false,txt='所有记录'">所有记录</text>
+							<text class="item1 item" @tap.stop="status=1,pulldown=false,txt='已获得'">已获得</text>
+							<text class="item2 item" @tap.stop="status=-1,pulldown=false,txt='已消耗'">已消耗</text>
+						</view>
+					
+					
 				</view>
 				
 			</view> 
 			<view class="topBox">当前环保积分余额：{{userDetail.integral||0}}</view>
 			<view class="divider1"></view>
 		
-			<scroll-view scroll-y="true" class="logBox"  @scrolltolower="loadmore">
+			<scroll-view scroll-y="true" class="logBox"  @scrolltolower="loadmore" v-if="pointList.length>0&&loading">
 				<view class="pointLogItem" v-for="(item,index) in pointList" :key="index" >
 				<view class="contentBox">
 					<view class="left">
@@ -66,11 +69,17 @@
 		},
 		watch:{
 			status(res){
+				  this.page=1,
+				  this.loading=false
+				  this.pointList=[]
 				this.getPointList(res)
 			}
 		},
 		methods:{
 			getPointList(status){
+				uni.showLoading({
+					title:'加载中...'
+				})
 				this.$http({
 					apiName:'getPointList',
 					method:'POST',
@@ -80,8 +89,13 @@
 						status:this.status
 					}
 				}).then(res=>{
-					// this.pointList.push(res.data.list)
-					this.pointList=this.pointList.concat(res.data.list)
+					
+					// if(this.status==''){
+						this.pointList=this.pointList.concat(res.data.list)
+					// }else{
+					// 	this.pointList=res.data.list
+					// }
+					this.loading=true
 					this.total=res.data.total
 					uni.hideLoading()
 				}).catch(err=>{})
@@ -114,11 +128,15 @@
 		  }
 		  .orderSel{
 		  	position: relative;
-		  	text{
+			
+		  	&>text{
 		  		color: #fff;
 		  		font-size:32rpx;
 		  		font-weight:500;
 		  		line-height:20px;
+				width: 128rpx;
+				text-align: right;
+				display: inline-block;
 		  	}
 		  	image{
 		  		width: 24rpx;

@@ -21,7 +21,7 @@
 					<view class="row r1">
 						<view class="left addBox">
 							<text class="label">所在地区</text>
-							<view @tap="addressSel" class="addMsg" >
+							<view @tap="addressSel" class="addMsg">
 								<view class="info">
 									<text>{{addressMsg.province+addressMsg.city+addressMsg.district}}</text>
 									<text>{{addressMsg.detailedAddress}}</text>
@@ -78,7 +78,7 @@
 					<picker :range="numArray" @change="numChange" :value="index">
 						<view class="right">
 							<text class="rightTxt">{{numArray[index]}}</text>
-							<image src="../../static/trangle.png" class="selnum" ></image>
+							<image src="../../static/trangle.png" class="selnum"></image>
 						</view>
 					</picker>
 
@@ -88,10 +88,10 @@
 				<view class="row remark">
 					<text class="label">留言备注</text>
 					<!-- <cover-view> -->
-					   <!-- <view @tap="handleIpt=true" class="textArea"> -->
-						   <textarea  value="" placeholder="留言备注（可描述回收物状态、特殊要求等）" auto-height placeholder-style="font-size:27rpx;color:#779D93" v-model="remark" 
-						   v-if="handleIpt" @blur="blur" @focus="focus" class="textArea" auto-focus />
-						   <view v-else @tap="handleIpt=true" class="textArea">{{remark1}}</view>
+					<!-- <view @tap="handleIpt=true" class="textArea"> -->
+					<textarea value="" placeholder="留言备注（可描述回收物状态、特殊要求等）" auto-height placeholder-style="font-size:27rpx;color:#779D93"
+					 v-model="remark" v-if="handleIpt" @blur="blur" @focus="focus" class="textArea" auto-focus />
+					<view v-else @tap="handleIpt=true" class="textArea">{{remark1}}</view>
 					   <!-- </view> -->
 						
 					<!-- </cover-view> -->
@@ -120,9 +120,10 @@
 		                    <!-- <view class="sModalHeadItem sModalHeadItem2" @tap="show_modal = false">我知道了</view> -->
 		                </view>
 		                <view class="sModalBody">
-		                    <view class="sModalBodyItem">1.为了让回收更加环保，以及考虑到装载能力，预约一次可回收<text class="sModalBodyItem2">3-10个</text>奶粉罐。</view>
-		                    <view class="sModalBodyItem">2.建议将奶粉罐适当压扁后交给物流小哥。</view>
-		                    <view class="sModalBodyItem">3.回收包含美赞臣旗下任意品牌罐装空罐，包括蓝臻、铂睿、安儿宝、亲舒等。</view>
+		                    <view class="sModalBodyItem">1.目前可回收的空罐不限品牌，但只限于金属材质（马口铁）的奶粉罐，其他材质暂不接收;
+</view>
+		                    <view class="sModalBodyItem">2.为了让回收流程更加环保，仅支持每次4个以上奶粉空罐的预约，建议累计4-10个空罐预约上门；</view>
+		                 <!--   <view class="sModalBodyItem">3.回收包含美赞臣旗下任意品牌罐装空罐，包括蓝臻、铂睿、安儿宝、亲舒等。</view> -->
 							<view class="btn" @tap="show_modal=false">已了解</view>
 		                </view>
 		            </view>
@@ -141,13 +142,13 @@
 				orderId:'',
 				flag:false,
 			    bookTime:'',
-				dateTimes:[ [],["09:00-10:00","10:00-11:00","11:00-12:00","12:00-13:00",
-				"13:00-14:00","14:00-15:00","15:00-16:00","16:00-17:00","17:00-18:00"]],
+				dateTimes:[ [],["上午",
+				"下午"]],
 				aTime :'',
 				eTime :'',
 				formatDate:[],
-				numArray:[3,4,5,6,7,8,9,10],
-				index:7,
+				numArray:[4,5,6,7,8,9,10],
+				index:6,
 				remark1:'留言备注（可描述回收物状态、特殊要求等）',
 				remark:'',
 				type:"奶粉罐",
@@ -205,8 +206,14 @@
 			dateTimeChange(e){
 				console.log(e)
 				this.bookTime=this.formatDate[e.detail.value[0]]+' '+ this.dateTimes[1][e.detail.value[1]]
-				this.aTime=this.formatDate[e.detail.value[0]]+' '+this.dateTimes[1][e.detail.value[1]].split('-')[0]
-				this.eTime=this.formatDate[e.detail.value[0]]+' '+this.dateTimes[1][e.detail.value[1]].split('-')[1]
+				if(e.detail.value[1]==0){
+					this.aTime=this.formatDate[e.detail.value[0]]+' '+'9:00'
+					this.eTime=this.formatDate[e.detail.value[0]]+' '+'12:00'
+				}else{
+					this.aTime=this.formatDate[e.detail.value[0]]+' '+'13:00'
+					this.eTime=this.formatDate[e.detail.value[0]]+' '+'18:00'
+				}
+				
 			},
 			numChange(e){
 				this.index=e.detail.value
@@ -218,6 +225,7 @@
 			},
 			// 立即预约
 			async toBook(){
+			
 				let _j_data = [
 				              { data:this.addressMsg?'1' : '',info:"请添加上门地址"},
 				              { data:this.bookTime,info:"请选择预约上门时间"},
@@ -226,30 +234,48 @@
 				]
 				 let jres = await Utils.judgeForm(_j_data)
 				if(jres){
-					this.$http({
-						apiName:'orderReverse',
-						method:'POST',
-						data:{
-							aTime:this.aTime,
-							amount:this.numArray[this.index],
-							areaNum:this.addressMsg.areaNum,
-							eTime:this.eTime,
-							mobile:this.addressMsg.mobile,
-							receiveaAddress:this.addressMsg.province + this.addressMsg.city + this.addressMsg.district + this.addressMsg.detailedAddress,
-							remark:this.remark,
-							type:this.types[this.type],
-							username:this.addressMsg.username 
-						}
-					}).then(res=>{
-						 uni.showToast({
-						      title:"预约成功"
-						 })
-						  setTimeout( ()=> {
-						                         uni.navigateTo({
-						                             url: './bookSuccess?id='+res.data,
-						                         })
-						                     },1000)
-					}).catch(err=>{})
+					if(Utils.checkMobile(this.addressMsg.mobile)){
+						uni.showLoading({
+							title:'预约中...'
+						})
+						this.$http({
+							apiName:'orderReverse',
+							method:'POST',
+							data:{
+								aTime:this.aTime,
+								amount:this.numArray[this.index],
+								areaNum:this.addressMsg.areaNum,
+								eTime:this.eTime,
+								mobile:this.addressMsg.mobile,
+								receiveaAddress:this.addressMsg.province + this.addressMsg.city + this.addressMsg.district + this.addressMsg.detailedAddress,
+								remark:this.remark,
+								type:this.types[this.type],
+								username:this.addressMsg.username 
+							}
+						}).then(res=>{
+							uni.hideLoading()
+							 uni.showToast({
+							      title:"预约成功"
+							 })
+							  setTimeout( ()=> {
+							                         uni.reLaunch({
+							                         	 url: './bookSuccess?id='+res.data,
+							                         })
+							                            
+							                         
+							                     },1000)
+						}).catch(err=>{})
+					}else{
+						setTimeout( ()=> {
+						                     uni.redirectTo({
+						                     	url:'../index/index'
+						                     })
+						                          
+						                       
+						                   },2000)
+						
+					}
+					
 				}else{
 					
 				}
@@ -270,7 +296,6 @@
 					this.bookTime=res.data.appointmentTime
 					this.index=this.numArray.indexOf(res.data.amount)
 					this.remark=res.data.remark
-					// this.$store.commit('userInfoSet',uni.getStorageSync('userInfo'))
 				})
 			}
 		}

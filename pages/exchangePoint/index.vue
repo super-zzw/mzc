@@ -12,7 +12,7 @@
 				<view class="title">公益捐赠</view>
 				<text class="description">{{publicActivies}}</text>
 				<view class="line"></view>
-				<text class="txt1">{{count1}}个环保积分，可认领保护地面积{{count1*integralM}}平方米</text>
+				<text class="txt1">10个环保积分，可认领保护地面积{{10*integralM}}平方米</text>
 				<view  class="protectBtn" @tap="protect">我要保护</view>
 			</view>
 			<view class="divider1"></view>
@@ -135,7 +135,7 @@
 			})
 	
 			await this.getMsg()
-			console.log(this.userDetail)
+		uni.hideLoading()
 		},
 		computed:{
 			...mapState(['userDetail'])
@@ -164,7 +164,7 @@
 							
 						}
 					}
-					uni.hideLoading()
+					
 				}).catch(res=>{})
 			},
 			changeValue(num){
@@ -178,14 +178,20 @@
 				this.isMask1=true
 			},
 			toProtect(){
+				uni.showLoading({
+					title:'加载中...',
+					mask:true
+				})
 				this.$http({
 					apiName:'exchangeCard',
 					data:{
 						integral:this.count1
 					}
 				}).then(res=>{
+					uni.hideLoading()
 					this.$store.dispatch('getUser')
 					this.close()
+					
 					uni.navigateTo({
 						url:'../achievement/index?isMask=true&imgPath='+res.data,
 					})
@@ -196,6 +202,8 @@
 				this.protectBtn=false
 				this.exchangeBtn=false
 				this.isMask1=false
+				this.alert=false
+				this.count1=10
 			},
 			exchange(){
 					this.isMask1=true
@@ -259,7 +267,9 @@
 				const {encryptedData,iv} = back.detail;
 				try{
 					const userPhone = await this.$http({apiName: "getWuserMobile",method:'POST',data:{encryptedData,iv}});
+					console.log(userPhone)
 					this.form_data.mobile = userPhone.data;
+					// this.$store.dispatch('getUser')
 					this.isMask1=true
 					this.exchangeBtn=true
 					
@@ -273,7 +283,10 @@
 				}
 			},
 			 async handleExchange(){
-				
+				uni.showLoading({
+					title:'加载中...',
+					mask:true
+				})
 					this.$http({
 						apiName:'exchangeIntegral',
 						method:'POST',
@@ -282,6 +295,7 @@
 						}
 					}).then(res=>{
 					this.alert=true
+					uni.hideLoading()
 					this.$store.dispatch('getUser')
 					 // this.getMsg()
 					}).catch(err=>{})
@@ -320,7 +334,7 @@
 	   .bigImg{
 		   width: 98%;
 		   height: 318rpx;
-		   margin: 0 auto;
+		   margin: 5rpx auto 0;
 		   border-top-left-radius: 47rpx;
 		   border-top-right-radius: 47rpx;
 		   background: #218C6F;
@@ -445,6 +459,8 @@
 	   .protectImg{
 		   width: 100%;
 		   height: 205rpx;
+		   position: relative;
+		   top:-5rpx
 	   }
    	   .contentBox{
    	   background-color: #fff;

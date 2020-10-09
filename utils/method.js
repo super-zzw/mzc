@@ -1,5 +1,7 @@
 import store from '../store'
 import {http,httpAll} from './request.js'
+var launched=false;
+	var socket = null;
 export default{
 	wxLogin(){
 		return new Promise((resolve,reject) => {
@@ -38,10 +40,11 @@ export default{
 			
 				store.commit("userInfoSet",result);
 			  const data=await http({apiName: "getUserInfo",method:"POST",data: {jsCode :result.jsCode,avatarUrl :result.avatarUrl ,nickName:result.nickName}})
-				
+	
 				uni.setStorageSync('session',data.data); // 存session
 				uni.setStorageSync('userInfo',result); // 存session
 				store.commit('isLoginSet',true); // 把登录状态变成true
+				
 				store.dispatch('getUser')
 				// await this.getUserInfo();
 				uni.navigateTo({
@@ -71,8 +74,9 @@ export default{
 	},
 	//退出登录
 	rmData(){
-		store.commit('setLogin',false)
-		store.commit('setUserInfo',null)
+		store.commit('isLoginSet',false)
+		store.commit('userInfoSet',null)
+		store.commit('setUserDetail',null)
 		uni.removeStorageSync('session');
 		uni.removeStorageSync('userInfo');
 	},
@@ -156,4 +160,53 @@ export default{
 		    return (Y2+'-'+M2);
 		  }
 	},
+	
+	getUser(){
+		http({
+			apiName:'getUser'
+		}).then(res=>{
+			store.commit('setUserDetail',res.data)
+	})
+	},
+	// 检测手机号是否在黑名单
+	checkMobile(phone){
+		http({
+			apiName:'checkMobile',
+			method:'POST',
+			data:{mobile:phone}
+		}).then(res=>{
+			if(res.code==20000){
+				return true
+			}else{
+				return false
+			}
+		})
+	},
+	createWebSocket() {
+	     if(!launched){
+	     	socket = uni.connectSocket({
+	     	    		url: 'ws://www.meadcan.com/imserver/'+uni.getStorageSync('userID'), 
+	     	    		complete: ()=> {}
+	     			});
+						
+	     	socket.onOpen(()=>{console.log('conn')});
+	     							socket.onMessage(res=>{
+	     								if(res.data!==20000){
+	     									this.getUser()
+	     								}
+	     								console.log(res)});//获取服务器传来的数据，做相应处理
+	     							socket.onClose(()=>{console.log('close'),
+									
+									setTimeout(()=>{
+										launched=false
+										this.createWebSocket()
+									},5000)
+									this.createWebSocket()
+									
+									});
+	     							socket.onError((err)=>{console.log(err)})
+	     	launched=true
+	     }
+	   },
+	
 }

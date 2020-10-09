@@ -34,15 +34,16 @@ export default {
 <style  lang="scss" scoped>
 .outer{
 	width: 100%;
-	height: 70%;
+	// height: 100%;
 }
 .null-page {
 	height: 100%;
-	margin-top: 20rpx;
+	margin-top: 200rpx;
 	padding-bottom: 40rpx;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	justify-content: center;
 }
 .text {
 		margin-top: 20rpx;

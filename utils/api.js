@@ -26,4 +26,6 @@ export default{
 	getOverFlow:'/order/logistics/' ,//获取物流信息
 	submitFeedBack:'/submitFeedBack' ,//提交反馈
 	getImgList:'/img/list' ,//获取图片
+	isReverse:'/order/quota'  ,//是否可预约
+	checkMobile:'/checkMobile' //检测手机号是否在黑名单
 }

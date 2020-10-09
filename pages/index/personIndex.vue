@@ -2,14 +2,15 @@
 	<view class="container">
 		<background></background>
 		<view class="mainCon">
-			<view class="avatar"><image :src="userInfo.avatarUrl" ></image></view>
+			<view class="avatar"><image :src="userDetail.avatarUrl" ></image></view>
 			<view class="titleBox">
-				<text class="row1">{{userInfo.nickName}}</text>
-				<view  class="row2">
-					<text class="txt" @tap="show_modal = true">{{userDetail.carbonEmissions||0}}g 碳减排量</text>
+				<text class="row1">{{userDetail.nickName}}</text>
+				<view  class="row2" @tap="show_modal = true">
+					<text class="txt" >{{userDetail.carbonEmissions||0}}g 碳减排量</text>
 					
 					<image src="../../static/line.png" class="line"></image>
 					<text class="txt">{{userDetail.integral||0}} 环保积分</text>
+					<image src="../../static/shuoming.png" class="icon1"></image>
 				</view>
 				
 			</view>
@@ -31,7 +32,10 @@
 					<text>公益成就</text>
 				</view>
 			</view>
-			<navigator url="#" class="feedback" @tap="toFeedBack" hover-class="none">问题反馈</navigator>
+			<navigator url="#" class="feedback" @tap="toFeedBack" hover-class="none">
+				<image src="../../static/what.png" mode=""></image>
+				问题反馈
+			</navigator>
 		</view>
 		<sModal :show_modal="show_modal" @toLog="toOrderLog"/>
 	</view>
@@ -52,11 +56,11 @@
 		},
 		
 	async onLoad() {
-		
+		this.$store.dispatch('getUser')
 		
 		},
 		onShow() {
-			this.$store.dispatch('getUser')
+			
 		},
 		methods:{
 			toOrderLog(){
@@ -135,7 +139,11 @@
 		  					 margin: 0 14rpx 2rpx;
 		  					 line-height: 24rpx;
 		  				 }
-		  				
+		  				.icon1{
+							width: 31rpx;
+							height: 31rpx;
+							margin-left: 5rpx;
+						}
 		  			 }
 		  			
 		  }
@@ -166,11 +174,22 @@
 		  		  }
 		  }
 		  .feedback{
-			  margin-top: 30rpx;
 			  font-size:36rpx;
 			  font-family:PingFang SC;
 			  font-weight:600;
 			  color:rgba(26,103,82,1);
+			  position: absolute;
+			  left: 50%;
+			  transform: translateX(-50%);
+			  bottom: 5%;
+			  display: flex;
+			  align-items: center;
+			  image{
+				  width: 36rpx;
+				  height: 36rpx;
+				  margin-right: 10rpx;
+				  
+			  }
 		  }
 		  
 	  }

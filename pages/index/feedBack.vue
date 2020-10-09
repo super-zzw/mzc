@@ -49,9 +49,11 @@
 							title:'提交成功'
 						})
 						setTimeout(()=>{
-							uni.navigateTo({
+							uni.redirectTo({
 								url:'./personIndex'
 							})
+							
+							
 						},1500)
 					}).catch(err=>{
 						uni.showToast({

@@ -1,9 +1,9 @@
 <template>
 	<view class="container">
 		<view class="contentBox" v-html="agreement"></view>
-		<view class="bottomBox">
+		<!-- <view class="bottomBox" v-if="agreement">
 			<view class="btn" @tap="iknow">已了解</view>
-		</view>
+		</view> -->
 	</view>
 </template>
 
@@ -29,11 +29,11 @@
 					this.agreement=res.data.content
 				})
 			},
-			iknow(){
-				uni.navigateTo({
-					url:'./editBookMsg'
-				})
-			}
+			// iknow(){
+			// 	uni.navigateBack({
+					
+			// 	})
+			// }
 		}
 	}
 </script>
@@ -42,31 +42,32 @@
 	.container{
 		display: flex;
 		flex-direction: column;
-		height: 100vh;
+		// height: 100vh;
 		.contentBox{
-			flex: 1;
-			flex-grow: ;
+			// flex: 1;
+		
 			padding: 20rpx;
+			padding-bottom: 50rpx;
 		}
-		.bottomBox{
-			height: 100rpx;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			background: #fff;
-			.btn{
-				height: 70rpx;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				background: #196751;
-				color: #fff;
-				font-size: 36rpx;
-				font-weight: 500;
-				padding: 0 70rpx;
-				border-radius: 35rpx;
-				margin-bottom: 30rpx;
-			}
-		}
+		// .bottomBox{
+		// 	height: 100rpx;
+		// 	display: flex;
+		// 	align-items: center;
+		// 	justify-content: center;
+		// 	background: #fff;
+		// 	.btn{
+		// 		height: 70rpx;
+		// 		display: flex;
+		// 		align-items: center;
+		// 		justify-content: center;
+		// 		background: #196751;
+		// 		color: #fff;
+		// 		font-size: 36rpx;
+		// 		font-weight: 500;
+		// 		padding: 0 70rpx;
+		// 		border-radius: 35rpx;
+		// 		margin-bottom: 30rpx;
+		// 	}
+		// }
 	}
 </style>

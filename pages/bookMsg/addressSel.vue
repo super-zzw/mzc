@@ -111,9 +111,12 @@
 				this.isDel=false
 			},
 			addressOk(item){
-				uni.navigateTo({
-					url:'./editBookMsg'
+				uni.navigateBack({
+					
 				})
+				// uni.navigateTo({
+				// 	url:'./editBookMsg'
+				// })
 				this.$store.commit('selectAddr', item)
 			}
 		}

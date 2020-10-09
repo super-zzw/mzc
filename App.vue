@@ -1,15 +1,21 @@
 <script>
+
 	export default {
 		onLaunch: function() {
 			if(uni.getStorageSync('session')){
 				this.$store.commit('isLoginSet',true)
 			}
+			
 		},
 		onShow: function() {
-			console.log('App Show')
+
+		
+		
+			
 		},
 		onHide: function() {
-			console.log('App Hide')
+		
+			
 		}
 	}
 </script>
@@ -40,7 +46,7 @@ button::after{ border: none; }
 			border-radius:47rpx;
 			border-bottom-left-radius:47rpx;
 			border-bottom-right-radius: 47rpx;
-			padding-bottom:40rpx;
+			padding-bottom:35rpx;
 				box-sizing: border-box;
 				// overflow: scroll;
 				.header{

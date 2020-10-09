@@ -4,7 +4,7 @@
 		<view class="awardDetail" v-if="isMask">
 			<image src="../static/close.png" @tap="close" class="close"></image>
 			<!-- <saveFile :url="src" class="aware"></saveFile> -->
-			<image :src="src" class="aware"  :data-url="src" @longpress="saveImg"></image>
+			<image :src="src" class="aware"  :data-url="src" @longpress="saveImg"  mode="widthFix"></image>
 			<view class="txt1">可长按图片保存到本地，再进行分享</view>
 		</view>
 	</view>
@@ -113,7 +113,7 @@
 		  margin-top: 20rpx;
 	  }
 	  .aware{
-		  height: 980rpx;
+		  height: auto;
 		  width: 670rpx;
 		  margin-top: 20rpx;
 		  border-radius:47rpx;

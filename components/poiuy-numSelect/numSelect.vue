@@ -1,50 +1,18 @@
 <template>
 	<view class="num-view">
-		<!-- <view class="box style1" v-if="model==='1'">
-			<text class="iconfont icon-wuuiconsuoxiao" :class="disable?'disable':closeMinus?'disable':''" :style="{color:color,'font-size':size+'rpx'}"
-			 @click="minus"></text>
-			<input v-model="num" :style="{'font-size':(size*0.7)+'rpx'}" type="digit" @input="numInput" @blur="blur" :maxlength="maxlength"
-			 :disabled="disable?true:!input" class="num" :class="disable?'disable':''" />
-			<text class="iconfont icon-wuuiconxiangjifangda" :class="disable?'disable':closeAdd?'disable':''" :style="{color:color,'font-size':size+'rpx'}"
-			 @click="add"></text>
-		</view>
-
-		<view class="box style2" v-if="model==='2'" :style="{border:'1rpx solid '+(disable?'#cccccc':color)}">
-			<text class="iconfont icon-jianshao" :class="disable?'disable-txt':closeMinus?'disable-txt':''" :style="{'background-color':color,'font-size':(size*0.6)+'rpx'}"
-			 @click="minus"></text>
-			<input v-model="num" :style="{'font-size':(size*0.7)+'rpx'}" type="digit" @input="numInput" @blur="blur" :maxlength="maxlength"
-			 :disabled="disable?true:!input" class="num" :class="disable?'disable':''" />
-			<text class="iconfont icon-jia" :class="disable?'disable-txt':closeAdd?'disable-txt':''" :style="{'background-color':color,'font-size':(size*0.6)+'rpx'}"
-			 @click="add"></text>
-		</view> -->
+		
 
 		<view class="box style3">
 			<text class="iconfont icon-fangkuang-jian" :class="disable?'disable':closeMinus?'disable':''" :style="{'color':color,'font-size':size+'rpx'
 			}"
 			 @click="minus"></text>
-			<input v-model="num" :style="{'font-size':(size*0.7)+'rpx'}" type="digit" @input="numInput" @blur="blur" :maxlength="maxlength"
+			<input v-model="num" :style="{'font-size':(size*0.7)+'rpx'}" type="digit" @input="numInput" @blur="blur" :maxlength="4"
 			 :disabled="disable?true:!input" class="num" :class="disable?'disable':''" />
 			<text class="iconfont icon-fangkuang-jia" :class="disable?'disable':closeAdd?'disable':''" :style="{'color':color,'font-size':size+'rpx'}"
 			 @click="add"></text>
 		</view>
 
-	<!-- 	<view class="box style4" v-if="model==='4'" :style="{border:'1rpx solid '+(disable?'#cccccc':color)}">
-			<text class="iconfont icon-jianshao" :class="disable?'disable':closeMinus?'disable':''" :style="{'color':color,'font-size':(size*0.6)+'rpx','border-right':'1rpx solid '+color}"
-			 @click="minus"></text>
-			<input v-model="num" :style="{'font-size':(size*0.7)+'rpx'}" type="digit" @input="numInput" @blur="blur" :maxlength="maxlength"
-			 :disabled="disable?true:!input" class="num" :class="disable?'disable':''" />
-			<text class="iconfont icon-jia" :class="disable?'disable':closeAdd?'disable':''" :style="{'color':color,'font-size':(size*0.6)+'rpx','border-left':'1rpx solid '+color}"
-			 @click="add"></text>
-		</view>
-
-		<view class="box style3" v-if="model==='5'">
-			<text class="iconfont  icon-jianshaoshuzi" :class="disable?'disable':closeMinus?'disable':''" :style="{'color':color,'font-size':size+'rpx'}"
-			 @click="minus"></text>
-			<input v-model="num" :style="{'font-size':(size*0.7)+'rpx'}" type="digit" @input="numInput" @blur="blur" :maxlength="maxlength"
-			 :disabled="disable?true:!input" class="num" :class="disable?'disable':''" />
-			<text class="iconfont icon-tianjia" :class="disable?'disable':closeAdd?'disable':''" :style="{'color':color,'font-size':size+'rpx'}"
-			 @click="add"></text>
-		</view> -->
+	
 	</view>
 </template>
 
@@ -64,12 +32,12 @@
 			},
 			max: { //最大值 不做限制则传入null
 				type: Number,
-				default: 100
+				default: 9999
 			},
-			disable: { //是否禁用
-				type: Boolean,
-				default: false
-			},
+			// disable: { //是否禁用
+			// 	type: Boolean,
+			// 	default: true
+			// },
 			color: { //风格颜色 输入颜色代码即可
 				type: String,
 				default: '#ea5a59'
@@ -80,7 +48,7 @@
 			},
 			input: { //允许输入
 				type: Boolean,
-				default: false
+				default: true
 			},
 			step: { //步长
 				type: Number,
@@ -93,11 +61,12 @@
 		},
 		data() {
 			return {
-				num: 0,
+				num: null,
 				closeMinus: false,
 				closeAdd: false,
 				maxlength: null,
-				isDigit: false
+				isDigit: false,
+				disable:false
 			}
 		},
 		created() {
@@ -107,20 +76,26 @@
 			this.decideMinus();
 			this.decideAdd();
 			let len = null;
-			if (this.max == null) {
-				len = 100000000
-			} else {
-				len = (this.max + "").length
-			}
-			if (typeof this.step !== 'Number' && this.step % 1 !== 0) {
-				len += 3;
-				this.isDigit = true;
-			}
-			this.maxlength = len;
+			// if (this.max == null) {
+			// 	len = 100000000
+			// } else {
+			// 	len = (this.max + "").length
+			// }
+			// if (typeof this.step !== 'Number' && this.step % 1 !== 0) {
+			// 	len += 3;
+			// 	this.isDigit = true;
+			// }
+			// this.maxlength = len;
 		},
 		watch: {
 			value(n, o) {
 				this.num = n;
+				this.value=this.value>9999?9999:this.value
+			},
+			num(){
+				this.disable=this.num>9999?true:false
+				this.closeAdd=this.num==9999?true:false
+				this.num=this.num>9999?9999:this.num
 			}
 		},
 		methods: {
@@ -271,7 +246,7 @@
 
 
 	.num-view {
-		width: 140rpx;
+		width: 170rpx;
 	}
 
 	.box {
@@ -290,8 +265,8 @@
 	}
 
 	.num {
-		width: 60rpx;
-		
+		width: 70rpx;
+		padding: 0 10rpx;
 		height: 100%;
 		text-align: center;
 		font-size: 28rpx;

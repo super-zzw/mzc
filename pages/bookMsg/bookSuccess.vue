@@ -5,10 +5,10 @@
 			<view class="wraper">
 				<image :src="imgUrl"  class="successImg"></image>
 				<image src="../../static/success.png" class="successIcon"></image>
-				<text class="successTxt">您已预约上门成功，请等待京东物流上门</text>
+				<text class="successTxt">您已预约成功，请等待物流上门回收</text>
 				<view class="options">
-					<navigator url="../index/index" class="index btn" hover-class="none">返回首页</navigator>
-					<navigator :url="'../index/orderDetail?id='+orderId" class="order btn" hover-class="none">查看订单</navigator>
+					<view  class="index btn"  @tap="toIndex">返回首页</view>
+					<view :url="'../index/orderDetail?id='+orderId" class="order btn" @tap="toOrder">查看订单</view>
 				</view>
 			</view>
 		</view>
@@ -42,6 +42,16 @@
 					
 					this.imgUrl=res.data[0].imageUrl
 					uni.hideLoading()
+				})
+			},
+			toIndex(){
+				uni.redirectTo({
+					url:'../index/index'
+				})
+			},
+			toOrder(){
+				uni.redirectTo({
+					url:'../index/orderDetail?id='+this.orderId
 				})
 			}
 		}

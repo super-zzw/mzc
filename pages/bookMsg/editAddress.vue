@@ -17,7 +17,7 @@
 				<view class="row region">
 					<text class="label">所在地区</text>
 
-					<view class="uni-list" @tap="regionSel">
+					<view class="uni-list">
 						<view class="uni-list-cell">
 
 							<view class="uni-list-cell-db">
@@ -212,6 +212,9 @@
 				]
 				let jres = await Utils.judgeForm(_j_data)
 				if (jres) {
+					uni.showLoading({
+						title:'保存中...'
+					})
 					let url = 'addAddress'
 					if (this.id) {
 						url = 'editAddress'
@@ -222,9 +225,10 @@
 						method: 'POST',
 						data: this.form_data
 					}).then(res => {
-						this.$store.commit('selectAddr', this.form_data)
-						uni.navigateTo({
-							url: './editBookMsg'
+						uni.hideLoading()
+						this.$store.commit('selectAddr', this.form_data)	
+						uni.navigateBack({
+							delta:2
 						})
 					}).catch(err => {})
 				}
@@ -242,7 +246,6 @@
 			.top {
 				padding-top: 56rpx;
 				padding-left: 60rpx;
-				// padding-right: 60rpx;
 				box-sizing: border-box;
 
 				.row {

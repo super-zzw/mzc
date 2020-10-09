@@ -3,19 +3,21 @@
 		<background1></background1>
 		<view class="box1">
 			<button type="default" class="avatarBox" hover-class="none" open-type="getUserInfo" lang="zh_CN" @getuserinfo="GotUserInfo()">
-				<image :src="userInfo.avatarUrl" mode="" class="avatar" @click="toIndex" v-if="userInfo.avatarUrl"></image>
-				<image src="../../static/defaultAvatar.png" mode="" class="avatar" @click="toIndex"  v-else></image>
+				<image :src="userDetail.avatarUrl||'../../static/defaultAvatar.png'" mode="" class="avatar" @click="toIndex" ></image>
+				<!-- <image src="" mode="" class="avatar" @click="toIndex"  v-else></image> -->
 			</button>
 			<view class="titleBox">
-				<text class="row1" v-if="isLogin">{{userInfo.nickName}}</text>
+				<text class="row1" v-if="isLogin">{{userDetail.nickName}}</text>
 				<text  class="row1" v-else>暂未登录</text>
 				<view  class="row2">
-					<text class="txt" @tap="show_modal = true">{{userDetail.carbonEmissions||0}}g 碳减排量</text>
 					
-					<image src="../../static/line.png" class="line"></image>
-					<text class="txt">{{userDetail.integral||0}} 环保积分</text>
 					<button type="default" class="arrow" hover-class="none" open-type="getUserInfo" lang="zh_CN" @getuserinfo="GotUserInfo()">
-						<image src="../../static/arrowRight.png" ></image>
+						<text class="txt" >{{userDetail.carbonEmissions||0}}g 碳减排量</text>
+						
+						<image src="../../static/line.png" class="line"></image>
+						
+						<text class="txt">{{userDetail.integral||0}} 环保积分</text> 
+						<image src="../../static/arrowRight.png" style="margin-left: 5rpx;"></image>
 					</button>
 					
 				</view>
@@ -41,7 +43,7 @@
 			</view>
 		</view>
 		<view class="box2">
-			<view class="navItem">
+			<view class="navItem" @tap="toSecret">
 				<image src="../../static/icon1.png" ></image>
 				<text>回收入门秘籍</text>
 			</view>
@@ -55,34 +57,45 @@
 			</view>
 		</view>
 		
-		<sModal :show_modal="show_modal" @toLog="toOrderLog"/>
+		
 	</view>
 </template>
 
 <script>
+	
 	import { mapState } from 'vuex';
 	import Utils from '../../utils/method.js'
 	import sModal from '../../components/sModal.vue'
+	var socket = null;
+	var launched = false;
 	export default {
 		data() {
 			return {
-				show_modal:false
+				
 			}
 		},
 		components:{sModal},
+		computed:{
+				  ...mapState(['isLogin','userInfo','userDetail'])
+		},
 		async onLoad() {
+			
+				// console.log(uni.getStorageSync('userId'))
 			if(this.isLogin){
-				this.$store.commit('userInfoSet',uni.getStorageSync('userInfo'))
-			}
-			uni.showLoading({
-				title:"加载中...",
-			})
 			await this.$store.dispatch('getUser')
+		
+		
+			
+					}
+		},
+		async onShow() {
+			if(this.isLogin&&!launched){
+			
+			}
+			
 		},
 	
-	  computed:{
-		  ...mapState(['isLogin','userInfo','userDetail'])
-	  },
+	  
 		methods: {
 			onShareAppMessage: function(e) {
 			let title = '美赞臣回收小程序'
@@ -93,23 +106,29 @@
 			},
 
 			
-			GotUserInfo(){
+			async GotUserInfo(){
 				if(this.isLogin){
 					uni.navigateTo({
 										url:'./personIndex'
 									})
 				}else{
 					this.$store.commit('jumpPageSet','./personIndex')
-					Utils.onGotUserInfo()
-					
+					await Utils.onGotUserInfo()
+				
 				}
 				
 			},
 			toBook(){
 				if(this.isLogin){
-					uni.navigateTo({
-										url:'/pages/bookMsg/editBookMsg'
-									})
+					this.$http({
+						apiName:'isReverse',
+						
+					}).then(res=>{
+						uni.navigateTo({
+							url:'/pages/bookMsg/editBookMsg'
+						})
+					}).catch(err=>{})
+					
 				}else{
 					this.$store.commit('jumpPageSet','/pages/bookMsg/editBookMsg')
 					Utils.onGotUserInfo()
@@ -121,9 +140,14 @@
 					url:'./lessons'
 				})
 			},
-			toOrderLog(){
+			// toOrderLog(){
+			// 	uni.navigateTo({
+			// 		url:'./orderLog'
+			// 	})
+			// },
+			toSecret(){
 				uni.navigateTo({
-					url:'./orderLog'
+					url:'./secret'
 				})
 			},
 			toWhere(){
@@ -142,12 +166,10 @@
 	 height: 100vh;
 	 flex-direction: column;
 	justify-content: space-around;
-	 // padding-top: 282rpx;
-	 padding-bottom: 70rpx;
+	 padding-top: 40rpx;
 	 box-sizing: border-box;
 	 position: relative;
 	 .box1{
-		
 		 margin: 0 auto;
 		 position: relative;
 		 border-radius:60rpx;
@@ -167,6 +189,7 @@
 			 display: flex;
 			 justify-content: center;
 			 align-items: center;
+			 padding: 0;
 			 .avatar{
 				 width: 150rpx;
 				 height: 151rpx;
@@ -188,25 +211,35 @@
 				 display: flex;
 				 align-items: center;
 				 justify-content: center;
+				 button{
+				 		 padding: 0;
+				 		 background: transparent;
+				 		 overflow: auto;
+				 		 display: flex;
+				 		 align-items: center;
+				 		 
+				 }
 				 .txt{
 					 font-size:34rpx;
 					 font-weight:500;
 					 color:rgba(18,92,72,1);
-					 line-height:30rpx;
+					 // line-height:42rpx;
 				 }
-				 .line{
-					 width: 2rpx;
-					 height:18rpx ;
-					 margin: 0 14rpx 2rpx;
-					 line-height: 24rpx;
-				 }
+				
 				 .arrow{
-				 				 width: 34rpx;
-				 				  height: 34rpx;
+				 				
 								  margin-left: 7rpx;
+								  font-size: 20rpx;
+								   line-height:42rpx;
 				 				  image{
-									  width: 100%;
-									  height: 100%;
+									 width: 34rpx;
+									  height: 34rpx;
+								  }
+								  .line{
+								  					 width: 2rpx;
+								  					 height:18rpx ;
+								  					 margin: 0 14rpx 2rpx;
+								  					 line-height: 24rpx;
 								  }
 				 }
 			 }
@@ -258,7 +291,7 @@
 		 }
 		 .rightBottom{
 			 position: absolute;
-			 right: 43rpx;
+			 right: 40rpx;
 			 bottom: 90rpx;
 			 display: flex;
 			 flex-direction: column;
@@ -326,9 +359,7 @@
 			 }
 		 }
 	 }
-	 button{
-		 padding: 0;
-	 }
+	 
 	
  }
 </style>

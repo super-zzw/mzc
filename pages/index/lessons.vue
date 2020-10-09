@@ -2,13 +2,16 @@
 	<view class="container">
 		<background1 color="#196751"></background1>
 		<view class="main">
-			<view class="mainContent">
+			<view class="mainContent" v-if="loading&&articleList.length">
 				<view class="adItem" v-for="(item,index) in articleList" :key="index" @tap="toDetail(item.contentUrl)">
 					<image :src="item.coverImg" class="left"></image>
 					<view class="right">{{item.title}}</view>
 				</view>
 			</view>
-			
+			<view  class="mainContent" v-if="loading&&articleList.length==0">
+				<image src="../../static/wait.png" class="waitTip"></image>
+				<text class="waitTxt">敬请期待哦～</text>
+			</view>
 		</view>
 	</view>
 </template>
@@ -17,7 +20,8 @@
 	export default {
 		data() {
 			return {
-				articleList:[]
+				articleList:[],
+				loading:false
 			};
 		},
 		async onLoad() {
@@ -34,7 +38,14 @@
 					method:'POST',
 					
 				}).then(res=>{
-					this.articleList=res.data.list
+					if(res.data.list.length==0){
+						 uni.setNavigationBarTitle({
+						            title:'敬请期待'
+						   });
+					}else{
+						this.articleList=res.data.list
+					}
+					this.loading=true
 					uni.hideLoading()
 				}).catch(err=>{}
 				)
@@ -72,6 +83,22 @@
 				.mainContent{
 					height: 970rpx;
 					overflow: scroll;
+					text-align: center;
+					.waitTip{
+						width: 401rpx;
+						height: 412rpx;
+						margin:120rpx 100rpx 40rpx;
+					}
+					.waitTxt{
+						width:193rpx;
+						height:32rpx;
+						font-size:33rpx;
+						font-family:PingFang SC;
+						font-weight:600;
+						color:rgba(26,103,82,1);
+						
+					}
+					
 					.adItem{
 									  
 									   height:245rpx;

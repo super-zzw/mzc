@@ -1,24 +1,23 @@
 <template>
 	<view>
 		<view class="sModal" v-if="show_modal">
-					
 		           <view class="sModalBox animated fadeIn">
 								 <image src="../static/close.png" mode="widthFix" class="close" @tap="$parent.show_modal=false"></image>
 		               <view class="sModalHead">	               
-		                   <view class="sModalHeadItem sModalHeadItem1">环保排碳量说明</view>
+		                   <view class="sModalHeadItem sModalHeadItem1">说明</view>
 		               </view>
 		               <view class="sModalBody">
 		                   <view class="sModalBodyItem">
-							   <text class="title">预约上门回收</text>
-							   <text class="content">按回收奶粉罐数量进行积分，每个20分</text>
+							   <text class="title">我的碳减排量如何计算？</text>
+							   <text class="content">碳减排量根据您累计回收的空罐数量计算而得。经过科学测算，平均每回收一个空奶粉金属罐可以减少98g碳排放。每成功完成一单，系统将自动为您积累碳减排量（PS：物流小哥上门收件会增加碳排放，因此每一单需要额外减去20g碳减排量）。</text>
 						   </view>
 		                   <view class="sModalBodyItem">
-							   <text class="title">美赞臣官网将不定期举行活动</text>
-							   <text class="content">环保排行榜前列的环保达人，将有机会获取美赞臣环保小礼物或参加专属环保活动，快来参与吧!</text>
+							   <text class="title">我的环保积分如何获得？</text>
+							   <text class="content">环保积分与您参与回收的次数有关。每成功完成一单空罐回收，您都将获得100环保积分，积分可用于公益捐赠或兑换好礼，点击您的头像进入“环保积分使用”即可使用（PS：获得100环保积分的贡献相当于植树一棵）。</text>
 						   </view>
 		              <view class="btns">
 						  <view class="btn" @tap="$parent.show_modal=false">已了解</view>
-						  <view class="btn" @tap="toLog">查看记录</view>
+						  <!-- <view class="btn" @tap="toLog">查看记录</view> -->
 					  </view>
 		               </view>
 		           </view>
@@ -34,10 +33,10 @@
 		},
 		props:['show_modal'],
 		methods:{
-			toLog(){
-				this.$parent.show_modal=false
-				this.$emit('toLog')
-			}
+			// toLog(){
+			// 	this.$parent.show_modal=false
+			// 	this.$emit('toLog')
+			// }
 		}
 	}
 </script>
@@ -119,7 +118,8 @@
 	                    .btns{
 							margin-top: 80rpx;
 							display: flex;
-							justify-content: space-around;
+							// justify-content: space-around;
+							justify-content: center;
 							.btn{
 								width: 250rpx;
 								height: 70rpx;
