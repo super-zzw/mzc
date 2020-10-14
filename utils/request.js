@@ -4,8 +4,8 @@ import utils from "./method.js"
 var test = false;
 var _baseUrl = '';
 if (test) {
-	_baseUrl = 'http://192.168.1.17:9108/api';  //测试地址
-} else {	_baseUrl = 'https://www.meadcan.com/api';  //正式地址
+	_baseUrl = 'http://192.168.1.25:9109/api';  //测试地址
+} else {	_baseUrl = 'https://mdhs.meadcan.com/api';  //正式地址
 }
 var baseUrl = _baseUrl;
 // 请求loading交给页面处理

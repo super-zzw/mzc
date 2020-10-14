@@ -170,22 +170,30 @@ export default{
 	},
 	// 检测手机号是否在黑名单
 	checkMobile(phone){
-		http({
-			apiName:'checkMobile',
-			method:'POST',
-			data:{mobile:phone}
-		}).then(res=>{
-			if(res.code==20000){
-				return true
-			}else{
-				return false
-			}
+		return new Promise((resolve,reject)=>{
+			http({
+				apiName:'checkMobile',
+				method:'POST',
+				data:{mobile:phone}
+			}).then(res=>{
+				resolve(res)
+				// if(res.code==200000){
+				// 	console.log(111)
+				// 	boo=true
+				// }else{
+				// 	console.log(2)
+				// 	boo=false
+				// }
+			}).catch(err=>{
+				reject(err)
+			})
 		})
+	
 	},
 	createWebSocket() {
 	     if(!launched){
 	     	socket = uni.connectSocket({
-	     	    		url: 'ws://www.meadcan.com/imserver/'+uni.getStorageSync('userID'), 
+	     	    		url: 'ws://mdhs.meadcan.com/imserver/'+uni.getStorageSync('userID'), 
 	     	    		complete: ()=> {}
 	     			});
 						

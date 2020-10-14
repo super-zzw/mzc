@@ -10,7 +10,7 @@
 					
 					<image src="../../static/line.png" class="line"></image>
 					<text class="txt">{{userDetail.integral||0}} 环保积分</text>
-					<image src="../../static/shuoming.png" class="icon1"></image>
+					<!-- <image src="../../static/shuoming.png" class="icon1"></image> -->
 				</view>
 				
 			</view>

@@ -21,23 +21,26 @@
 			</view> 
 			<view class="topBox">当前环保积分余额：{{userDetail.integral||0}}</view>
 			<view class="divider1"></view>
-		
-			<scroll-view scroll-y="true" class="logBox"  @scrolltolower="loadmore" v-if="pointList.length>0&&loading">
-				<view class="pointLogItem" v-for="(item,index) in pointList" :key="index" >
-				<view class="contentBox">
-					<view class="left">
-						<text class="row1">{{item.title}}</text>
-						<text class="row2">{{item.remark}}</text>
-						<text class="row3">{{item.createTime}}</text>
-					</view>
-					<view :class="item.status==1?'right1':'right2'">{{item.status==1?'+'+item.integral:'-'+item.integral}}</view>
-				</view>
-				<view class="divider"></view>
-				</view>
-			</scroll-view>
-			<view v-if="loading&&pointList.length==0" class="logBox" >
-				<defaultPage></defaultPage>
-			</view>
+		      <view class="logBox">
+				  <scroll-view scroll-y="true"   @scrolltolower="loadmore" style="height: 100%;" v-if="pointList.length>0&&loading">
+				  	<view class="pointLogItem" v-for="(item,index) in pointList" :key="index" >
+				  	<view class="contentBox">
+				  		<view class="left">
+				  			<text class="row1">{{item.title}}</text>
+				  			<text class="row2">{{item.remark}}</text>
+				  			<text class="row3">{{item.createTime}}</text>
+				  		</view>
+				  		<view :class="item.status==1?'right1':'right2'">{{item.status==1?'+'+item.integral:'-'+item.integral}}</view>
+				  	</view>
+				  	<view class="divider"></view>
+				  	</view>
+				  </scroll-view>
+				  <view v-if="loading&&pointList.length==0"  >
+				  	<defaultPage></defaultPage>
+				  </view>
+			  </view>
+			
+			
 		</view>
 	</view>
 </template>

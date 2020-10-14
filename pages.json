@@ -104,7 +104,7 @@
         ,{
             "path" : "pages/index/lessons",
             "style" : {
-				"navigationBarTitleText": "美罐最新活动"
+				"navigationBarTitleText": "美袋最新进展"
 			}
         }
         
@@ -145,6 +145,10 @@
       
  
    
+        ,{
+            "path" : "pages/index/knowDetail",
+            "style" : {}
+        }
     ],
 	// "subPackages":[
 	// 	{
@@ -176,7 +180,7 @@
 	// },
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
-		"navigationBarTitleText": "美罐Mead Can奶粉空罐回收",
+		"navigationBarTitleText": "美袋循环回收",
 		"navigationBarBackgroundColor": "#1A6752",
 		"backgroundColor": "#1A6752"
 		

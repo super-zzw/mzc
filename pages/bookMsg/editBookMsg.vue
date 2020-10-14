@@ -48,10 +48,10 @@
 					<text class="label">预约时间</text>
 					<view class="timeSel">
 						<picker mode="multiSelector" :range="dateTimes" @change="dateTimeChange">
-							<!-- <view>{{}}</view> -->
+						
 							<view class="mr">
 								<view class="info"><text v-if="bookTime">{{bookTime}}</text> </view>
-								<!-- 	<view class="right"> -->
+								
 								<view class="right">
 									<text class="rightTxt" v-if="!bookTime">选择预约上门时间</text>
 									<image src="../../static/icon8.png" class="selectIcon"></image>
@@ -65,19 +65,34 @@
 				</view>
 				<view class="divider"></view>
 				<view class="row">
-					<text class="label">回收品类</text>
-					<view class="right">
-						<text class="rightTxt">{{type}}</text>
-						<image src="../../static/detail.png" class="icon1" @tap="show_modal = true"></image>
-					</view>
-
+					<text class="label">美袋数量</text>
+					<picker :range="numArray1" @change="numChange1" :value="meidaiIndex">
+						<view class="right">
+							<text class="rightTxt">{{numArray1[meidaiIndex]}}</text>
+							<image src="../../static/trangle.png" class="selnum"></image>
+						</view>
+					</picker>
+				
+				
 				</view>
 				<view class="divider"></view>
 				<view class="row">
-					<text class="label">回收数量</text>
-					<picker :range="numArray" @change="numChange" :value="index">
+					<text class="label">回收品类</text>
+					<picker :range="numArray2" @change="numChange2" :value="sortIndex">
 						<view class="right">
-							<text class="rightTxt">{{numArray[index]}}</text>
+							<text class="rightTxt">{{numArray2[sortIndex]}}</text>
+							<image src="../../static/trangle.png" class="selnum"></image>
+						</view>
+					</picker>
+				
+				
+				</view>
+				<view class="divider"></view>
+				<view class="row">
+					<text class="label">回收数量(kg)</text>
+					<picker :range="numArray3" @change="numChange3" :value="index">
+						<view class="right">
+							<text class="rightTxt">{{numArray3[index]}}</text>
 							<image src="../../static/trangle.png" class="selnum"></image>
 						</view>
 					</picker>
@@ -87,15 +102,11 @@
 				<view class="divider"></view>
 				<view class="row remark">
 					<text class="label">留言备注</text>
-					<!-- <cover-view> -->
-					<!-- <view @tap="handleIpt=true" class="textArea"> -->
+				
 					<textarea value="" placeholder="留言备注（可描述回收物状态、特殊要求等）" auto-height placeholder-style="font-size:27rpx;color:#779D93"
 					 v-model="remark" v-if="handleIpt" @blur="blur" @focus="focus" class="textArea" auto-focus />
 					<view v-else @tap="handleIpt=true" class="textArea">{{remark1}}</view>
-					   <!-- </view> -->
-						
-					<!-- </cover-view> -->
-				
+					
 					</view>
 				<view class="divider"></view>
 				<view  class="readme">
@@ -103,7 +114,7 @@
 						<image src="../../static/agree0.png" v-if="!flag"></image>
 						<image src="../../static/agree1.png" v-if="flag"></image>
 					</view>
-					<view class="xieyiBox">阅读并同意<navigator url="./statement" class="xieyi">《美赞臣隐私保护声明》</navigator></view>
+					<view class="xieyiBox">阅读并同意<navigator url="./statement" class="xieyi">《隐私保护声明》</navigator></view>
 				</view>
 				
 			</view>
@@ -117,13 +128,13 @@
 		                <view class="sModalHead">
 		                
 		                    <view class="sModalHeadItem sModalHeadItem1">回收说明</view>
-		                    <!-- <view class="sModalHeadItem sModalHeadItem2" @tap="show_modal = false">我知道了</view> -->
+		                   
 		                </view>
 		                <view class="sModalBody">
 		                    <view class="sModalBodyItem">1.目前可回收的空罐不限品牌，但只限于金属材质（马口铁）的奶粉罐，其他材质暂不接收;
 </view>
 		                    <view class="sModalBodyItem">2.为了让回收流程更加环保，仅支持每次4个以上奶粉空罐的预约，建议累计4-10个空罐预约上门；</view>
-		                 <!--   <view class="sModalBodyItem">3.回收包含美赞臣旗下任意品牌罐装空罐，包括蓝臻、铂睿、安儿宝、亲舒等。</view> -->
+		                 
 							<view class="btn" @tap="show_modal=false">已了解</view>
 		                </view>
 		            </view>
@@ -147,14 +158,19 @@
 				aTime :'',
 				eTime :'',
 				formatDate:[],
-				numArray:[4,5,6,7,8,9,10],
-				index:6,
+				numArray1:[1,2,3,4,5,6,7,8,9,10],
+				meidaiIndex:4,
+				numArray2:['衣服鞋帽','图书','玩具','电子数码产品'],
+				sortIndex:2,
+				numArray3:[10,15,20,25,30,35,40,45,50],
+				index:0,
 				remark1:'留言备注（可描述回收物状态、特殊要求等）',
 				remark:'',
-				type:"奶粉罐",
-				        types:{
-				            "奶粉罐":1
-				        },
+				booking:false
+				// type:"奶粉罐",
+				//         types:{
+				//             "奶粉罐":1
+				//         },
 			};
 		},
 		computed:{
@@ -162,15 +178,15 @@
 		},
 		async onLoad(opt) {
 			await this.setDate()
-			if(opt.id){
-				this.orderId=opt.id
-				uni.showLoading({
-					title:'加载中...'
-				})
+			// if(opt.id){
+			// 	this.orderId=opt.id
+			// 	uni.showLoading({
+			// 		title:'加载中...'
+			// 	})
 				
-				await this.getOrder()
-				uni.hideLoading()
-			}
+			// 	await this.getOrder()
+			// 	uni.hideLoading()
+			// }
 		},
 		methods:{
 		focus(){
@@ -215,7 +231,13 @@
 				}
 				
 			},
-			numChange(e){
+			numChange1(e){
+				this.meidaiIndex=e.detail.value
+			},
+			numChange2(e){
+				this.sortIndex=e.detail.value
+			},
+			numChange3(e){
 				this.index=e.detail.value
 			},
 			addressSel(){
@@ -225,79 +247,87 @@
 			},
 			// 立即预约
 			async toBook(){
-			
-				let _j_data = [
-				              { data:this.addressMsg?'1' : '',info:"请添加上门地址"},
-				              { data:this.bookTime,info:"请选择预约上门时间"},
-				              // { data:this.form_data.city,info:"地区不能为空"},
-				              { data:this.flag,info:"请阅读并同意美赞臣隐私保护声明"},
-				]
-				 let jres = await Utils.judgeForm(_j_data)
-				if(jres){
-					if(Utils.checkMobile(this.addressMsg.mobile)){
-						uni.showLoading({
-							title:'预约中...'
-						})
-						this.$http({
-							apiName:'orderReverse',
-							method:'POST',
-							data:{
-								aTime:this.aTime,
-								amount:this.numArray[this.index],
-								areaNum:this.addressMsg.areaNum,
-								eTime:this.eTime,
-								mobile:this.addressMsg.mobile,
-								receiveaAddress:this.addressMsg.province + this.addressMsg.city + this.addressMsg.district + this.addressMsg.detailedAddress,
-								remark:this.remark,
-								type:this.types[this.type],
-								username:this.addressMsg.username 
+				if(!this.booking){
+					let _j_data = [
+					              { data:this.addressMsg?'1' : '',info:"请填写上门地址"},
+					              { data:this.bookTime,info:"请选择预约上门时间"},
+					              // { data:this.form_data.city,info:"地区不能为空"},
+					              { data:this.flag,info:"请阅读并同意隐私保护声明"},
+					]
+					 let jres = await Utils.judgeForm(_j_data)
+					if(jres){
+						this.booking=true
+						Utils.checkMobile(this.addressMsg.mobile).then(res=>{
+							if(res.code=200000){
+								uni.showLoading({
+									title:'预约中...'
+								})
+								
+								this.$http({
+									apiName:'orderReverse',
+									method:'POST',
+									data:{
+										aTime:this.aTime,
+										amount:this.numArray3[this.index],
+										areaNum:this.addressMsg.areaNum,
+										eTime:this.eTime,
+										mobile:this.addressMsg.mobile,
+										receiveaAddress:this.addressMsg.province + this.addressMsg.city + this.addressMsg.district + this.addressMsg.detailedAddress,
+										remark:this.remark,
+										mdAmount:this.numArray1[this.meidaiIndex],
+										type:Number(this.sortIndex)+1,
+										username:this.addressMsg.username 
+									}
+								}).then(res=>{
+									uni.hideLoading()
+									 uni.showToast({
+									      title:"预约成功"
+									 })
+									 
+									  setTimeout( ()=> {
+										
+									                         uni.reLaunch({
+									                         	 url: './bookSuccess?id='+res.data,
+									                         })
+									                              this.booking=false
+									                         
+									                     },1000)
+														 
+								}).catch(err=>{this.booking=false})
 							}
-						}).then(res=>{
-							uni.hideLoading()
-							 uni.showToast({
-							      title:"预约成功"
-							 })
-							  setTimeout( ()=> {
-							                         uni.reLaunch({
-							                         	 url: './bookSuccess?id='+res.data,
-							                         })
-							                            
-							                         
-							                     },1000)
-						}).catch(err=>{})
-					}else{
-						setTimeout( ()=> {
-						                     uni.redirectTo({
-						                     	url:'../index/index'
-						                     })
-						                          
-						                       
-						                   },2000)
-						
-					}
-					
-				}else{
-					
+						}).catch(err=>{
+							setTimeout( ()=> {
+								this.booking=false
+							                     uni.redirectTo({
+							                     	url:'../index/index'
+							                     })
+							                          
+							                       
+							                   },2000)
+							
+						})
+					  }
 				}
+				
 			},
 			 editMsg(){
 						uni.navigateTo({
 							url:'./addressSel'
 						})
 			},
-			getOrder(){
-				this.$http({
-						apiName:'checkOrderStatus',
-						method:'POST',
-						params:this.orderId
+			// getOrder(){
+			// 	this.$http({
+			// 			apiName:'checkOrderStatus',
+			// 			method:'POST',
+			// 			params:this.orderId
 						
-					})
-				.then(res=>{
-					this.bookTime=res.data.appointmentTime
-					this.index=this.numArray.indexOf(res.data.amount)
-					this.remark=res.data.remark
-				})
-			}
+			// 		})
+			// 	.then(res=>{
+			// 		this.bookTime=res.data.appointmentTime
+			// 		this.index=this.numArray3.indexOf(res.data.amount)
+			// 		this.remark=res.data.remark
+			// 	})
+			// }
 		}
 		
 	}
@@ -307,6 +337,7 @@
     .main{
 		padding-bottom: 25rpx;
 		 overflow-y: scroll;
+		// height: 100rpx;
 		.wraper{
 			padding-left: 58rpx ;
 			.row{
@@ -364,7 +395,7 @@
 			}
 		}
 		.divider{
-						  height: 2rpx;
+						  height: 3rpx;
 						  width: 100%;
 						  background: #CACACA;
 		}

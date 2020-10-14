@@ -23,14 +23,14 @@
 		position: fixed;
 		.bg1{
 			  width: 100%;
-			   height: 316rpx;
+			   height: 523rpx;
 			   position: fixed;
 			   top: 0;
 			   left: 0;
 			   
 		}
 		.bg2{
-			   height: 700rpx;
+			   height: 470rpx;
 			   width: 100%;
 			   position: fixed;
 			   bottom: 0;

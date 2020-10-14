@@ -15,7 +15,7 @@
 				<text class="txt1">10个环保积分，可认领保护地面积{{10*integralM}}平方米</text>
 				<view  class="protectBtn" @tap="protect">我要保护</view>
 			</view>
-			<view class="divider1"></view>
+			<!-- <view class="divider1"></view>
 			<view class="wraper">
 				<view class="title color1">兑换好礼</view>
 				<text class="description color1">{{changeRule}}</text>
@@ -27,7 +27,7 @@
 					<view class="btn shopBtn" @tap="enterShop(true)">进入蓝臻积分商城</view>
 				</view>
 				
-			</view>
+			</view> -->
 		</view>
 		</view>
 		<view v-if="isMask1">
@@ -323,10 +323,10 @@
    .main{
 	 overflow: hidden;
 	 top: 80rpx;
-	 height: 1100rpx;
+	 // height: 1000rpx;
 	  .mainContent{
-		 height: 1060rpx;
-		 overflow: scroll;
+		 // height: 100%;
+		 // overflow: scroll;
 		  
 		 
 	  }

@@ -21,8 +21,7 @@
 						<view class="uni-list-cell">
 
 							<view class="uni-list-cell-db">
-								<picker mode="multiSelector" @change="areaPickerChange" @columnchange="areaPickerColumnChange" :value="multiIndex"
-								 :range="multiArray">
+								<picker mode="multiSelector" @change="areaPickerChange" @columnchange="areaPickerColumnChange" :value="multiIndex" :range="multiArray">
 									<view class="Region">
 										<text class="showRegion">{{area}}</text>
 										<image src="../../static/icon8.png" class="selectIcon"></image>
@@ -42,6 +41,9 @@
 			<view class="divider1"></view>
 			<view class="saveBtn" @tap="submitAdd">
 				保存并使用
+			</view>
+			<view class="saveBtn" @tap="wxAddress">
+				一键导入微信地址
 			</view>
 		</view>
 	</view>
@@ -232,6 +234,67 @@
 						})
 					}).catch(err => {})
 				}
+			},
+			wxAddress(){
+				let that=this
+				wx.chooseAddress({
+				  success (res) {
+					  console.log(res)
+					let flag=false
+				for(let area in that.areas_ids){
+					if(area.includes(res.countyName)){
+						let form=that.form_data
+						form.username=res.userName
+						form.province=res.provinceName
+						form.city=res.cityName
+						form.district=res.countyName
+						form.mobile=res.telNumber
+						that.area=res.provinceName+res.cityName+res.countyName
+						form.detailedAddress=res.detailInfo
+						form.areaNum=that.areas_ids[area]
+						flag=true
+						
+						that.provinces.forEach((province,index1)=>{
+							if(res.provinceName.includes(province)){
+								// console.log(i)
+								that.multiIndex[0]=index1
+								that.multiArray[1]=that.cities[province]
+								that.multiArray[1].forEach((item,index2)=>{
+									if(res.countyName==item||res.cityName==item){
+										that.multiIndex[1]=index2
+									}
+								})
+								
+							}
+							
+						})
+						for(let k in that.areas){
+							if(res.countyName==k||res.cityName==k){
+								that.multiArray[2]=that.areas[k]
+								that.areas[k].forEach((a,b)=>{
+									if(res.countyName==a){
+										that.multiIndex[2]=b
+									}
+								})
+							}
+						}
+						break
+					}
+				}
+					
+						
+					if(!flag){
+						uni.showToast({
+							title:'不在规定的回收区域',
+							icon:'none'
+						})
+											
+					}	
+					
+						
+					
+				  }
+				})
 			}
 
 		}

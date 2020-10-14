@@ -50,7 +50,7 @@
 				})
 			},
 			toOrder(){
-				uni.redirectTo({
+				uni.navigateTo({
 					url:'../index/orderDetail?id='+this.orderId
 				})
 			}

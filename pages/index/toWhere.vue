@@ -1,19 +1,14 @@
 <template>
 	<view>
-		 <image src="https://www.meadcan.com/profile/upload/pic2-1.png" mode="widthFix"></image>
-		<image src="https://www.meadcan.com/profile/upload/pic2-2.png" mode="widthFix"></image> 
-	
-		
-		
-		<view class="box2">
-		 <image src="https://www.meadcan.com/profile/upload/pic2-3.png" mode="widthFix"></image>
-			<video
-			 src="https://www.meadcan.com/profile/upload/video.mp4" 
-			 object-fit="cover"
-			controls
-			show-play-btn></video>
-		</view>
-		<image src="https://www.meadcan.com/profile/upload/pic2-4.png" mode="widthFix"></image>
+		 <image src="https://mdhs.meadcan.com/profile/upload/pic2-1.png" mode="widthFix"></image>
+		<image src="https://mdhs.meadcan.com/profile/upload/pic2-2.png" mode="widthFix"></image> 
+		<div class="box">
+			<image src="https://mdhs.meadcan.com/profile/upload/pic2-3.png" mode="widthFix"></image>
+			<div class="liaojie" @click="toDetail">了解详情
+			<image src="../../static/more.png" mode=""></image></div>
+		</div>
+		<image src="https://mdhs.meadcan.com/profile/upload/pic2-4.png" mode="widthFix"></image>
+		<image src="https://mdhs.meadcan.com/profile/upload/pic2-5.png" mode="widthFix"></image>
 	</view>
 </template>
 
@@ -25,7 +20,11 @@
 			}
 		},
 		methods: {
-			
+			toDetail(){
+				uni.navigateTo({
+					url:'./knowDetail'
+				})
+			}
 		}
 	}
 </script>
@@ -37,17 +36,24 @@
 	  	 
 	  display: block;
   }
-  .box2{
+  .box{
 	  position: relative;
-	  video{
-	  	  width: 560rpx;
-	  	  height: 330rpx;
-		  position: absolute;
-		  top: 74rpx;
-		  left: 50%;
-		  transform: translateX(-50%);
-		  z-index: 100;
+	  .liaojie{
+	  	  position: absolute;
+	  	  bottom: 0;
+		  left: 80rpx;
+		  color: #11b97f;
+		  display: flex;
+		 font-size: 35rpx;
+		 align-items: center;
+		  font-weight: 600;
+		 border-bottom: 4rpx solid #11b97f;
+		  image{
+			  width: 40rpx;
+			  height: 40rpx;
+			  margin-left: 10rpx;
+		  }
 	  }
-	  
   }
+ 
 </style>

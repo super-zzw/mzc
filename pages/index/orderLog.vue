@@ -56,7 +56,7 @@
 				sortTxt:'所有订单',
 				pageNum:1,
 				size:10,
-				total:''
+				hasNextPage:null
 			};
 		},
 		computed:{
@@ -83,6 +83,7 @@
 			this.pulldown=false
 		},
 		async onLoad() {
+			
 			uni.showLoading({
 				title:'加载中...'
 			})
@@ -90,6 +91,7 @@
 			uni.hideLoading()
 		},
 		methods:{
+			
 			getOrderList(status){
 				uni.showLoading({
 					title:'加载中...'
@@ -98,16 +100,16 @@
 					apiName:'getOrderList',
 					method:'POST',
 					data:{
-						status:status,
+						status:this.status,
 						size:this.size,
-						pageNum:this.pageNum
+						page:this.pageNum
 					}
 				}).then(res=>{
 					// if(this.status==''){
 						this.orderList=this.orderList.concat(res.data.list)
 					
-					
-					this.total=res.data.total
+					this.hasNextPage=res.data.hasNextPage
+					// this.total=res.data.total
 					this.loading=true
 					uni.hideLoading()
 				}).catch(err=>{})
@@ -124,13 +126,13 @@
 			}
 		},
 		async loadmore(){
-			if(this.orderList.length>this.total){
+			if(this.hasNextPage===false){
 				uni.showToast({
 					title:'没有更多了...',
 					icon:'none'
 				})
 			}else{
-				this.page++
+				this.pageNum++
 				uni.showLoading({
 					title:'拼命加载中...'
 				})
@@ -209,7 +211,7 @@
 			}
 			.orderBox{
 			   .logBox{
-				   height: 900rpx;
+				   height: 1080rpx;
 			   }
 				.orderItem{
 					

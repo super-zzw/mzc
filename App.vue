@@ -34,7 +34,7 @@ button::after{ border: none; }
 	    background:rgba(52,52,52,0.7);
   }
 	.main{
-		    height: 1060rpx;
+		    // height: 80%;
 			width: 674rpx;
 		
 			position: absolute;
@@ -73,7 +73,7 @@ button::after{ border: none; }
 				
 			}
 			.orderBox{
-			     height:900rpx ;
+			     height:1080rpx ;
 			   overflow: scroll;
 				.orderItem{
 					.wraper{

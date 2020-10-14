@@ -30,30 +30,31 @@
 				<image src="../../static/bg6.png" mode="" class="right"></image>
 			</view>
 			<view class="leftBottom">
-				<image src="../../static/naifen.png"  class="naifen"></image>
-				<image src="../../static/bg3.png" class="bg3"></image>
+				<image src="../../static/meidai.png"  class="naifen"></image>
+				<!-- <image src="../../static/bg3.png" class="bg3"></image> -->
 			</view>
 			<view class="rightBottom">
 				<view class="txt1 ">免费上门</view>
-				<view class="txt2">加入空罐回收计划</view>
-				<view class="txt3 ">还有环保积分等你拿</view>
+				<view class="txt2">美袋再用一次</view>
+				<view class="txt3 ">让家中闲置温暖返航</view>
 				<button type="default" class="btn" hover-class="none" open-type="getUserInfo" lang="zh_CN" @getuserinfo="toBook">
 					立即预约
 				</button>
 			</view>
 		</view>
 		<view class="box2">
+			<view class="navItem" @tap="toWhere">
+				<image src="../../static/icon2.png" ></image>
+				<text>美袋如何循环</text>
+			</view>
 			<view class="navItem" @tap="toSecret">
 				<image src="../../static/icon1.png" ></image>
 				<text>回收入门秘籍</text>
 			</view>
-			<view class="navItem" @tap="toWhere">
-				<image src="../../static/icon2.png" ></image>
-				<text>空罐去哪儿了</text>
-			</view>
+			
 			<view class="navItem" @tap="toLessons">
 				<image src="../../static/icon3.png" ></image>
-				<text>美罐最新活动</text>
+				<text>美袋最新进展</text>
 			</view>
 		</view>
 		
@@ -66,8 +67,7 @@
 	import { mapState } from 'vuex';
 	import Utils from '../../utils/method.js'
 	import sModal from '../../components/sModal.vue'
-	var socket = null;
-	var launched = false;
+	
 	export default {
 		data() {
 			return {
@@ -89,9 +89,7 @@
 					}
 		},
 		async onShow() {
-			if(this.isLogin&&!launched){
 			
-			}
 			
 		},
 	
@@ -120,14 +118,14 @@
 			},
 			toBook(){
 				if(this.isLogin){
-					this.$http({
-						apiName:'isReverse',
+					// this.$http({
+					// 	apiName:'isReverse',
 						
-					}).then(res=>{
+					// }).then(res=>{
 						uni.navigateTo({
 							url:'/pages/bookMsg/editBookMsg'
 						})
-					}).catch(err=>{})
+					// }).catch(err=>{})
 					
 				}else{
 					this.$store.commit('jumpPageSet','/pages/bookMsg/editBookMsg')
@@ -269,9 +267,9 @@
 		 .leftBottom{
 			 position: absolute;
 			 left: 0;
-			 bottom: 0;
-			 width: 322rpx;
-			 height: 420rpx;
+			 bottom: 90rpx;
+			 width: 300rpx;
+			 height: 314rpx;
 			 .naifen{
 				 width: 100%;
 				 height: 100%;
@@ -279,14 +277,6 @@
 				 position: absolute;
 				 left: 0;
 				 top: 0;
-			 }
-			 .bg3{
-				 height: 403rpx;
-				 width: 100%;
-				 position: absolute;
-				 left: 0;
-				 bottom: 0;
-				 
 			 }
 		 }
 		 .rightBottom{

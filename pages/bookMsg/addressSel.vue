@@ -128,7 +128,8 @@
 		display: flex;
 		flex-direction: column;
 		background: #F9F9F9;
-          height: 1000rpx;
+          // height: 1000rpx;
+		    height: 85%;
           overflow: scroll;
 		.addreeBox {
 			
