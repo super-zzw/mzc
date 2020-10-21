@@ -162,7 +162,7 @@
 				meidaiIndex:4,
 				numArray2:['衣服鞋帽','图书','玩具','电子数码产品'],
 				sortIndex:2,
-				numArray3:[10,15,20,25,30,35,40,45,50],
+				numArray3:['5Kg以下','5-10Kg','10-15Kg','15-20Kg','20Kg以上'],
 				index:0,
 				remark1:'留言备注（可描述回收物状态、特殊要求等）',
 				remark:'',
@@ -178,15 +178,6 @@
 		},
 		async onLoad(opt) {
 			await this.setDate()
-			// if(opt.id){
-			// 	this.orderId=opt.id
-			// 	uni.showLoading({
-			// 		title:'加载中...'
-			// 	})
-				
-			// 	await this.getOrder()
-			// 	uni.hideLoading()
-			// }
 		},
 		methods:{
 		focus(){

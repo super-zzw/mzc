@@ -1,11 +1,11 @@
 <template>
 	<view>
 		<background></background>
-		<view class="main">
+		<view class="main" v-if="loading">
 			<view class="header">
-				<image :src="userInfo.avatarUrl" class="avatar"></image>
+				<image :src="userDetail.avatarUrl" class="avatar"></image>
 			</view> 
-			<view class="orderBox" v-if="loading">
+			<view class="orderBox" >
 				<view class="orderItem">
 					<view class="wraper">
 						<view class="orderItem">
@@ -88,7 +88,7 @@
 			};
 		},
 		computed:{
-				...mapState(['userInfo']),
+				...mapState(['userInfo','userDetail']),
 				
 			icon(){
 				return function(i){

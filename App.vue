@@ -36,7 +36,6 @@ button::after{ border: none; }
 	.main{
 		    // height: 80%;
 			width: 674rpx;
-		
 			position: absolute;
 			top: 110rpx;
 			left: 50%;

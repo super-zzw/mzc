@@ -34,6 +34,7 @@
 				<view class="divider"></view>
 				<view class="row address">
 					<text class="label">详细地址</text>
+				
 					<textarea type="text" name="" id="textArea" placeholder="请输入详细的地址信息" class="inputBox " placeholder-style="color:#1A6752"
 					 v-model="form_data.detailedAddress" :auto-height="true"></textarea>
 				</view>
